@@ -230,3 +230,20 @@ TKL -> Raw Candidate -> TKW -> Approved Formation -> KnowledgeHub
 ```
 
 TKW should retain the Candidate -> FormationProposal -> formed Knowledge link so TKL can distinguish already-admitted knowledge from genuinely new/update/support/conflict/relation candidates on later preparation runs.
+
+
+## Knowledge Feedback use-case support
+
+TKW participates in the Knowledge Feedback Loop by preserving the link from incoming Raw Candidate through KnowledgeFormationProposal to the formed Knowledge identity/version.
+
+On successful formation, TKW must make the formation result available to TKL so TKL can refresh its Existing Knowledge Context. This is supporting behavior for TKL's `Refresh Knowledge Context after Formation` use case, not ownership of the projection itself.
+
+TKW must also support trace resolution in the reverse direction:
+
+```text
+formed Knowledge
+ -> KnowledgeFormationProposal
+ -> Workbench Candidate
+ -> TKL PreparedMaterial (when TKL-originated)
+ -> Evidence
+```
