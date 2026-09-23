@@ -247,3 +247,10 @@ formed Knowledge
  -> TKL PreparedMaterial (when TKL-originated)
  -> Evidence
 ```
+
+
+## Projection change publication
+
+After formation/approval, TKW must expose enough formation-result information for TKL to append a `KnowledgeProjectionDelta` or trigger a context rebuild.
+
+Relevant outcomes include new Knowledge, updated Knowledge, relation changes and supersession. TKW does not own KnowledgeProjection storage or compaction; it provides formation/change correlation and formed Knowledge identity/version to the TKL feedback path.
