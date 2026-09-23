@@ -215,3 +215,18 @@ AI / TKL / Capture
 ```
 
 This boundary is the central purpose of TKW.
+
+## Feedback to acquisition/preparation layer
+
+TKW approval/formation completes a loop rather than a one-way pipeline.
+
+After Knowledge is formed/admitted, its canonical identity/version must be available for downstream feedback to TKL. TKL can then project current Knowledge into preparation environments such as Google Workspace.
+
+```text
+TKL -> Raw Candidate -> TKW -> Approved Formation -> KnowledgeHub
+ ^                                                   |
+ |                                                   |
+ +--------- KnowledgeReference / Projection ---------+
+```
+
+TKW should retain the Candidate -> FormationProposal -> formed Knowledge link so TKL can distinguish already-admitted knowledge from genuinely new/update/support/conflict/relation candidates on later preparation runs.
