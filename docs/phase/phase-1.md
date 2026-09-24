@@ -1,81 +1,49 @@
-# Phase 1 — Knowledge Candidate Formation Vertical Slice
+# Phase 1 — Information Candidate Admission Vertical Slice
 
 ## Goal
 
-Establish Textus Knowledge Workbench as the common formation/approval layer between acquisition applications and KnowledgeHub.
+Establish Textus Knowledge Workbench as the common human formation/admission layer between acquisition applications and canonical KnowledgeHub Information.
 
 ## Primary use case
 
-**Form and approve knowledge from a raw knowledge candidate.**
+Form, review and admit Information from a raw/prepared Information Candidate.
 
 ## Reference flow
 
-```text
-Raw Knowledge Candidate
-      |
-      v
-Register Candidate
-      |
-      v
-Resolve Evidence / Context
-      |
-      v
-Edit / Correct
-      |
-      v
-Semantic Grounding / Mapping
-      |
-      v
-KnowledgeFormationProposal
-      |
-      v
-Human Review
-      |
-      +--> Hold / Reject
-      |
-      v
-Approve
-      |
-      v
-KnowledgeHub Knowledge Formation
-      |
-      v
-Formation Trace
-```
+Raw/Prepared Candidate -> Register Candidate -> Resolve Evidence/Context -> Edit/Correct -> Semantic Grounding/Mapping -> Human Review -> Approve/Hold/Reject -> Information Admission -> Admission Trace.
 
 ## Inputs
 
-Phase 1 should support deterministic fixtures for at least:
-
-- a TKL-originated raw candidate with PreparedMaterial/Evidence references;
-- an Editing-Studio-originated candidate derived from captured book information.
+Support deterministic fixtures for at least:
+- a TKL-originated candidate with PreparedMaterial/Evidence references;
+- an Editing-Studio-originated candidate derived from confirmed book-capture raw data.
 
 Full Google Workspace, Slack and smartphone integration is not required for closure.
 
 ## Scope
 
-- initial KnowledgeCandidate Entity;
-- candidate identity and lifecycle;
-- Evidence/Provenance references;
+- initial InformationCandidate Entity/lifecycle;
+- candidate identity and Evidence/Provenance references;
 - candidate content/context editing;
-- minimal grounding/mapping representation using existing CNCF/KnowledgeHub contracts where available;
-- KnowledgeFormationProposal;
-- explicit human review decision;
-- approval and KnowledgeHub formation boundary;
-- trace link from formed Knowledge back to Candidate/Evidence;
+- minimal grounding/mapping using existing CNCF/KnowledgeHub contracts where applicable;
+- explicit human review decision and approval;
+- KnowledgeHub Information Admission boundary;
+- trace link from admitted Information back to Candidate/Evidence;
 - CML application use case/workflow model;
 - executable specification for the vertical slice.
 
+## Architectural invariants
+
+- mobile Capture Confirm is transfer authorization, not Information Admission;
+- AI/provisional editing cannot perform final admission;
+- canonical KnowledgeHub knowledge is Information;
+- RDF/Open Knowledge is downstream through KnowledgeProjection, not a Phase 1 canonical model;
+- TKW owns candidate/admission lifecycle; Editing Studio/TKL provide domain/source interaction.
+
 ## Non-goals
 
-- TKL evidence federation;
-- Google Workspace/Slack adapters;
-- smartphone capture implementation;
-- publishing-specific Editing Studio UI;
-- agriculture-specific UI;
-- advanced KnowledgeHub distillation/federation;
-- automated final approval.
+TKL evidence federation; Google Workspace/Slack adapters; smartphone capture implementation; publishing-specific Editing Studio UI; agriculture-specific UI; RDF/Open Knowledge publication; automated final approval.
 
 ## Completion criteria
 
-Phase 1 is complete when both a TKL-like raw candidate fixture and an Editing-Studio-like capture candidate fixture can enter the same Workbench candidate lifecycle, be reviewed and approved, cross the KnowledgeHub formation boundary, and retain traceability to their original evidence/context.
+Phase 1 is complete when both fixture types enter the same Workbench candidate lifecycle, can be edited/reviewed, explicitly approved by a human, admitted as canonical KnowledgeHub Information, and retain traceability to original evidence/context.
