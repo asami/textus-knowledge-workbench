@@ -1,102 +1,65 @@
 # Knowledge Workbench Establishment
 
 - Date: 2026-09-23
-- Status: Initial architecture decision
+- Updated: 2026-09-25
+- Status: Active architecture decision
 
 ## Background
 
-NICT KnowledgeHub currently has two important acquisition paths.
+KnowledgeHub has multiple acquisition paths. Domain applications such as NICT Editing Studio receive raw real-world material from smartphones. Textus Knowledge Lake discovers and prepares evidence from Drive, Gmail, Slack, Web and other providers.
 
-1. Domain capture applications such as NICT Editing Studio receive raw real-world information from smartphones: book photographs and bibliographic data, user audio comments, annotations, and in other domains daily observation records such as fruit-tree data.
-2. Textus Knowledge Lake (TKL) discovers and prepares evidence already distributed across Drive, Gmail, Slack, Web and other providers and proposes raw knowledge candidates.
+Both paths need a common human-governed step before canonical KnowledgeHub Information: candidates must be edited, semantically mapped, reviewed and explicitly approved.
 
-Both paths require a common step before KnowledgeHub: raw information/candidates must be formed into knowledge, semantically mapped, reviewed and explicitly approved by a human.
-
-Initially this responsibility was effectively placed in Editing Studio. That is too domain-specific because Editing Studio is expected to become a publishing/editorial application.
+Initially this responsibility was effectively placed in Editing Studio. That is too domain-specific because Editing Studio is a publishing/editorial application.
 
 ## Decision
 
-Create **Textus Knowledge Workbench (TKW)** as the reusable intermediate application/component.
+Textus Knowledge Workbench (TKW) is the reusable intermediate application/component for Information Candidate formation and admission.
 
-```text
-Mobile / Domain Capture ---> Editing Studio ---+
-                                               |
-TKL ---> PreparedMaterial ---> Raw Candidate --+--> TKW
-                                                    |
-                                               Form / Edit
-                                               Ground / Map
-                                               Review
-                                               Approve
-                                                    |
-                                                    v
-                                               KnowledgeHub
-```
+Flow: Mobile/Domain Capture or TKL PreparedMaterial -> TKW -> edit/ground/map/review/approve -> KnowledgeHub Information -> KnowledgeProjection -> RDF/Open Knowledge.
 
 ## Roles
 
 ### TKL — Discover & Prepare
-
-Federated Evidence, Preparation, PreparedMaterial and raw candidate proposal.
+Federated Evidence, Preparation, PreparedMaterial and raw/prepared candidate proposal.
 
 ### Editing Studio — Domain Interaction
+Publishing/editorial capture, raw-source registration, domain validation/views and Book-specific interaction. It presents editorial views over TKW-managed candidates.
 
-Publishing/editorial capture, validation, views and domain-specific interaction. It operates on TKW-managed candidates through editorial views.
+### TKW — Form & Admit Information
+Owns Information Candidate lifecycle and interactive formation/review/approval. Human approval is the Information Admission boundary.
 
-### TKW — Form & Approve
+### KnowledgeHub — Canonical Information
+Stores, links and processes canonical Information. KnowledgeHub knowledge is managed as Information.
 
-Owns candidate lifecycle and the interactive knowledge-formation workflow. Provides reusable operations to domain applications.
-
-### KnowledgeHub — Store, Link & Process
-
-Provides Semantic Context/Knowledge Processing and stores/processes formed Knowledge.
+### KnowledgeProjection / Open Knowledge
+Projects canonical Information to external representations such as RDF. RDF is not KnowledgeHub's canonical internal model.
 
 ## Candidate ownership
 
-Candidate state is centralized in TKW. Domain applications should not create parallel candidate lifecycle stores.
+Candidate state is centralized in TKW. Domain applications and TKL do not create parallel admission lifecycle stores. They may retain source/application linkage and view state.
 
-A domain application may retain application linkage and view state, but candidate identity, formation state, review and approval belong to TKW.
+## Human boundaries
 
-## Relationship to existing KnowledgeHub design
+Mobile Capture Confirm means permission to transfer a capture entry to the server. It is not Information Admission.
 
-KnowledgeHub already defines/proposes SemanticGrounding, GroundingCandidate, KnowledgeFormation and KnowledgeFormationProposal.
-
-TKW should use these capabilities/contracts and place the human-facing candidate workflow above them. It should not fork a competing knowledge model.
-
-The exact boundary may evolve as the KnowledgeHub/CNCF contracts become concrete.
+AI may provisionally edit/structure candidates, but final Information Admission requires explicit human approval in the Workbench workflow.
 
 ## Initial implementation direction
 
 1. Define TKW application use cases.
-2. Define KnowledgeCandidate Entity and lifecycle.
+2. Define InformationCandidate Entity/lifecycle.
 3. Define TKL -> TKW candidate submission contract.
-4. Define Editing Studio -> TKW capture/candidate interaction contract.
-5. Define TKW -> KnowledgeHub formation contract.
+4. Define Editing Studio -> TKW raw-capture/candidate interaction contract.
+5. Define TKW -> KnowledgeHub Information Admission contract.
 6. Define Evidence/Provenance resolution without copying TKL resources.
-7. Model use cases and workflow in CML.
-8. Build one vertical slice from raw candidate through human approval to KnowledgeHub formation.
+7. Model use cases/workflow in CML.
+8. Build one vertical slice through human approval to canonical Information.
 
 ## Reference vertical slices
 
-### TKL path
+TKL: Drive/Gmail/Slack -> TKL Preparation -> PreparedMaterial/raw candidate -> TKW review/admission -> KnowledgeHub Information.
 
-```text
-Drive/Gmail/Slack
- -> TKL Preparation
- -> PreparedMaterial
- -> Raw Knowledge Candidate
- -> TKW review/formation
- -> KnowledgeHub
-```
+Editing Studio: Smartphone Book Capture -> Capture Confirm -> nict-editing-studio raw source -> TKW candidate -> editorial view + TKW operations -> human approval -> KnowledgeHub Information.
 
-### Editing Studio path
-
-```text
-Smartphone Book Capture
- -> nict-editing-studio
- -> TKW candidate
- -> editorial view + TKW operations
- -> human approval
- -> KnowledgeHub
-```
-
-These two paths should converge on the same Workbench candidate/formation model.
+Both paths converge on the same Workbench Information Candidate/admission model.
