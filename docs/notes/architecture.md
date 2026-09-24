@@ -2,255 +2,72 @@
 
 ## Purpose
 
-Textus Knowledge Workbench (TKW) is the reusable application layer for turning raw knowledge candidates and captured information into reviewed, formed and approved knowledge proposals.
+Textus Knowledge Workbench (TKW) is the reusable application/admission layer for turning raw source data and prepared candidates into reviewed, human-approved **KnowledgeHub Information**.
 
-It separates generic knowledge formation/curation interaction from domain applications such as NICT Editing Studio and from the KnowledgeHub runtime.
+KnowledgeHub's canonical knowledge is managed as Information. TKW therefore does not create a separate canonical Knowledge entity. It manages Information Candidate lifecycle, semantic editing/grounding, review, and explicit Information Admission.
 
 ## Position
 
-```text
-Acquisition / Discovery
-────────────────────────────────────
-Textus Knowledge Lake        Domain Applications
-(TKL)                        Editing Studio / others
-  Discover / Prepare           Capture / Domain View
-        |                            |
-        +-------------+--------------+
-                      v
-            Textus Knowledge Workbench
-            Form / Edit / Review / Approve
-                      |
-                      v
-                 KnowledgeHub
-            Store / Link / Process
-```
+Acquisition/Discovery -> TKW -> KnowledgeHub Information -> KnowledgeProjection -> RDF/Open Knowledge.
 
-TKW is not a storage lake and is not the final Knowledge repository.
+Sources include Textus Knowledge Lake PreparedMaterial/raw candidates and domain applications such as NICT Editing Studio.
 
 ## Responsibilities
 
-- manage Knowledge Candidate lifecycle;
-- accept raw candidates from TKL and domain applications;
-- retain Evidence and Provenance references;
-- provide candidate editing/correction;
-- resolve/use Semantic Context;
+- manage Information Candidate lifecycle;
+- accept raw/prepared candidates from TKL and domain applications;
+- retain Evidence/Provenance references;
+- edit/correct candidate content and Context;
 - support Semantic Grounding and Concept Mapping;
 - edit Context, Facets and Relations;
-- compare candidates with existing Knowledge;
-- create KnowledgeFormationProposal;
+- compare candidates with existing canonical Information;
 - support human review, correction, hold and rejection;
-- record human approval;
-- invoke KnowledgeHub Knowledge Formation;
-- retain traceability from formed Knowledge back to Candidate and Evidence;
+- record explicit human approval;
+- request Information Admission into KnowledgeHub;
+- retain traceability from admitted Information to Candidate and Evidence;
 - expose reusable operations/views to domain applications.
 
 ## Non-responsibilities
 
-- raw resource federation and evidence discovery: TKL;
+- raw resource federation/evidence discovery: TKL;
 - provider-specific Drive/Gmail/Slack preparation: TKL/provider adapters;
+- smartphone capture and Capture Confirm: domain mobile applications;
 - publishing/editorial domain semantics: NICT Editing Studio;
-- agriculture-specific semantics: agriculture application;
-- canonical Information/Knowledge primitives: CNCF;
-- final Knowledge storage/runtime/search/processing: KnowledgeHub.
+- final canonical Information storage/runtime/search/processing: KnowledgeHub;
+- RDF/Open Knowledge canonicalization: RDF is a downstream KnowledgeProjection.
 
 ## Candidate ownership
 
-Knowledge Candidates are managed by TKW, not by Editing Studio or TKL.
+Information Candidate state is centralized in TKW. Editing Studio and TKL must not create parallel admission lifecycles. Domain applications may retain linkage/view state and provide domain-specific views over TKW-managed candidates.
 
-```text
-TKL
- PreparedMaterial
-      |
- Raw Knowledge Candidate
-      |
-      v
-     TKW
- Candidate Entity / lifecycle
-      |
- KnowledgeFormationProposal
-      |
- Human Approval
-      |
-      v
- KnowledgeHub
-```
-
-Domain applications present their own views of the Workbench-managed candidate and call TKW operations.
+Lifecycle: Proposed -> Draft -> Editing -> Review -> Approved -> Admission Requested -> Admitted, with Held/Rejected review outcomes.
 
 ## Editing Studio integration
 
-```text
-Editing Studio Smartphone App
-  -> nict-editing-studio
-       - book photos
-       - bibliographic data
-       - edition/printing
-       - audio comments
-       - annotations
-       - editorial context
-  -> TKW
-       - candidate management
-       - knowledge formation editing
-       - review / approval
-  -> KnowledgeHub
-```
+Smartphone Book Capture -> nict-editing-studio raw-source registration -> TKW Information Candidate -> editorial view + TKW operations -> human approval -> KnowledgeHub Information.
 
-Editing Studio remains a publishing/editorial application. It provides an editorial view and interaction model over TKW candidates.
+Mobile Capture Confirm only authorizes transfer. TKW human approval is the separate Information Admission decision.
 
 ## TKL integration
 
-TKL performs evidence discovery and preparation.
+Drive/Gmail/Slack/Web -> TKL -> PreparedMaterial/raw candidate -> TKW.
 
-```text
-Drive / Gmail / Slack / Web
-       |
-      TKL
-       |
- PreparedMaterial
-       |
- Raw Knowledge Candidate
-       |
-      TKW
-```
-
-PreparedMaterial and TKL resource IDs preserve provenance to canonical Evidence. TKW should not duplicate TKL's resource federation.
+PreparedMaterial and resource IDs preserve provenance. TKW does not duplicate TKL resource federation.
 
 ## KnowledgeHub integration
 
-TKW is the interactive formation/admission layer in front of KnowledgeHub.
+TKW is the interactive Information Admission layer in front of KnowledgeHub. Existing SemanticContext, SemanticGrounding, GroundingCandidate and related KnowledgeHub/CNCF capabilities should be reused where semantics match, while older KnowledgeFormation terminology should be mapped to the current Information Admission model rather than introducing a second canonical layer.
 
-Existing KnowledgeHub concepts such as:
+KnowledgeHub owns canonical Information. Downstream KnowledgeProjection can project Information into RDF/Open Knowledge.
 
-- SemanticContext
-- SemanticGrounding
-- GroundingCandidate
-- KnowledgeFormation
-- KnowledgeFormationProposal
+## Primary use case: Form and admit Information
 
-should be reused/aligned rather than duplicated.
+A Knowledge Worker receives a raw/prepared candidate, resolves Evidence/Context, edits and semantically maps it, reviews it, and explicitly approves it for Information Admission.
 
-KnowledgeHub remains responsible for Knowledge processing/runtime and canonical Knowledge formation/storage.
+Flow: Register Candidate -> Resolve Evidence/Context -> Edit/Correct -> Ground/Map Concepts/Facets/Relations -> Human Review -> Approve/Hold/Reject -> Request Information Admission -> retain Admission Trace.
 
-## Initial candidate lifecycle
+AI proposal is never identical to admitted Information.
 
-Provisional lifecycle:
+## Feedback loop
 
-```text
-Proposed
-   |
-   v
-Draft
-   |
-   v
-Editing
-   |
-   v
-Review
-   +----> Held
-   +----> Rejected
-   |
-   v
-Approved
-   |
-   v
-Formation Requested
-   |
-   v
-Admitted
-```
-
-Exact state-machine semantics should be defined in CML/CNCF Workflow after reviewing current Workflow support.
-
-## Initial domain concepts
-
-- KnowledgeCandidate
-- KnowledgeCandidateId
-- CandidateSource
-- CandidateContent
-- CandidateContext
-- EvidenceReference
-- ProvenanceReference
-- Grounding / Mapping
-- CandidateRelation
-- CandidateFacet
-- KnowledgeFormationProposal
-- ReviewDecision
-- Approval
-- FormationLink
-
-Canonical CNCF/KnowledgeHub types should be reused where their semantics match.
-
-## Primary application use case
-
-### Form and approve knowledge
-
-Goal:
-
-A Knowledge Worker receives a raw candidate from TKL or a domain application, examines its Evidence and Context, edits/grounds/maps it into a Knowledge Formation Proposal, and explicitly approves it for KnowledgeHub formation.
-
-Main scenario:
-
-1. Receive/register raw candidate.
-2. Resolve Evidence and existing Knowledge references.
-3. Present candidate through a domain or generic view.
-4. Edit/correct content and Context.
-5. Ground/map Concepts, Facets and Relations.
-6. Compare with existing Knowledge where relevant.
-7. Compose KnowledgeFormationProposal.
-8. Human reviews the proposal.
-9. Human accepts, corrects, holds or rejects.
-10. Approved proposal is submitted to KnowledgeHub Knowledge Formation.
-11. Formation result and trace link are retained.
-
-## Design principle
-
-AI proposal is never identical to accepted Knowledge.
-
-```text
-AI / TKL / Capture
-       -> Candidate
-       -> Human Formation / Review
-       -> Explicit Approval
-       -> KnowledgeHub Knowledge
-```
-
-This boundary is the central purpose of TKW.
-
-## Feedback to acquisition/preparation layer
-
-TKW approval/formation completes a loop rather than a one-way pipeline.
-
-After Knowledge is formed/admitted, its canonical identity/version must be available for downstream feedback to TKL. TKL can then project current Knowledge into preparation environments such as Google Workspace.
-
-```text
-TKL -> Raw Candidate -> TKW -> Approved Formation -> KnowledgeHub
- ^                                                   |
- |                                                   |
- +--------- KnowledgeReference / Projection ---------+
-```
-
-TKW should retain the Candidate -> FormationProposal -> formed Knowledge link so TKL can distinguish already-admitted knowledge from genuinely new/update/support/conflict/relation candidates on later preparation runs.
-
-
-## Knowledge Feedback use-case support
-
-TKW participates in the Knowledge Feedback Loop by preserving the link from incoming Raw Candidate through KnowledgeFormationProposal to the formed Knowledge identity/version.
-
-On successful formation, TKW must make the formation result available to TKL so TKL can refresh its Existing Knowledge Context. This is supporting behavior for TKL's `Refresh Knowledge Context after Formation` use case, not ownership of the projection itself.
-
-TKW must also support trace resolution in the reverse direction:
-
-```text
-formed Knowledge
- -> KnowledgeFormationProposal
- -> Workbench Candidate
- -> TKL PreparedMaterial (when TKL-originated)
- -> Evidence
-```
-
-
-## Projection change publication
-
-After formation/approval, TKW must expose enough formation-result information for TKL to append a `KnowledgeProjectionDelta` or trigger a context rebuild.
-
-Relevant outcomes include new Knowledge, updated Knowledge, relation changes and supersession. TKW does not own KnowledgeProjection storage or compaction; it provides formation/change correlation and formed Knowledge identity/version to the TKL feedback path.
+TKW retains Candidate -> admitted Information identity/version -> Evidence trace. It exposes admission results so TKL can refresh Existing Knowledge Context and update/rebuild KnowledgeProjection context. TKW does not own KnowledgeProjection storage or compaction.
