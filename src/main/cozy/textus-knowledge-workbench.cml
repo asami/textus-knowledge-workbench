@@ -2,9 +2,7 @@
 
 > NOTE FOR CODEX
 >
-> This is the canonical CML source location for the Workbench application model.
-> Replace this scaffold with valid current CML after inspecting Cozy/CML grammar and representative src/main/cozy/*.cml files.
-> Do not invent unsupported syntax.
+> Canonical CML source location. Replace this scaffold with valid current CML only after inspecting Cozy/CML grammar and representative models.
 >
 > Design sources:
 > - docs/notes/architecture.md
@@ -12,7 +10,7 @@
 > - docs/phase/phase-1.md
 >
 > Primary application use case:
-> - Form and approve knowledge from a raw Knowledge Candidate.
+> - Form, review and admit Information from a raw/prepared Information Candidate.
 >
 > Model Use Case and Application Workflow separately where supported.
 >
@@ -21,25 +19,27 @@
 > -> Resolve Evidence / Context
 > -> Edit / Correct
 > -> Semantic Grounding / Mapping
-> -> Compose KnowledgeFormationProposal
 > -> Human Review
 > -> Approve / Hold / Reject
-> -> Submit approved proposal to KnowledgeHub Knowledge Formation
-> -> retain Formation Trace.
+> -> Request KnowledgeHub Information Admission
+> -> retain Admission Trace.
 >
 > Candidate sources:
 > - TKL PreparedMaterial / raw candidate
-> - NICT Editing Studio capture-derived candidate
+> - NICT Editing Studio confirmed capture-derived raw data
 >
 > Important boundaries:
-> - TKW owns candidate lifecycle and human formation/approval.
+> - TKW owns Information Candidate lifecycle and human admission workflow.
 > - TKL owns evidence federation/preparation.
 > - Editing Studio owns publishing/editorial domain interaction and views.
-> - KnowledgeHub owns Knowledge processing/runtime/formation/storage.
+> - Mobile Capture Confirm authorizes transfer only.
+> - KnowledgeHub owns canonical Information processing/runtime/storage.
+> - KnowledgeProjection maps canonical Information to RDF/Open Knowledge downstream.
+> - AI cannot perform final Information Admission.
 > - Reuse CNCF/KnowledgeHub canonical types where semantics match.
 >
 > TODO(Codex):
 > - inspect current CML grammar;
-> - encode the application use case(s), capabilities, candidate entity/value types and workflow using supported CML;
+> - encode supported use cases, capabilities, candidate types and workflow;
 > - validate/generate with current Cozy tooling;
-> - preserve explicit human approval before Knowledge formation.
+> - preserve explicit human approval before Information Admission.
