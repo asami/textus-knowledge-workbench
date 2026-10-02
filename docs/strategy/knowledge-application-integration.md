@@ -155,6 +155,23 @@ complete UI metamodel up front.
 
 After the minimum protocol is stable, connect it through textus-flutter-core. Replace mock sources with CNCF-backed Display Model sources while retaining the same standard application-framework UI.
 
+### Track D — Workbench component
+
+Develop [TKW Phase 1](../phase/phase-1.md) independently of the app prototype:
+Candidate registration and durable source/proposal lookup -> evidence-aware
+editing/grounding -> human review/approval -> real KnowledgeHub Admission.
+Start with TKL and Editing Studio fixtures and reuse Cozy/CNCF contracts.
+
+The incoming TKL requirements are a proposal for joint review. The
+[2026-10-02 planning decision](../journal/2026/10/2026-10-02-workbench-development-plan.md)
+prioritizes the business flow and adds guarantees according to concrete needs.
+Content hashes, an independent receipt state machine, concurrent-receipt proof
+and comprehensive recovery machinery are not prerequisites for the first slice.
+Unimplemented requirements remain open. Real Admission remains required for
+TKW Phase 1 completion; TKL feedback and existing-Candidate preparation follow
+their owning contracts. This track does not close the server/app integration
+gates or change their acceptance owners.
+
 ## Integration milestones
 
 | Milestone | Outcome |
