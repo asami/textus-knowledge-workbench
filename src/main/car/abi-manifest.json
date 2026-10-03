@@ -1,0 +1,164 @@
+{
+  "format": "cozy.car.abi-manifest.v2",
+  "component": {
+    "namespace": "org.simplemodeling.textus",
+    "id": "KnowledgeWorkbench",
+    "version": "0.1.0-SNAPSHOT"
+  },
+  "abi": {
+    "version": 1,
+    "exports": {
+      "components": [
+        {
+          "namespace": "org.simplemodeling.textus",
+          "id": "KnowledgeWorkbench"
+        }
+      ],
+      "services": [
+        {
+          "name": "Candidate"
+        }
+      ],
+      "operations": [
+        {
+          "service": "Candidate",
+          "name": "registerCandidate",
+          "kind": "COMMAND",
+          "input": "RegisterCandidate",
+          "output": "RegisterCandidateResult"
+        },
+        {
+          "service": "Candidate",
+          "name": "listCandidates",
+          "kind": "QUERY",
+          "input": "ListCandidates",
+          "output": "ListCandidatesResult"
+        }
+      ],
+      "types": [
+        {
+          "name": "RegisterCandidate",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "name",
+              "type": "name",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "description",
+              "type": "InformationCandidateDescription",
+              "multiplicity": "?",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "ListCandidates",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "text",
+              "type": "InformationCandidateSearchText",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "offset",
+              "type": "int",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "limit",
+              "type": "int",
+              "multiplicity": "?",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "InformationCandidateDescription",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "value",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "InformationCandidateSearchText",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "value",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "RegisterCandidateResult",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "id",
+              "type": "entityid",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "name",
+              "type": "name",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "ListCandidatesResult",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "items",
+              "type": "InformationCandidate",
+              "multiplicity": "*",
+              "required": false
+            }
+          ]
+        }
+      ],
+      "entities": [
+        {
+          "name": "InformationCandidate",
+          "fields": [
+            {
+              "name": "id",
+              "type": "entityid",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "name",
+              "type": "name",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "description",
+              "type": "InformationCandidateDescription",
+              "multiplicity": "?",
+              "required": false
+            }
+          ]
+        }
+      ]
+    },
+    "dependencies": []
+  }
+}

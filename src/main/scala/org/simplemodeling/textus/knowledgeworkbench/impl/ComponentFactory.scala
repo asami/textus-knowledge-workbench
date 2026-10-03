@@ -1,0 +1,126 @@
+package org.simplemodeling.textus.knowledgeworkbench.impl
+
+import cats.syntax.all.*
+import org.simplemodeling.textus.knowledgeworkbench.{KnowledgeWorkbenchComponent, entity, value}
+import org.goldenport.cncf.component.{Component, ComponentCreate, ComponentId}
+import org.goldenport.cncf.directive.Query
+import org.goldenport.cncf.entity.runtime.EntityQueryFieldResolver
+import org.goldenport.cncf.unitofwork.ExecUowM
+import org.goldenport.protocol.operation.OperationResponse
+import org.goldenport.record.Record
+
+final class ComponentFactory extends Component.BundleFactory {
+  def primaryFactory: Component.PrimaryComponentFactory =
+    KnowledgeWorkbenchPrimaryFactory
+
+  override def componentletFactories: Vector[Component.ComponentletFactory] =
+    Vector.empty
+}
+
+abstract class KnowledgeWorkbenchParticipantFactoryBase extends KnowledgeWorkbenchComponent.Factory {
+  protected final val shared_services =
+    Vector(
+      KnowledgeWorkbenchComponent.CandidateService,
+      KnowledgeWorkbenchComponent.AggregateService,
+      KnowledgeWorkbenchComponent.ViewService,
+      KnowledgeWorkbenchComponent.EntityService
+    )
+
+  protected final def component_core(
+    name: String,
+    componentId: ComponentId
+  ): Component.Core =
+    spec_create(name, componentId, shared_services)
+
+  override val Candidate: KnowledgeWorkbenchComponent.CandidateServiceFactory = DefaultCandidateServiceFactory()
+  override val aggregate: KnowledgeWorkbenchComponent.AggregateServiceFactory = AggregateServiceFactoryImpl()
+  override val view: KnowledgeWorkbenchComponent.ViewServiceFactory = ViewServiceFactoryImpl()
+  override val entity: KnowledgeWorkbenchComponent.EntityServiceFactory = DefaultEntityServiceFactory()
+}
+
+final class KnowledgeWorkbenchPrimaryComponent extends KnowledgeWorkbenchComponent {
+  override def mcpReadyServices: Set[String] =
+    Set.empty
+}
+
+object KnowledgeWorkbenchPrimaryFactory extends KnowledgeWorkbenchParticipantFactoryBase with Component.PrimaryComponentFactory {
+  override protected def create_Component(params: ComponentCreate): Component =
+    new KnowledgeWorkbenchPrimaryComponent()
+
+  override protected def create_Core(
+    params: ComponentCreate,
+    comp: Component
+  ): Component.Core =
+    component_core(KnowledgeWorkbenchComponent.name, KnowledgeWorkbenchComponent.componentId)
+}
+
+final class DefaultCandidateServiceFactory extends KnowledgeWorkbenchComponent.CandidateServiceFactory {
+  import KnowledgeWorkbenchComponent.CandidateService.*
+
+  override def createRegisterCandidateActionCall(
+    core: org.goldenport.cncf.action.ActionCall.Core,
+    action: RegisterCandidate
+  ): RegisterCandidateActionCall =
+    RegisterCandidateActionCallImpl(core, action)
+
+  override def createListCandidatesActionCall(
+    core: org.goldenport.cncf.action.ActionCall.Core,
+    action: ListCandidates
+  ): ListCandidatesActionCall =
+    ListCandidatesActionCallImpl(core, action)
+
+  private final case class RegisterCandidateActionCallImpl(
+    core: org.goldenport.cncf.action.ActionCall.Core,
+    override val action: RegisterCandidate
+  ) extends RegisterCandidateActionCall {
+    protected def build_Program: ExecUowM[OperationResponse] =
+      for {
+        candidate <- exec_from(entity.create.InformationCandidate.createC(action.request.toRecord))
+        result <- entity_create(candidate)
+        output <- exec_from(value.RegisterCandidateResult.createC(action.request.toRecord ++ result.toRecord))
+      } yield OperationResponse(output.toRecord())
+  }
+
+  private final case class ListCandidatesActionCallImpl(
+    core: org.goldenport.cncf.action.ActionCall.Core,
+    override val action: ListCandidates
+  ) extends ListCandidatesActionCall {
+    protected def build_Program: ExecUowM[OperationResponse] =
+      for {
+        input <- exec_from(value.ListCandidates.createC(action.request.toRecord))
+        query = Query.plan(
+          Record.empty,
+          where = input.text.map(t => Query.Or(Vector(
+            Query.Contains("name", t.value, caseInsensitive = true),
+            Query.Contains("description", t.value, caseInsensitive = true)
+          ))).getOrElse(Query.True),
+          offset = input.offset,
+          limit = input.limit
+        )
+        rewrittenquery = EntityQueryFieldResolver(core.component, "InformationCandidate").rewrite(query)
+        result <- entity_search[entity.InformationCandidate](entity.query.InformationCandidate.collectionId, rewrittenquery)
+      } yield OperationResponse(value.ListCandidatesResult(result.data).toRecord())
+  }
+  }
+
+object DefaultCandidateServiceFactory {
+  def apply(): DefaultCandidateServiceFactory = new DefaultCandidateServiceFactory()
+  }
+
+final class DefaultEntityServiceFactory extends KnowledgeWorkbenchComponent.EntityServiceFactory
+
+object DefaultEntityServiceFactory {
+  def apply(): DefaultEntityServiceFactory = new DefaultEntityServiceFactory()
+  }
+
+final class AggregateServiceFactoryImpl extends KnowledgeWorkbenchComponent.AggregateServiceFactory
+
+object AggregateServiceFactoryImpl {
+  def apply(): AggregateServiceFactoryImpl = new AggregateServiceFactoryImpl()
+}
+
+final class ViewServiceFactoryImpl extends KnowledgeWorkbenchComponent.ViewServiceFactory
+
+object ViewServiceFactoryImpl {
+  def apply(): ViewServiceFactoryImpl = new ViewServiceFactoryImpl()
+}
