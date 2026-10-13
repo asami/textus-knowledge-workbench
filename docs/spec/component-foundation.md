@@ -3,7 +3,17 @@
 Spec: `workbench-component-foundation`\
 Rules: `FND-01` through `FND-05`\
 Owner: PHASE-1 / STEP-1 / S1-A\
-Status: foundation predecessor validation recorded; documentation validation and independent Step acceptance pending
+Status: STEP-1 / S1-A accepted at commit 70620d1aeaae4a3859df93d6ff6948bdcff5742c
+
+Acceptance basis: parent record
+`tkw-phase1-step1-post-hardbreak-commit-acceptance-20261003@1`, retained Step
+review `tkw-phase1-step1-acceptance-review-20261003@1`, focused closure review
+`tkw-phase1-step1-hardbreak-focused-review-20261003@1`, and review ledger
+`tkw-phase1-review-ledger-20261002@4`. The commit receipt confirms all 23 admitted
+foundation paths, original parent `c3425d2968e2b95ad94474a1d83c2cc005373c3e`,
+and preservation of the seven planning changes. It closes STEP-1/S1-A only.
+The historical limits below remain applicable; the successful full SBT suite,
+comprehensive Phase review, closure ledger and final release remain pending.
 
 This foundation adopts the actual standard Cozy CAR scaffold for
 KnowledgeWorkbench, Candidate and InformationCandidate. `project.yaml` owns
@@ -22,7 +32,7 @@ and provides `domain.full@1`, `user.fixed-context-compatible@1` and
 datastore/provider placement and user context. The subject-10 predecessor evidence
 passed production factory/assembly scenarios and actual CLI help in isolated
 standalone storage; style metadata alone does not establish Subsystem activation
-or persistence. Independent Step acceptance remains pending.
+or persistence. STEP-1 acceptance is recorded at the commit above.
 
 The native authored `src/main/car/assembly-descriptor.yaml` declares subsystem
 `textus-knowledge-workbench` at `0.1.0-SNAPSHOT`, binds
@@ -47,7 +57,7 @@ The instance uses native descriptor syntax without assumed interpolation or
 
 `src/main/car/abi-manifest.json` is the canonical authored ABI source, using
 `cozy.car.abi-manifest.v2` and `abi.version=1` for the canonical component
-coordinate above. Its complete exports are KnowledgeWorkbench, service
+coordinate above. At accepted STEP-1 its complete exports were KnowledgeWorkbench, service
 Candidate, COMMAND `registerCandidate` and QUERY `listCandidates`, value types
 RegisterCandidate, ListCandidates, InformationCandidateDescription,
 InformationCandidateSearchText, RegisterCandidateResult and ListCandidatesResult,
@@ -103,9 +113,10 @@ without changing ABI, schemas, actions or publication. Native component Help
 uses a framework-fixed generic summary without manual navigation fields;
 the documentation does not require a framework display override. Fresh
 generation, packaged manual bytes, description projection, canonical CLI help
-and CAR lint remain validation gates for this documentation change.
+and CAR lint were included in the accepted STEP-1 documentation evidence.
 
-InformationCandidate has required `id` and `name` and optional `description`.
+The accepted STEP-1 InformationCandidate schema had required `id` and `name`
+and optional `description`. The proposal specification owns its additive STEP-2 fields.
 The CML declares `entity-create` implementation metadata for
 `Candidate/registerCandidate`, with required name and optional description, and
 `entity-search` metadata for `Candidate/listCandidates`, with optional text,
@@ -128,8 +139,9 @@ process, including description text search and offset/limit, with one persistent
 SQLite row inspected in isolated storage. Registration returns `id` and `name`;
 listing returns optional description as `description.value`. Native generated
 `Record.dataAuto` omits empty `items`, yielding `{}` for an empty search or page.
-These observations do not complete independent Step acceptance. This starter
-schema is not yet provider-neutral RawCandidateProposal registration.
+These historical observations form part of the accepted foundation evidence.
+The accepted STEP-1 starter schema did not provide proposal registration;
+[STEP-2](candidate-proposals.md) adds that surface under its own acceptance gate.
 
 The handwritten BundleFactory binds Candidate to the native ActionCalls above
 and delegates aggregate, view and entity services to the generated contracts.
@@ -187,10 +199,10 @@ the explicit project dependency, instance and prepared-classpath contract above;
 file modes and web descriptors are preserved. `target/` and launcher
 `.cache/` are ignored. SBT-containing scripts are routed through the serial
 command runner. No generated source under `target` is edited or committed.
-The new documentation projection remains subject to fresh selected generation,
-runtime preparation, focused specifications, packaging, canonical help and CAR
-lint; the parent owns validation and evidence reuse. Independent Step acceptance
-review and a local Step commit remain pending. The required successful complete
+STEP-1 documentation projection passed the selected generation/runtime-preparation,
+focused specifications, packaging, canonical help and CAR lint gates. Independent
+acceptance review and the focused hardbreak closure review were admitted before
+the local Step commit. The parent owns validation and evidence reuse for later changes. The required successful complete
 SBT suite remains the Phase 1 bootstrap release gate after Step commits and
 comprehensive Phase review. Foundation predecessor evidence does not close
 Phase 1 or its later business acceptance gates.
@@ -225,10 +237,11 @@ Confirm authorizes transfer only. KnowledgeHub owns canonical Information;
 KnowledgeProjection maps it to downstream RDF/Open Knowledge. AI cannot perform
 final Information Admission.
 
-Proposal receipt, persistence/restart lookup, sequential resend, evidence-aware
-formation, lifecycle transitions/approval invalidation and available
-List/Detail/edit/review contracts remain subsequent Phase 1 work, with no
-acceptance claimed by this starter. [Phase 1.1](../phase/phase-1.1.md) owns real
+The accepted foundation closes STEP-1 only. Proposal registration, restart
+lookup and sequential resend are now the authored [STEP-2 implementation](candidate-proposals.md),
+with validation/review/commit pending. Evidence-aware formation, lifecycle
+transitions/approval invalidation and available List/Detail/edit/review contracts
+remain subsequent Phase 1 work. [Phase 1.1](../phase/phase-1.1.md) owns real
 KnowledgeHub Admission, its outcome/failure semantics and Candidate/Evidence
 trace. Existing-Candidate preparation remains a correlated request/result
 follow-on flow; full DTOs, execution, TKL feedback and live provider integration

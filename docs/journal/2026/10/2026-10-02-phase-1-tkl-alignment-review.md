@@ -460,3 +460,13 @@ The most valuable immediate changes are:
 6. keep real KnowledgeHub Admission as the non-negotiable Phase 1 closure gate.
 
 These refinements preserve the current business-first development plan while making the TKL/TKW authority and implementation boundaries concrete enough for implementation.
+
+## Subsequent planning split — 2026-10-02
+
+This review remains the historical assessment of the unsplit Phase 1 plan.
+The later user invocation `cncf-split-phase Phase 1` partitions its unfinished
+scope into [Phase 1 — Candidate Formation](../../../phase/phase-1.md) (items 1-4)
+and [Phase 1.1 — KnowledgeHub Admission](../../../phase/phase-1.1.md) (item 5).
+Real Admission remains mandatory for Phase 1.1 and sequence completion; the
+earlier Phase 1 closure wording above is pre-split evidence. The split changes
+delivery ownership without adopting the review's deferred guarantee/DTO proposals.

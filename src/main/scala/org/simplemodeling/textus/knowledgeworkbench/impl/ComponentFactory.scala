@@ -69,6 +69,55 @@ final class DefaultCandidateServiceFactory extends KnowledgeWorkbenchComponent.C
   ): ListCandidatesActionCall =
     ListCandidatesActionCallImpl(core, action)
 
+  override def createRegisterProposalActionCall(
+    core: org.goldenport.cncf.action.ActionCall.Core,
+    action: RegisterProposal
+  ): RegisterProposalActionCall =
+    RegisterProposalActionCallImpl(core, action)
+
+  override def createFindCandidateByProposalActionCall(
+    core: org.goldenport.cncf.action.ActionCall.Core,
+    action: FindCandidateByProposal
+  ): FindCandidateByProposalActionCall =
+    FindCandidateByProposalActionCallImpl(core, action)
+
+  private final case class RegisterProposalActionCallImpl(
+    core: org.goldenport.cncf.action.ActionCall.Core,
+    override val action: RegisterProposal
+  ) extends RegisterProposalActionCall {
+    protected def build_Program: ExecUowM[OperationResponse] =
+      for {
+        input <- exec_from(value.RegisterProposal.createC(action.request.toRecord))
+        proposal <- exec_from(CandidateProposal.parse(input.proposalJson))
+        query <- exec_from(CandidateProposal.key(proposal.producerref, proposal.proposalid))
+        rewrittenquery = EntityQueryFieldResolver(core.component, "InformationCandidate").rewrite(query)
+        matches <- entity_search[entity.InformationCandidate](entity.query.InformationCandidate.collectionId, rewrittenquery)
+        current <- exec_from(CandidateProposal.current(matches.data))
+        output <- current match {
+          case Some(candidate) => exec_pure(value.RegisterProposalResult(candidate, false))
+          case None =>
+            for {
+              created <- entity_create(proposal.candidate)
+              candidate <- entity_load[entity.InformationCandidate](created.id)
+            } yield value.RegisterProposalResult(candidate, true)
+        }
+      } yield OperationResponse(output.toRecord())
+  }
+
+  private final case class FindCandidateByProposalActionCallImpl(
+    core: org.goldenport.cncf.action.ActionCall.Core,
+    override val action: FindCandidateByProposal
+  ) extends FindCandidateByProposalActionCall {
+    protected def build_Program: ExecUowM[OperationResponse] =
+      for {
+        input <- exec_from(value.FindCandidateByProposal.createC(action.request.toRecord))
+        query <- exec_from(CandidateProposal.key(input.producerRef, input.proposalId))
+        rewrittenquery = EntityQueryFieldResolver(core.component, "InformationCandidate").rewrite(query)
+        matches <- entity_search[entity.InformationCandidate](entity.query.InformationCandidate.collectionId, rewrittenquery)
+        candidate <- exec_from(CandidateProposal.current(matches.data))
+      } yield OperationResponse(value.FindCandidateByProposalResult(candidate).toRecord())
+  }
+
   private final case class RegisterCandidateActionCallImpl(
     core: org.goldenport.cncf.action.ActionCall.Core,
     override val action: RegisterCandidate

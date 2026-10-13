@@ -157,10 +157,26 @@ After the minimum protocol is stable, connect it through textus-flutter-core. Re
 
 ### Track D — Workbench component
 
-Develop [TKW Phase 1](../phase/phase-1.md) independently of the app prototype:
-Candidate registration and durable source/proposal lookup -> evidence-aware
+Develop the Workbench sequence independently of the app prototype:
+Producer proposal -> TKW Candidate registration and durable source/proposal lookup -> evidence-aware
 editing/grounding -> human review/approval -> real KnowledgeHub Admission.
 Start with TKL and Editing Studio fixtures and reuse Cozy/CNCF contracts.
+CandidateSource identifies input origin/correspondence; RawDataIndex retains
+supporting references, including optional TKL preparation/Run provenance.
+Their minimal representation is owned by TKW; preparation execution stays with TKL.
+
+| Order | Owning Phase | Closure and validation responsibility |
+| --- | --- | --- |
+| 1 | [TKW Phase 1 — Candidate Formation](../phase/phase-1.md) | Existing items 1-4: runnable component, durable registration/lookup, evidence-aware edit/ground/review/approval and both fixture views; create root build.sbt and pass bootstrap full validation |
+| 2 | [TKW Phase 1.1 — KnowledgeHub Admission](../phase/phase-1.1.md) | Former item 5: actual canonical Information Admission, confirmed outcome and Candidate/Evidence trace; final owner of the repository-complete SBT suite for both Phases |
+
+Applied split on 2026-10-02: `Phase 1 -> Phase 1.1`, each expected 6h (range
+5-8h, low confidence; no comparable timing calibration). Both execution parents
+are recommended `gpt-6.1-sol / high`, standard mode. The policy is
+`final-only / sbt-full-suite`; Phase 1 additionally proves its new build entry
+under `bootstrap-structural`. Each retains focused validation, independent
+review, Step acceptance, closure ledger and release commit. No later TKW
+Phase is renumbered or selected, and no child execution starts from the split.
 
 The incoming TKL requirements are a proposal for joint review. The
 [2026-10-02 planning decision](../journal/2026/10/2026-10-02-workbench-development-plan.md)
@@ -168,7 +184,8 @@ prioritizes the business flow and adds guarantees according to concrete needs.
 Content hashes, an independent receipt state machine, concurrent-receipt proof
 and comprehensive recovery machinery are not prerequisites for the first slice.
 Unimplemented requirements remain open. Real Admission remains required for
-TKW Phase 1 completion; TKL feedback and existing-Candidate preparation follow
+TKW Phase 1.1 and the complete sequence; Phase 1 closure proves Candidate
+formation only. TKL feedback and existing-Candidate preparation follow
 their owning contracts. This track does not close the server/app integration
 gates or change their acceptance owners.
 

@@ -33,6 +33,20 @@
           "kind": "QUERY",
           "input": "ListCandidates",
           "output": "ListCandidatesResult"
+        },
+        {
+          "service": "Candidate",
+          "name": "registerProposal",
+          "kind": "COMMAND",
+          "input": "RegisterProposal",
+          "output": "RegisterProposalResult"
+        },
+        {
+          "service": "Candidate",
+          "name": "findCandidateByProposal",
+          "kind": "QUERY",
+          "input": "FindCandidateByProposal",
+          "output": "FindCandidateByProposalResult"
         }
       ],
       "types": [
@@ -131,6 +145,114 @@
               "required": false
             }
           ]
+        },
+        {
+          "name": "RegisterProposal",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "proposalJson",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "RegisterProposalResult",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "candidate",
+              "type": "InformationCandidate",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "created",
+              "type": "boolean",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "FindCandidateByProposal",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "producerRef",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "proposalId",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "FindCandidateByProposalResult",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "candidate",
+              "type": "InformationCandidate",
+              "multiplicity": "?",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "ProposalReference",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "id",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "kind",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "revision",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "snapshotRef",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "retrievalState",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "retentionUntil",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "limitation",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            }
+          ]
         }
       ],
       "entities": [
@@ -152,6 +274,72 @@
             {
               "name": "description",
               "type": "InformationCandidateDescription",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "producerRef",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "proposalId",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "sourceKind",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "originalProposal",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "context",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "preparationState",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "evidenceRefs",
+              "type": "ProposalReference",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "preparedMaterialRefs",
+              "type": "ProposalReference",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "sourceRunRef",
+              "type": "ProposalReference",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "sourceContextRef",
+              "type": "ProposalReference",
               "multiplicity": "?",
               "required": false
             }

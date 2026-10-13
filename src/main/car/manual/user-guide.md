@@ -1,6 +1,6 @@
 # Textus Knowledge Workbench user guide
 
-This guide runs the starter Candidate operations for
+This guide runs starter and proposal Candidate operations for
 `org.simplemodeling.textus.KnowledgeWorkbench` version `0.1.0-SNAPSHOT`.
 The [reference manual](index.md) explains results, security and scope.
 
@@ -16,7 +16,7 @@ Run every command below from the repository root. The ordinary focused workflow
 is:
 
 ```sh
-sbt --batch clean cozyGenerate cozyPrepareRuntime 'testOnly org.simplemodeling.textus.knowledgeworkbench.ComponentFactorySpec' cozyBuildCAR
+sbt --batch clean cozyGenerate cozyPrepareRuntime 'testOnly org.simplemodeling.textus.knowledgeworkbench.CandidateProposalSpec org.simplemodeling.textus.knowledgeworkbench.ComponentFactorySpec' cozyBuildCAR
 ```
 
 For agent execution, the parent routes this invocation through
@@ -86,7 +86,7 @@ The project launcher consumes the prepared classpath, invokes
 bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class org.goldenport.cncf.CncfMain -- --discover=classes "--textus.assembly.descriptor=$WORKBENCH_ASSEMBLY_DESCRIPTOR" command meta.help org.simplemodeling.textus.KnowledgeWorkbench
 ```
 
-Help should contain both Candidate operations without assembly/profile failure
+Help should contain all four Candidate operations without assembly/profile failure
 diagnostics; exit zero alone does not establish successful activation. Native
 component Help retains the framework's generic summary. The authored operation
 descriptions also supply Cozy metadata.
@@ -124,6 +124,80 @@ or page results render as `{}` because generated `Record.dataAuto` omits empty
 `items`. This is also the expected shape of a list with no accessible rows.
 The [reference examples](index.md#listcandidates) show nonempty YAML/JSON output.
 
+## Register and look up proposals
+
+Use the same complete operator instance, fixed subject and native storage root
+throughout this sequence. These source fixtures are in the repository's
+`src/test/resources/proposals`; they are fixture mappings, with no live provider
+transport claim. Shell command substitution supplies the fixture JSON as one
+`--proposalJson` argument. The operation retains the exact string it receives;
+the shell removes the trailing file newline in these examples.
+
+Register the prepared TKL fixture:
+
+```sh
+bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class org.goldenport.cncf.CncfMain -- --discover=classes "--textus.assembly.descriptor=$WORKBENCH_ASSEMBLY_DESCRIPTOR" command KnowledgeWorkbench.Candidate.registerProposal --proposalJson "$(cat src/test/resources/proposals/tkl-prepared.json)"
+```
+
+Successful first registration returns `created: true` and `candidate` containing
+its native ID, current content/context, exact first `originalProposal`, evidence,
+PreparedMaterial and ProcessingRun references. Keep the observed native ID.
+Look up that exact source key in a separate process:
+
+```sh
+bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class org.goldenport.cncf.CncfMain -- --discover=classes "--textus.assembly.descriptor=$WORKBENCH_ASSEMBLY_DESCRIPTOR" command KnowledgeWorkbench.Candidate.findCandidateByProposal --producerRef tkl-fixture --proposalId tkl-proposal-1
+```
+
+The result has the same persisted `candidate`, with no `created` field. Exact
+case and whitespace matter. An absent key returns `{}` through the optional
+candidate codec. Lookup never writes. More than one accessible matching row
+fails explicitly as ambiguous correspondence.
+
+Set the following variable to the native ID just observed, replacing the
+placeholder. Exercise a content-only edit through the already generated native
+entity operation:
+
+```sh
+WORKBENCH_CANDIDATE_ID="<observed-native-id>"
+bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class org.goldenport.cncf.CncfMain -- --discover=classes "--textus.assembly.descriptor=$WORKBENCH_ASSEMBLY_DESCRIPTOR" command KnowledgeWorkbench.entity.updateInformationCandidate --id "$WORKBENCH_CANDIDATE_ID" --content "Human corrected content"
+```
+
+Observe native success, then look up the candidate to confirm its content is
+`Human corrected content`. This is a persistence fixture; Step 3 owns the
+human-facing edit/review lifecycle and native revision policy. Resend the same
+valid source proposal from another ordinary process:
+
+```sh
+bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class org.goldenport.cncf.CncfMain -- --discover=classes "--textus.assembly.descriptor=$WORKBENCH_ASSEMBLY_DESCRIPTOR" command KnowledgeWorkbench.Candidate.registerProposal --proposalJson "$(cat src/test/resources/proposals/tkl-prepared.json)"
+```
+
+The result has `created: false`, the same ID and the edited current content.
+The exact first original proposal and source/evidence/material/run metadata
+remain stored. A different valid payload with the same producer/proposal key
+also returns that current candidate without incoming-field writes or payload
+conflict. Validation still applies before any registration result. Sequential
+resend promises no concurrent uniqueness guarantee or independent receipt state.
+
+Register and separately look up the unprepared Editing Studio fixture:
+
+```sh
+bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class org.goldenport.cncf.CncfMain -- --discover=classes "--textus.assembly.descriptor=$WORKBENCH_ASSEMBLY_DESCRIPTOR" command KnowledgeWorkbench.Candidate.registerProposal --proposalJson "$(cat src/test/resources/proposals/editing-studio-unprepared.json)"
+bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class org.goldenport.cncf.CncfMain -- --discover=classes "--textus.assembly.descriptor=$WORKBENCH_ASSEMBLY_DESCRIPTOR" command KnowledgeWorkbench.Candidate.findCandidateByProposal --producerRef editing-studio-fixture --proposalId book-capture-1
+```
+
+It retains source context, unverified capture evidence, unknown revision/snapshot
+and the stated scan/version limitation. It requires no PreparedMaterial or Run.
+`captureConfirmed` stays in the exact original JSON as transfer confirmation;
+human review/approval remains pending. Query absence without adding a candidate:
+
+```sh
+bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class org.goldenport.cncf.CncfMain -- --discover=classes "--textus.assembly.descriptor=$WORKBENCH_ASSEMBLY_DESCRIPTOR" command KnowledgeWorkbench.Candidate.findCandidateByProposal --producerRef editing-studio-fixture --proposalId absent
+```
+
+See the [proposal reference](index.md#registerproposal) for complete validation
+and candidate/reference fields. These examples describe the implemented
+operation sequence; STEP-2 runtime validation and acceptance are still pending.
+
 ## Troubleshooting and validation boundary
 
 If startup fails, confirm the prepared classpath exists and is nonempty, the
@@ -142,9 +216,13 @@ were CLI help, registration, separate-process list, description filtering and
 paging, with one persistent SQLite row in isolated storage. No Web/manual,
 OpenAPI or MCP route execution is established by those checks.
 
-The predecessor clean build passed four focused factory/assembly scenarios and
-CAR packaging. The new manuals and DESCRIPTION changes remain subject to fresh
-generation/package/help/lint validation, independent Step review and a local
-Step commit. Phase 1 is still in progress and retains its final bootstrap full
-SBT suite. Proposal formation, human lifecycle actions and views are subsequent
-Phase 1 work; actual KnowledgeHub Admission belongs to Phase 1.1.
+STEP-1 clean generation/runtime preparation, four focused factory/assembly scenarios,
+CAR packaging/manual/help/lint and independent reviews were admitted before
+local commit `70620d1aeaae4a3859df93d6ff6948bdcff5742c`. Parent record
+`tkw-phase1-step1-post-hardbreak-commit-acceptance-20261003@1` and review ledger
+`tkw-phase1-review-ledger-20261002@4` close STEP-1/S1-A only. STEP-2 proposal
+implementation and GWT scenarios are authored; fresh focused validation,
+representative CLI evidence, CAR lint, independent review and local Step commit
+remain pending. Phase 1 retains human lifecycle work, views, comprehensive
+Phase review and its final successful bootstrap full SBT suite/closure/release.
+Actual KnowledgeHub Admission belongs to Phase 1.1.

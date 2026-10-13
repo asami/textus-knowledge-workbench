@@ -12,10 +12,11 @@ org.simplemodeling.textus.knowledgeworkbench
 
 ### DESCRIPTION
 
-Forms Information Candidates for human work. The current starter supports
-Candidate registration and search using a stable standalone user identity and
-the CNCF-managed native persistent application datastore. Proposal formation,
-review and approval belong to subsequent Phase 1 work.
+Forms Information Candidates for human work. Supports starter registration/search
+and provider-neutral proposal registration with durable source-key lookup. Sequential
+resend returns the current candidate without overwriting edits or original proposal
+metadata. Uses a stable standalone identity and the CNCF native persistent datastore.
+Human formation, review and approval belong to subsequent Phase 1 Steps.
 
 ### COMPONENTLET
 
@@ -54,7 +55,7 @@ factory does not instantiate this participant or publish its services through MC
 
 ### DESCRIPTION
 
-Registers and searches starter Information Candidates for the current user.
+Registers and searches Information Candidates and source proposals for the current user.
 Operations require a stable user identity and the native persistent application
 datastore supplied by the CNCF Subsystem.
 
@@ -86,6 +87,51 @@ entity-create
 
 ##### ENTITY
 InformationCandidate
+
+#### registerProposal
+
+##### DESCRIPTION
+
+Validates one proposal JSON object and searches its exact producerRef/proposalId key.
+Creates a native candidate when absent; sequential resend returns the current
+candidate with created=false without any incoming-field write. Retains the exact
+first originalProposal and supplied evidence/material/source references.
+
+##### TYPE
+
+COMMAND
+
+##### INPUT
+
+###### TYPE
+RegisterProposal
+
+##### OUTPUT
+
+###### TYPE
+RegisterProposalResult
+
+#### findCandidateByProposal
+
+##### DESCRIPTION
+
+Finds the current accessible candidate by exact, case-sensitive producerRef and
+proposalId. Returns an optional candidate without writes. Ambiguous visible
+correspondence fails explicitly instead of selecting a row.
+
+##### TYPE
+
+QUERY
+
+##### INPUT
+
+###### TYPE
+FindCandidateByProposal
+
+##### OUTPUT
+
+###### TYPE
+FindCandidateByProposalResult
 
 #### listCandidates
 
@@ -127,6 +173,17 @@ InformationCandidate
 | id          | entityid | 1            |
 | name        | name     | 1            |
 | description | InformationCandidateDescription | ?            |
+| producerRef | string | ? |
+| proposalId | string | ? |
+| sourceKind | string | ? |
+| originalProposal | string | ? |
+| content | string | ? |
+| context | string | ? |
+| preparationState | string | ? |
+| evidenceRefs | ProposalReference | * |
+| preparedMaterialRefs | ProposalReference | * |
+| sourceRunRef | ProposalReference | ? |
+| sourceContextRef | ProposalReference | ? |
 
 # VALUE
 
@@ -185,3 +242,55 @@ InformationCandidate
 | name  | type                   | multiplicity |
 |-------+------------------------+--------------|
 | items | InformationCandidate | *            |
+
+## RegisterProposal
+
+- input-kind :: COMMAND
+
+### Attribute
+
+| name | type | multiplicity |
+|------+------+--------------|
+| proposalJson | string | 1 |
+
+## RegisterProposalResult
+
+### Attribute
+
+| name | type | multiplicity |
+|------+------+--------------|
+| candidate | InformationCandidate | 1 |
+| created | boolean | 1 |
+
+## FindCandidateByProposal
+
+- input-kind :: QUERY
+
+### Attribute
+
+| name | type | multiplicity |
+|------+------+--------------|
+| producerRef | string | 1 |
+| proposalId | string | 1 |
+
+## FindCandidateByProposalResult
+
+### Attribute
+
+| name | type | multiplicity |
+|------+------+--------------|
+| candidate | InformationCandidate | ? |
+
+## ProposalReference
+
+### Attribute
+
+| name | type | multiplicity |
+|------+------+--------------|
+| id | string | 1 |
+| kind | string | 1 |
+| revision | string | ? |
+| snapshotRef | string | ? |
+| retrievalState | string | ? |
+| retentionUntil | string | ? |
+| limitation | string | ? |

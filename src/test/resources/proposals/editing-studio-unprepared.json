@@ -1,0 +1,25 @@
+{
+  "producerRef": "editing-studio-fixture",
+  "proposalId": "book-capture-1",
+  "sourceKind": "editing-studio",
+  "name": "Confirmed book capture",
+  "content": "A capture-derived note awaiting preparation and human review.",
+  "context": "Book chapter captured through Editing Studio",
+  "preparationState": "unprepared",
+  "captureConfirmed": true,
+  "evidenceRefs": [
+    {
+      "id": "capture:book:1",
+      "kind": "book-capture",
+      "retrievalState": "unverified",
+      "limitation": "Reference metadata only; original scan and a stable version are not available in this fixture."
+    }
+  ],
+  "sourceContextRef": {
+    "id": "editing-context:book:1",
+    "kind": "source-context"
+  },
+  "provenance": {
+    "producerObservation": "confirmed transfer; human approval remains pending"
+  }
+}

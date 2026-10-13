@@ -18,7 +18,7 @@ persistence.
 
 The canonical authored ABI source is `src/main/car/abi-manifest.json`, in
 `cozy.car.abi-manifest.v2` format with `abi.version=1`. It declares the component
-coordinate, Candidate service, both operations, all six value types and the
+coordinate, Candidate service, four operations, all eleven value types and the
 InformationCandidate entity with their complete fields, plus an empty
 dependency list. Later CML surface or component-coordinate changes must update
 the canonical ABI exports/version coherently and revalidate ordinary CAR
@@ -26,11 +26,15 @@ packaging and runtime preparation.
 
 The starter `Candidate/registerCandidate` operation accepts a name and optional
 description; `Candidate/listCandidates` searches InformationCandidate entities.
-Provider-neutral proposal registration, durable source/proposal lookup and
-resend behavior belong to the subsequent Phase 1 work. Starter operations
-remain outside MCP publication.
+`Candidate/registerProposal` accepts one JSON proposal, creates a native
+candidate if its exact producer/proposal key is absent, and returns the current
+candidate on sequential resend without overwriting human edits.
+`Candidate/findCandidateByProposal` looks up that persisted key without writes.
+All Candidate operations remain outside MCP publication. STEP-2 implementation
+and GWT specifications are authored; its validation, review and commit are pending.
 
-See the [component foundation specification](docs/spec/component-foundation.md),
+See the [proposal specification](docs/spec/candidate-proposals.md),
+[component foundation specification](docs/spec/component-foundation.md),
 [packaged reference manual](src/main/car/manual/index.md),
 [user guide](src/main/car/manual/user-guide.md),
 [Phase 1 plan](docs/phase/phase-1.md), [Phase 1 checklist](docs/phase/phase-1-checklist.md)
@@ -53,7 +57,7 @@ dependency resolution. `CNCF_VERSION`, `CNCF_VERSION_FILE`, `CNCF_SAMPLES_ROOT`,
 The focused development workflow is:
 
 ```sh
-sbt --batch clean cozyGenerate cozyPrepareRuntime 'testOnly org.simplemodeling.textus.knowledgeworkbench.ComponentFactorySpec' cozyBuildCAR
+sbt --batch clean cozyGenerate cozyPrepareRuntime 'testOnly org.simplemodeling.textus.knowledgeworkbench.CandidateProposalSpec org.simplemodeling.textus.knowledgeworkbench.ComponentFactorySpec' cozyBuildCAR
 ```
 
 Ordinary `clean` refreshes source-bound public Scaladoc staging after handwritten
@@ -136,7 +140,7 @@ bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class o
 ```
 
 Packaged CLI use also requires the operator instance when fixed-user settings
-are needed. Acceptance requires component help containing both Candidate
+are needed. STEP-1 acceptance required component help containing both starter Candidate
 operations with no assembly/profile failure diagnostics; exit zero alone is
 insufficient. It also requires actual `KnowledgeWorkbench.Candidate.registerCandidate`
 and `KnowledgeWorkbench.Candidate.listCandidates` in separate ordinary command
@@ -147,15 +151,30 @@ factory/assembly tests and CAR packaging. Actual CLI help, registration and
 separate-process list, description text filtering and offset/limit checks passed
 with one persistent SQLite row inspected under isolated storage. Controlled
 normal/debug routing passed all 16 cases. Metadata and factory initialization
-alone do not establish persistence acceptance. The new manuals and DESCRIPTION
-prose remain subject to fresh generation/package/help/lint validation; independent
-Step review and a local Step commit remain pending. These CLI checks do not
+alone do not establish persistence acceptance. STEP-1 documentation generation,
+packaging/help/lint and independent review were admitted, including focused
+hardbreak closure review. STEP-1/S1-A is accepted at local commit
+`70620d1aeaae4a3859df93d6ff6948bdcff5742c`, recorded by
+`tkw-phase1-step1-post-hardbreak-commit-acceptance-20261003@1` and review ledger
+`tkw-phase1-review-ledger-20261002@4`. STEP-2 changes require fresh focused
+proposal validation, representative CLI evidence, CAR lint, review and commit. These CLI checks do not
 verify Web/manual/OpenAPI/MCP routes or complete Phase 1 acceptance.
 Runtime startup uses the Workbench-prepared classpath; scripts that invoke SBT
 use the serial command runner. The Phase 1 bootstrap release gate requires
 `sbt --batch test` on the accepted final tree.
 
-Phase 1 is in progress. Proposal fixtures, persistent correspondence, human
-formation/approval and List/Detail/edit/review remain pending. Real KnowledgeHub
+The prepared [TKL fixture](src/test/resources/proposals/tkl-prepared.json)
+and unprepared [Editing Studio fixture](src/test/resources/proposals/editing-studio-unprepared.json)
+use the same `--proposalJson` input. Both retain the exact first proposal and
+supplied source/evidence associations in InformationCandidate. Prepared input
+requires a material reference; unprepared capture may lack material/run and
+keeps its evidence limitations. Capture confirmation is transfer only. Use the
+[user guide](src/main/car/manual/user-guide.md#register-and-look-up-proposals)
+for registration, lookup, generated content-only edit and same-key resend examples.
+
+Phase 1 is in progress. STEP-2 proposal implementation/specifications are authored;
+validation, independent review and local Step commit remain pending. Human
+formation/approval, List/Detail/edit/review, comprehensive Phase review, successful
+bootstrap full SBT suite and final release remain pending. Real KnowledgeHub
 Admission belongs to [Phase 1.1](docs/phase/phase-1.1.md); TKL preparation,
 feedback and live provider adapters remain follow-on work.
