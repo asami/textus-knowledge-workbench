@@ -1,0 +1,228 @@
+# Textus Knowledge Workbench user guide
+
+This guide runs starter and proposal Candidate operations for
+`org.simplemodeling.textus.KnowledgeWorkbench` version `0.1.0-SNAPSHOT`.
+The [reference manual](index.md) explains results, security and scope.
+
+## Prepare the repository
+
+Use Java compatible with the Scala/SBT toolchain, SBT `1.9.7`, Cozy
+`0.3.3-SNAPSHOT` on `PATH`, sbt-cozy `0.1.18-SNAPSHOT`, CNCF
+`0.5.3-SNAPSHOT`, Scala `3.3.8` and ScalaTest `3.2.19`. The build resolves
+through local Ivy, local Maven and SimpleModeling repositories. The sbt-cozy
+version may be overridden with `-Dsbt.cozy.version=...` or `SBT_COZY_VERSION`.
+
+Run every command below from the repository root. The ordinary focused workflow
+is:
+
+```sh
+sbt --batch clean cozyGenerate cozyPrepareRuntime 'testOnly org.simplemodeling.textus.knowledgeworkbench.CandidateProposalSpec org.simplemodeling.textus.knowledgeworkbench.ComponentFactorySpec' cozyBuildCAR
+```
+
+For agent execution, the parent routes this invocation through
+`cncf_command_runner` and the machine's serial SBT wrapper. Runtime preparation
+must precede the assembly scenarios on a fresh build. It writes
+`target/cncf.d/runtime-classpath.txt`; rerun preparation after dependency changes.
+Ordinary clean also refreshes source-bound Scaladoc staging.
+
+`project.yaml` owns the CNCF version under `build.dependencies.compile`, currently
+`org.goldenport::goldenport-cncf:0.5.3-SNAPSHOT`. Missing, blank or duplicate CNCF
+declarations fail build configuration before dependency resolution. Legacy
+`CNCF_VERSION`, `CNCF_VERSION_FILE`, `CNCF_SAMPLES_ROOT` and `CNCF_BIN` do not
+select a version or launcher.
+
+## Select an operator instance
+
+Choose an absolute path in an existing operator-owned directory and copy the
+complete authored assembly descriptor:
+
+```sh
+export WORKBENCH_ASSEMBLY_DESCRIPTOR="/absolute/path/to/workbench-instance.yaml"
+cp src/main/car/assembly-descriptor.yaml "$WORKBENCH_ASSEMBLY_DESCRIPTOR"
+```
+
+Edit that copy's existing security mapping to set your explicitly selected
+stable standalone identity. Replace the placeholder before running:
+
+```yaml
+security:
+  authentication:
+    convention: disabled
+    fallbackPrivilege: disabled
+    localSubject:
+      id: <selected-stable-user-id>
+```
+
+Use the identity from an admitted HOME standalone profile when present. Keep
+all components, providers and existing configuration from the complete copy.
+The base descriptor has no production user ID, and no interpolation or `extends`
+syntax is assumed. A conflicting fixed-user ID requires explicit migration or
+datastore isolation under CNCF's existing rule.
+
+Optionally add an absolute isolated storage root to the copy's existing `config`
+mapping, retaining both existing entries:
+
+```yaml
+config:
+  textus.subsystem.user-mode: standalone
+  textus.component.org.simplemodeling.textus.knowledge-workbench.datastores.application.policy: local-default
+  textus.local-data.root: /absolute/path/to/workbench-data
+```
+
+This remains the ordinary framework-managed persistent application datastore.
+No extra application database or privilege override is required. Use the same
+instance, user and storage root for subsequent commands. Development projection
+excludes the adjacent assembly descriptor, so runtime preparation alone does not
+select this instance. Only `WORKBENCH_ASSEMBLY_DESCRIPTOR` needs exporting for
+the examples below.
+
+## Run CLI operations
+
+The project launcher consumes the prepared classpath, invokes
+`org.goldenport.cncf.CncfMain` and passes discovery and assembly arguments after
+`--`. Show canonical component help:
+
+```sh
+bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class org.goldenport.cncf.CncfMain -- --discover=classes "--textus.assembly.descriptor=$WORKBENCH_ASSEMBLY_DESCRIPTOR" command meta.help org.simplemodeling.textus.KnowledgeWorkbench
+```
+
+Help should contain all four Candidate operations without assembly/profile failure
+diagnostics; exit zero alone does not establish successful activation. Native
+component Help retains the framework's generic summary. The authored operation
+descriptions also supply Cozy metadata.
+
+Register a new starter candidate with optional description:
+
+```sh
+bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class org.goldenport.cncf.CncfMain -- --discover=classes "--textus.assembly.descriptor=$WORKBENCH_ASSEMBLY_DESCRIPTOR" command KnowledgeWorkbench.Candidate.registerCandidate --name "Research note" --description "Evidence for review"
+```
+
+Omit `--description` when it is not needed. Successful registration returns
+`id` and `name`. Retain the native ID to recognize the stored entity. Launch a
+separate process using the same instance to list accessible candidates:
+
+```sh
+bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class org.goldenport.cncf.CncfMain -- --discover=classes "--textus.assembly.descriptor=$WORKBENCH_ASSEMBLY_DESCRIPTOR" command KnowledgeWorkbench.Candidate.listCandidates
+```
+
+Find the stored ID/name in `items`. Its optional description appears as
+`description.value`; registration itself returns only ID/name. Search by a
+case-insensitive substring of the description or name:
+
+```sh
+bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class org.goldenport.cncf.CncfMain -- --discover=classes "--textus.assembly.descriptor=$WORKBENCH_ASSEMBLY_DESCRIPTOR" command KnowledgeWorkbench.Candidate.listCandidates --text "evidence"
+```
+
+Use native paging controls:
+
+```sh
+bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class org.goldenport.cncf.CncfMain -- --discover=classes "--textus.assembly.descriptor=$WORKBENCH_ASSEMBLY_DESCRIPTOR" command KnowledgeWorkbench.Candidate.listCandidates --offset 1 --limit 1
+```
+
+With a single accessible row, that offset produces an empty page. Empty search
+or page results render as `{}` because generated `Record.dataAuto` omits empty
+`items`. This is also the expected shape of a list with no accessible rows.
+The [reference examples](index.md#listcandidates) show nonempty YAML/JSON output.
+
+## Register and look up proposals
+
+Use the same complete operator instance, fixed subject and native storage root
+throughout this sequence. These source fixtures are in the repository's
+`src/test/resources/proposals`; they are fixture mappings, with no live provider
+transport claim. Shell command substitution supplies the fixture JSON as one
+`--proposalJson` argument. The operation retains the exact string it receives;
+the shell removes the trailing file newline in these examples.
+
+Register the prepared TKL fixture:
+
+```sh
+bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class org.goldenport.cncf.CncfMain -- --discover=classes "--textus.assembly.descriptor=$WORKBENCH_ASSEMBLY_DESCRIPTOR" command KnowledgeWorkbench.Candidate.registerProposal --proposalJson "$(cat src/test/resources/proposals/tkl-prepared.json)"
+```
+
+Successful first registration returns `created: true` and `candidate` containing
+its native ID, current content/context, exact first `originalProposal`, evidence,
+PreparedMaterial and ProcessingRun references. Keep the observed native ID.
+Look up that exact source key in a separate process:
+
+```sh
+bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class org.goldenport.cncf.CncfMain -- --discover=classes "--textus.assembly.descriptor=$WORKBENCH_ASSEMBLY_DESCRIPTOR" command KnowledgeWorkbench.Candidate.findCandidateByProposal --producerRef tkl-fixture --proposalId tkl-proposal-1
+```
+
+The result has the same persisted `candidate`, with no `created` field. Exact
+case and whitespace matter. An absent key returns `{}` through the optional
+candidate codec. Lookup never writes. More than one accessible matching row
+fails explicitly as ambiguous correspondence.
+
+Set the following variable to the native ID just observed, replacing the
+placeholder. Exercise a content-only edit through the already generated native
+entity operation:
+
+```sh
+WORKBENCH_CANDIDATE_ID="<observed-native-id>"
+bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class org.goldenport.cncf.CncfMain -- --discover=classes "--textus.assembly.descriptor=$WORKBENCH_ASSEMBLY_DESCRIPTOR" command KnowledgeWorkbench.entity.updateInformationCandidate --id "$WORKBENCH_CANDIDATE_ID" --content "Human corrected content"
+```
+
+Observe native success, then look up the candidate to confirm its content is
+`Human corrected content`. This is a persistence fixture; Step 3 owns the
+human-facing edit/review lifecycle and native revision policy. Resend the same
+valid source proposal from another ordinary process:
+
+```sh
+bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class org.goldenport.cncf.CncfMain -- --discover=classes "--textus.assembly.descriptor=$WORKBENCH_ASSEMBLY_DESCRIPTOR" command KnowledgeWorkbench.Candidate.registerProposal --proposalJson "$(cat src/test/resources/proposals/tkl-prepared.json)"
+```
+
+The result has `created: false`, the same ID and the edited current content.
+The exact first original proposal and source/evidence/material/run metadata
+remain stored. A different valid payload with the same producer/proposal key
+also returns that current candidate without incoming-field writes or payload
+conflict. Validation still applies before any registration result. Sequential
+resend promises no concurrent uniqueness guarantee or independent receipt state.
+
+Register and separately look up the unprepared Editing Studio fixture:
+
+```sh
+bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class org.goldenport.cncf.CncfMain -- --discover=classes "--textus.assembly.descriptor=$WORKBENCH_ASSEMBLY_DESCRIPTOR" command KnowledgeWorkbench.Candidate.registerProposal --proposalJson "$(cat src/test/resources/proposals/editing-studio-unprepared.json)"
+bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class org.goldenport.cncf.CncfMain -- --discover=classes "--textus.assembly.descriptor=$WORKBENCH_ASSEMBLY_DESCRIPTOR" command KnowledgeWorkbench.Candidate.findCandidateByProposal --producerRef editing-studio-fixture --proposalId book-capture-1
+```
+
+It retains source context, unverified capture evidence, unknown revision/snapshot
+and the stated scan/version limitation. It requires no PreparedMaterial or Run.
+`captureConfirmed` stays in the exact original JSON as transfer confirmation;
+human review/approval remains pending. Query absence without adding a candidate:
+
+```sh
+bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class org.goldenport.cncf.CncfMain -- --discover=classes "--textus.assembly.descriptor=$WORKBENCH_ASSEMBLY_DESCRIPTOR" command KnowledgeWorkbench.Candidate.findCandidateByProposal --producerRef editing-studio-fixture --proposalId absent
+```
+
+See the [proposal reference](index.md#registerproposal) for complete validation
+and candidate/reference fields. These examples describe the implemented
+operation sequence; STEP-2 runtime validation and acceptance are still pending.
+
+## Troubleshooting and validation boundary
+
+If startup fails, confirm the prepared classpath exists and is nonempty, the
+selected descriptor is a readable regular file and its complete component and
+provider mappings remain intact. Check the selected stable user against the
+standalone profile and confirm the required native providers are present. For
+input diagnostics, supply the required name and valid optional query inputs.
+Use the actual native admission, authorization and input diagnostics; no
+additional starter-specific error codes are defined.
+
+Declared server commands are `scripts/run-server.sh` and
+`scripts/run-server-debug.sh`; debug uses `DEBUG_PORT` (default `5005`). Both
+require the prepared classpath and exported instance path. Controlled routing
+checks cover their guards and exact arguments. Actual supplied runtime checks
+were CLI help, registration, separate-process list, description filtering and
+paging, with one persistent SQLite row in isolated storage. No Web/manual,
+OpenAPI or MCP route execution is established by those checks.
+
+STEP-1 clean generation/runtime preparation, four focused factory/assembly scenarios,
+CAR packaging/manual/help/lint and independent reviews were admitted before
+local commit `70620d1aeaae4a3859df93d6ff6948bdcff5742c`. Parent record
+`tkw-phase1-step1-post-hardbreak-commit-acceptance-20261003@1` and review ledger
+`tkw-phase1-review-ledger-20261002@4` close STEP-1/S1-A only. STEP-2 proposal
+implementation and GWT scenarios are authored; fresh focused validation,
+representative CLI evidence, CAR lint, independent review and local Step commit
+remain pending. Phase 1 retains human lifecycle work, views, comprehensive
+Phase review and its final successful bootstrap full SBT suite/closure/release.
+Actual KnowledgeHub Admission belongs to Phase 1.1.

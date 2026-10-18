@@ -1,0 +1,22 @@
+subsystem: textus-knowledge-workbench
+version: 0.1.0-SNAPSHOT
+components:
+  - namespace: org.simplemodeling.textus
+    id: KnowledgeWorkbench
+    version: 0.1.0-SNAPSHOT
+subsystemCapabilities:
+  providers:
+    - name: workbench-runtime-facilities
+      component: org.simplemodeling.textus.KnowledgeWorkbench
+      provides:
+        - datastore.optimistic-concurrency@1
+        - datastore.persistent@1
+        - datastore.transactional@1
+        - user-context.current@1
+config:
+  textus.subsystem.user-mode: standalone
+  textus.component.org.simplemodeling.textus.knowledge-workbench.datastores.application.policy: local-default
+security:
+  authentication:
+    convention: disabled
+    fallbackPrivilege: disabled

@@ -2,7 +2,7 @@
 
 status=active
 owner=textus-knowledge-workbench
-updated_at=2026-10-02
+updated_at=2026-10-17
 
 ## Purpose
 
@@ -155,6 +155,40 @@ complete UI metamodel up front.
 
 After the minimum protocol is stable, connect it through textus-flutter-core. Replace mock sources with CNCF-backed Display Model sources while retaining the same standard application-framework UI.
 
+### Track D — Workbench component
+
+Develop the Workbench sequence independently of the app prototype:
+Producer proposal -> TKW Candidate registration and durable source/proposal lookup -> evidence-aware
+editing/grounding -> human review/approval -> real KnowledgeHub Admission.
+Start with TKL and Editing Studio fixtures and reuse Cozy/CNCF contracts.
+CandidateSource identifies input origin/correspondence; RawDataIndex retains
+supporting references, including optional TKL preparation/Run provenance.
+Their minimal representation is owned by TKW; preparation execution stays with TKL.
+
+| Order | Owning Phase | Closure and validation responsibility |
+| --- | --- | --- |
+| 1 | [TKW Phase 1 — Candidate Formation](../phase/phase-1.md) | Existing items 1-4: runnable component, durable registration/lookup, evidence-aware edit/ground/review/approval and both fixture views; create root build.sbt and pass bootstrap full validation |
+| 2 | [TKW Phase 1.1 — KnowledgeHub Admission](../phase/phase-1.1.md) | Former item 5: actual canonical Information Admission, confirmed outcome and Candidate/Evidence trace; final owner of the repository-complete SBT suite for both Phases |
+
+Applied split on 2026-10-02: `Phase 1 -> Phase 1.1`, each expected 6h (range
+5-8h, low confidence; no comparable timing calibration). Both execution parents
+are recommended `gpt-6.1-sol / high`, standard mode. The policy is
+`final-only / sbt-full-suite`; Phase 1 additionally proves its new build entry
+under `bootstrap-structural`. Each retains focused validation, independent
+review, Step acceptance, closure ledger and release commit. No later TKW
+Phase is renumbered or selected, and no child execution starts from the split.
+
+The incoming TKL requirements are a proposal for joint review. The
+[2026-10-02 planning decision](../journal/2026/10/2026-10-02-workbench-development-plan.md)
+prioritizes the business flow and adds guarantees according to concrete needs.
+Content hashes, an independent receipt state machine, concurrent-receipt proof
+and comprehensive recovery machinery are not prerequisites for the first slice.
+Unimplemented requirements remain open. Real Admission remains required for
+TKW Phase 1.1 and the complete sequence; Phase 1 closure proves Candidate
+formation only. TKL feedback and existing-Candidate preparation follow
+their owning contracts. This track does not close the server/app integration
+gates or change their acceptance owners.
+
 ## Integration milestones
 
 | Milestone | Outcome |
@@ -199,3 +233,20 @@ New visual capabilities such as Gallery, Timeline, Graph, or Conversation extend
 ## Status update rule
 
 Keep this file current as the single cross-project status view. Record decision history and rationale in TKW journal entries. Keep implementation detail, checklists, and closure evidence in each owning repository's Phase documents.
+
+## Workbench migration and persistence prerequisite — 2026-10-17
+
+CNCF Phase 96 is CLOSED and integrated into GitHub main; the canonical local
+main and fetched origin/main select `e455716c`. The user requests completion of
+CNCF Phase 100 within the Workbench mac mini -> asamiair migration. Its
+Core logical types, SimpleModeler/Cozy Phase 78 producer and runtime persistence
+work are being integrated into the canonical main/scala12 checkouts, preserving
+Phase 96. Migration completion includes the original Phase 100 acceptance,
+not just source transfer or Workbench startup. Full Workbench Phase 1 remains
+separate.
+
+Use the [migration ledger](../phase/workbench-asamiair-migration.md) for current
+progress and the [migration plan](../journal/2026/10/2026-10-14-asamiair-migration-plan.md)
+for the handoff and operational decisions. Dependencies use the declared common
+SNAPSHOT artifacts in Ivy local; the earlier dedicated-checkout plan is
+historical. No Phase 100/78 completion is claimed by this coordination update.

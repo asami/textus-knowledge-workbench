@@ -1,0 +1,6 @@
+apps:
+  - name: textus-knowledge-workbench
+    path: /web/textus-knowledge-workbench
+    kind: static-form
+    root: /web/textus-knowledge-workbench
+    route: /web/{component}/textus-knowledge-workbench

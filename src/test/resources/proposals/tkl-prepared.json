@@ -1,0 +1,34 @@
+{
+  "producerRef": "tkl-fixture",
+  "proposalId": "tkl-proposal-1",
+  "sourceKind": "tkl",
+  "name": "TKL prepared research note",
+  "content": "A prepared research note for human formation.",
+  "context": "TKL preparation fixture",
+  "preparationState": "prepared",
+  "evidenceRefs": [
+    {
+      "id": "evidence:tkl:1",
+      "kind": "evidence",
+      "revision": "1",
+      "snapshotRef": "snapshot:tkl:1",
+      "retrievalState": "available"
+    }
+  ],
+  "preparedMaterialRefs": [
+    {
+      "id": "material:tkl:1",
+      "kind": "prepared-material",
+      "revision": "1",
+      "retrievalState": "available"
+    }
+  ],
+  "sourceRunRef": {
+    "id": "run:tkl:1",
+    "kind": "processing-run",
+    "revision": "1"
+  },
+  "provenance": {
+    "producerObservation": "deterministic fixture; no live TKL transport"
+  }
+}

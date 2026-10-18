@@ -18,3 +18,26 @@ Two TKL paths converge on TKW:
 For mobile book capture, Capture Confirm creates/updates candidate source metadata and authorizes transfer. Raw material is stored in Google Workspace, indexed by TKW, prepared by TKL, then returned to TKW for human review and Information Admission.
 
 This makes TKW the operational Workbench: it can show source-storage state, preparation state, review readiness and admission state without storing the raw media itself.
+
+## Clarification — 2026-10-02
+
+The original decision above is retained as history. The current
+[architecture](../notes/architecture.md#candidate-sources-and-supporting-references)
+clarifies CandidateSource as origin/correspondence and RawDataIndex as supporting
+material associations. These are responsibilities, not a requirement for two
+separate Aggregates or tables in the first slice.
+
+Google Workspace/Drive is the initial TKL backend; references are provider-neutral
+TKL Resource/Evidence identities with available version/snapshot/provenance and
+PreparedMaterial/ProcessingRun references. The earlier checksum wording does not
+require default TKW hashing. TKL processing history and raw bodies remain owned
+outside TKW. Unprepared capture input is supported, and correlated Candidate
+preparation remains follow-on work in [Phase 1](../phase/phase-1.md).
+
+## Planning split clarification — 2026-10-02
+
+The preceding Phase reference described the unsplit plan. The applied sequence
+is now [Phase 1 — Candidate Formation](../phase/phase-1.md) followed by
+[Phase 1.1 — KnowledgeHub Admission](../phase/phase-1.1.md). Existing-Candidate
+preparation remains future work outside both; see the
+[development-plan split note](2026/10/2026-10-02-workbench-development-plan.md#phase-split--2026-10-02).

@@ -1,45 +1,296 @@
-# Textus Knowledge Workbench CML Model
+# COMPONENT
 
-> NOTE FOR CODEX
->
-> Canonical CML source location. Replace this scaffold with valid current CML only after inspecting Cozy/CML grammar and representative models.
->
-> Design sources:
-> - docs/notes/architecture.md
-> - docs/journal/2026-09-23-knowledge-workbench-establishment.md
-> - docs/phase/phase-1.md
->
-> Primary application use case:
-> - Form, review and admit Information from a raw/prepared Information Candidate.
->
-> Model Use Case and Application Workflow separately where supported.
->
-> Phase 1 workflow:
-> Register Candidate
-> -> Resolve Evidence / Context
-> -> Edit / Correct
-> -> Semantic Grounding / Mapping
-> -> Human Review
-> -> Approve / Hold / Reject
-> -> Request KnowledgeHub Information Admission
-> -> retain Admission Trace.
->
-> Candidate sources:
-> - TKL PreparedMaterial / raw candidate
-> - NICT Editing Studio confirmed capture-derived raw data
->
-> Important boundaries:
-> - TKW owns Information Candidate lifecycle and human admission workflow.
-> - TKL owns evidence federation/preparation.
-> - Editing Studio owns publishing/editorial domain interaction and views.
-> - Mobile Capture Confirm authorizes transfer only.
-> - KnowledgeHub owns canonical Information processing/runtime/storage.
-> - KnowledgeProjection maps canonical Information to RDF/Open Knowledge downstream.
-> - AI cannot perform final Information Admission.
-> - Reuse CNCF/KnowledgeHub canonical types where semantics match.
->
-> TODO(Codex):
-> - inspect current CML grammar;
-> - encode supported use cases, capabilities, candidate types and workflow;
-> - validate/generate with current Cozy tooling;
-> - preserve explicit human approval before Information Admission.
+## KnowledgeWorkbench
+
+### STYLE
+
+full-fledged-with-standalone
+
+### PACKAGE
+
+org.simplemodeling.textus.knowledgeworkbench
+
+### DESCRIPTION
+
+Forms Information Candidates for human work. Supports starter registration/search
+and provider-neutral proposal registration with durable source-key lookup. Sequential
+resend returns the current candidate without overwriting edits or original proposal
+metadata. Uses a stable standalone identity and the CNCF native persistent datastore.
+Human formation, review and approval belong to subsequent Phase 1 Steps.
+
+### COMPONENTLET
+
+#### public-candidate
+
+#### candidate-admin
+
+# COMPONENTLET
+
+## public-candidate
+
+- component :: KnowledgeWorkbench
+- kind :: participant
+
+### DESCRIPTION
+
+Declares the participant intended for public Candidate registration and search.
+The current factory constructs only the primary participant; this declaration
+does not enable MCP publication.
+
+# COMPONENTLET
+
+## candidate-admin
+
+- component :: KnowledgeWorkbench
+- kind :: participant
+
+### DESCRIPTION
+
+Declares the participant intended for administrative Candidate work. The current
+factory does not instantiate this participant or publish its services through MCP.
+
+# SERVICE
+
+## Candidate
+
+### DESCRIPTION
+
+Registers and searches Information Candidates and source proposals for the current user.
+Operations require a stable user identity and the native persistent application
+datastore supplied by the CNCF Subsystem.
+
+### OPERATION
+
+#### registerCandidate
+
+##### DESCRIPTION
+
+Creates a native InformationCandidate using a required name and optional
+description. This command persists a new entity and returns its native id and name.
+
+##### TYPE
+
+COMMAND
+
+##### INPUT
+
+###### TYPE
+RegisterCandidate
+
+##### OUTPUT
+
+###### TYPE
+RegisterCandidateResult
+
+##### IMPLEMENTATION
+entity-create
+
+##### ENTITY
+InformationCandidate
+
+#### registerProposal
+
+##### DESCRIPTION
+
+Validates one proposal JSON object and searches its exact producerRef/proposalId key.
+Creates a native candidate when absent; sequential resend returns the current
+candidate with created=false without any incoming-field write. Retains the exact
+first originalProposal and supplied evidence/material/source references.
+
+##### TYPE
+
+COMMAND
+
+##### INPUT
+
+###### TYPE
+RegisterProposal
+
+##### OUTPUT
+
+###### TYPE
+RegisterProposalResult
+
+#### findCandidateByProposal
+
+##### DESCRIPTION
+
+Finds the current accessible candidate by exact, case-sensitive producerRef and
+proposalId. Returns an optional candidate without writes. Ambiguous visible
+correspondence fails explicitly instead of selecting a row.
+
+##### TYPE
+
+QUERY
+
+##### INPUT
+
+###### TYPE
+FindCandidateByProposal
+
+##### OUTPUT
+
+###### TYPE
+FindCandidateByProposalResult
+
+#### listCandidates
+
+##### DESCRIPTION
+
+Returns accessible InformationCandidates as items. Optional text matches a
+case-insensitive substring of name or description; without text, all accessible
+rows are eligible. Optional offset and limit apply through native query paging.
+This query does not create candidates.
+
+##### TYPE
+
+QUERY
+
+##### INPUT
+
+###### TYPE
+ListCandidates
+
+##### OUTPUT
+
+###### TYPE
+ListCandidatesResult
+
+##### IMPLEMENTATION
+entity-search
+
+##### ENTITY
+InformationCandidate
+
+# ENTITY
+
+## InformationCandidate
+
+### Attribute
+
+| name        | type     | multiplicity |
+|-------------+----------+--------------|
+| id          | entityid | 1            |
+| name        | name     | 1            |
+| description | InformationCandidateDescription | ?            |
+| producerRef | string | ? |
+| proposalId | string | ? |
+| sourceKind | string | ? |
+| originalProposal | string | ? |
+| content | string | ? |
+| context | string | ? |
+| preparationState | string | ? |
+| evidenceRefs | ProposalReference | * |
+| preparedMaterialRefs | ProposalReference | * |
+| sourceRunRef | ProposalReference | ? |
+| sourceContextRef | ProposalReference | ? |
+
+# VALUE
+
+## RegisterCandidate
+
+- input-kind :: COMMAND
+
+### Attribute
+
+| name        | type   | multiplicity |
+|-------------+--------+--------------|
+| name        | name   | 1            |
+| description | InformationCandidateDescription | ?            |
+
+## ListCandidates
+
+- input-kind :: QUERY
+
+### Attribute
+
+| name   | type   | multiplicity |
+|--------+--------+--------------|
+| text   | InformationCandidateSearchText | ?            |
+| offset | int    | ?            |
+| limit  | int    | ?            |
+
+## InformationCandidateDescription
+
+### Attribute
+
+| name  | type   | multiplicity |
+|-------+--------+--------------|
+| value | string | 1            |
+
+## InformationCandidateSearchText
+
+### Attribute
+
+| name  | type   | multiplicity |
+|-------+--------+--------------|
+| value | string | 1            |
+
+## RegisterCandidateResult
+
+### Attribute
+
+| name | type     | multiplicity |
+|------+----------+--------------|
+| id   | entityid | 1            |
+| name | name     | 1            |
+
+## ListCandidatesResult
+
+### Attribute
+
+| name  | type                   | multiplicity |
+|-------+------------------------+--------------|
+| items | InformationCandidate | *            |
+
+## RegisterProposal
+
+- input-kind :: COMMAND
+
+### Attribute
+
+| name | type | multiplicity |
+|------+------+--------------|
+| proposalJson | string | 1 |
+
+## RegisterProposalResult
+
+### Attribute
+
+| name | type | multiplicity |
+|------+------+--------------|
+| candidate | InformationCandidate | 1 |
+| created | boolean | 1 |
+
+## FindCandidateByProposal
+
+- input-kind :: QUERY
+
+### Attribute
+
+| name | type | multiplicity |
+|------+------+--------------|
+| producerRef | string | 1 |
+| proposalId | string | 1 |
+
+## FindCandidateByProposalResult
+
+### Attribute
+
+| name | type | multiplicity |
+|------+------+--------------|
+| candidate | InformationCandidate | ? |
+
+## ProposalReference
+
+### Attribute
+
+| name | type | multiplicity |
+|------+------+--------------|
+| id | string | 1 |
+| kind | string | 1 |
+| revision | string | ? |
+| snapshotRef | string | ? |
+| retrievalState | string | ? |
+| retentionUntil | string | ? |
+| limitation | string | ? |

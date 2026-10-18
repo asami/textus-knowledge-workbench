@@ -1,0 +1,18 @@
+expose:
+  textus-knowledge-workbench.candidate.register-candidate: protected
+  textus-knowledge-workbench.candidate.list-candidates: public
+form:
+  textus-knowledge-workbench.candidate.register-candidate:
+    enabled: true
+    successRedirect: /web/${component}/admin/entities/information-candidate/${result.id}
+    stayOnError: true
+    controls:
+      description:
+        type: textarea
+  textus-knowledge-workbench.candidate.list-candidates:
+    enabled: true
+    successRedirect: /web/${component}/admin/entities/information-candidate
+    stayOnError: true
+admin:
+  entity.information-candidate:
+    totalCount: optional
