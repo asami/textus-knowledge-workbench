@@ -137,9 +137,12 @@ Generator value types remain unchanged. The subject-10 predecessor CLI checks
 registered a native entity and returned the same ID/name through a separate
 process, including description text search and offset/limit, with one persistent
 SQLite row inspected in isolated storage. Registration returns `id` and `name`;
-listing returns optional description as `description.value`. Native generated
-`Record.dataAuto` omits empty `items`, yielding `{}` for an empty search or page.
-These historical observations form part of the accepted foundation evidence.
+listing returns optional description as `description.value`. At the historical
+STEP-1 boundary, generated `Record.dataAuto` omitted empty `items`, yielding `{}`
+for an empty search or page. These historical observations form part of the
+accepted foundation evidence. The current STEP-2 continuation consumes CNCF
+Phase 115 and the Core Phase 3 Record convention: empty collection fields are
+preserved, so an empty search or page now returns `{"items":[]}`.
 The accepted STEP-1 starter schema did not provide proposal registration;
 [STEP-2](candidate-proposals.md) adds that surface under its own acceptance gate.
 
@@ -238,8 +241,8 @@ KnowledgeProjection maps it to downstream RDF/Open Knowledge. AI cannot perform
 final Information Admission.
 
 The accepted foundation closes STEP-1 only. Proposal registration, restart
-lookup and sequential resend are now the authored [STEP-2 implementation](candidate-proposals.md),
-with validation/review/commit pending. Evidence-aware formation, lifecycle
+lookup and sequential resend are accepted by the separate
+[STEP-2 contract and binding](candidate-proposals.md). Evidence-aware formation, lifecycle
 transitions/approval invalidation and available List/Detail/edit/review contracts
 remain subsequent Phase 1 work. [Phase 1.1](../phase/phase-1.1.md) owns real
 KnowledgeHub Admission, its outcome/failure semantics and Candidate/Evidence

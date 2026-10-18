@@ -9,7 +9,8 @@ import org.simplemodeling.textus.knowledgeworkbench.entity
 
 /*
  * @since   Oct. 14, 2026
- * @version Oct. 18, 2026
+ *  version Oct. 18, 2026
+ * @version Oct. 19, 2026
  */
 private[impl] object CandidateProposal {
   final case class Parsed(
@@ -63,19 +64,19 @@ private[impl] object CandidateProposal {
       }
     }
 
-  def key(producerref: String, proposalid: String): Consequence[Query[?]] =
+  def key(producerRef: String, proposalId: String): Consequence[Query[?]] =
     Consequence {
-      require(producerref.trim.nonEmpty, "producerRef must be a nonblank string")
-      require(proposalid.trim.nonEmpty, "proposalId must be a nonblank string")
+      require(producerRef.trim.nonEmpty, "producerRef must be a nonblank string")
+      require(proposalId.trim.nonEmpty, "proposalId must be a nonblank string")
       Query.plan(Record.empty, where = Query.And(Vector(
-        Query.Eq("producerRef", producerref),
-        Query.Eq("proposalId", proposalid)
+        Query.Eq("producerRef", producerRef),
+        Query.Eq("proposalId", proposalId)
       )), limit = Some(2))
     }
 
   def current(candidates: Vector[entity.InformationCandidate]): Consequence[Option[entity.InformationCandidate]] =
     if (candidates.size > 1)
-      Consequence.failure("Ambiguous proposal correspondence: more than one accessible candidate matches producerRef/proposalId")
+      Consequence.stateConflict("Ambiguous proposal correspondence: more than one accessible candidate matches producerRef/proposalId")
     else
       Consequence.success(candidates.headOption)
 
@@ -85,7 +86,7 @@ private[impl] object CandidateProposal {
       val objectvalue = document.asObject.getOrElse(
         throw new IllegalArgumentException("proposalJson must be an object")
       )
-      def reference(input: Json, field: String): Unit = {
+      def _reference_(input: Json, field: String): Unit = {
         val fields = input.asObject.getOrElse(
           throw new IllegalArgumentException(s"$field must contain reference objects")
         )
@@ -105,11 +106,11 @@ private[impl] object CandidateProposal {
           val items = value.asArray.getOrElse(
             throw new IllegalArgumentException(s"$field must be an array of references")
           )
-          items.foreach(reference(_, field))
+          items.foreach(_reference_(_, field))
         }
       }
       Vector("sourceRunRef", "sourceContextRef").foreach { field =>
-        objectvalue(field).foreach(reference(_, field))
+        objectvalue(field).foreach(_reference_(_, field))
       }
       objectvalue("context").foreach(value =>
         require(value.isString, "context must be a string"))

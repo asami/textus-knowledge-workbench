@@ -79,13 +79,14 @@ items:
       value: Evidence for review
 ```
 
-An absent optional description is omitted. Native generated `Record.dataAuto`
-also omits an empty `items` field: a search or page with no matching rows returns
-`{}`, rather than an explicit empty array.
+An absent optional description is omitted. Under the Core Phase 3 Record
+convention adopted through CNCF Phase 115, a search or page with no matching
+rows returns `{"items":[]}`.
 
 ### registerProposal
 
-The `RegisterProposal` input contains required string `proposalJson`. It carries
+The `RegisterProposal` input contains required `ProposalJsonText` `proposalJson`,
+represented as a JSON/CLI string. It carries
 one JSON object with these fields:
 
 | Proposal field | Required | Shape and constraint |
@@ -120,11 +121,16 @@ correspondence native failure without selecting or reconciling rows.
 and `created: boolean`. Illustrative abbreviated output:
 
 ```json
-{"candidate":{"id":"<native-id>","name":"TKL prepared research note","producerRef":"tkl-fixture","proposalId":"tkl-proposal-1","sourceKind":"tkl","content":"A prepared research note for human formation.","preparationState":"prepared","originalProposal":"<exact first JSON string>","evidenceRefs":[{"id":"evidence:tkl:1","kind":"evidence","revision":"1","snapshotRef":"snapshot:tkl:1","retrievalState":"available"}]},"created":true}
+{"candidate":{"id":"<native-id>","name":"TKL prepared research note","producer_ref":"tkl-fixture","proposal_id":"tkl-proposal-1","source_kind":"tkl","content":"A prepared research note for human formation.","preparation_state":"prepared","original_proposal":"<exact first JSON string>","evidence_refs":[{"id":"evidence:tkl:1","kind":"evidence","revision":"1","snapshot_ref":"snapshot:tkl:1","retrieval_state":"available"}]},"created":true}
 ```
 
-The actual TKL fixture also returns `context`, `preparedMaterialRefs` and
-`sourceRunRef`. On sequential resend, `created` is false and the candidate
+The proposal input JSON schema and model attribute names use camelCase. Native
+CLI output uses the framework's default snake_case property names, including
+nested reference fields; the model attribute descriptions below retain their
+semantic camelCase names.
+
+The actual TKL fixture also returns `context`, `prepared_material_refs` and
+`source_run_ref`. On sequential resend, `created` is false and the candidate
 contains current stored content. A different valid payload with the same key
 has the same behavior: incoming name/content/context/original/references never
 replace stored fields. A generated content-only entity edit and restart retain
@@ -142,12 +148,22 @@ because the native codec omits the absent optional candidate.
 ### InformationCandidate additions
 
 The required `id`/`name` and optional description wrapper remain compatible.
-Proposal candidates add optional string `producerRef`, `proposalId`, `sourceKind`,
-`originalProposal`, `content`, `context` and `preparationState`; zero-many typed
+Proposal candidates add optional semantic string types for `producerRef`
+(`ProposalProducerRef`), `proposalId` (`SourceProposalId`), `sourceKind`
+(`ProposalSourceKind`), `originalProposal` (`ProposalJsonText`), `content`
+(`CandidateContent`) and `context` (`CandidateContext`). `preparationState` uses
+`ProposalPreparationState`, a closed POWERTYPE accepting exactly lowercase
+`prepared` and `unprepared` in scalar JSON and CLI output. The six nominal
+DATATYPEs retain scalar string JSON, CLI and SQL storage representations.
+Preparation state instead stores the explicit CML database codes `prepared = 1`
+and `unprepared = 2`; table order must not determine these codes, and codes must
+never be reassigned or reused. Native storage/read round trips, including
+shutdown/reopen, retain numeric database codes and textual JSON/CLI values.
+No existing database migration is introduced. There are also zero-many typed
 `evidenceRefs` and `preparedMaterialRefs`; and optional typed `sourceRunRef` and
 `sourceContextRef`. All reference fields use the shape above. Legacy starter
 rows have no fabricated proposal fields. List results may expose these additive
-fields; absent optionals and empty reference vectors are omitted.
+fields; absent optionals are omitted and empty reference vectors are explicit arrays.
 
 CandidateSource is represented by source/key/original/run/context metadata.
 RawDataIndex is represented by typed evidence/material associations with stated
@@ -179,15 +195,15 @@ and independent reviews were admitted before local commit
 `70620d1aeaae4a3859df93d6ff6948bdcff5742c`. Parent receipt
 `tkw-phase1-step1-post-hardbreak-commit-acceptance-20261003@1` and ledger
 `tkw-phase1-review-ledger-20261002@4` record STEP-1/S1-A acceptance.
-The STEP-2 proposal changes still require fresh validation, independent review
-and local Step commit.
+STEP-2 acceptance requires focused validation, independent review and a local
+Step commit in addition to the foundation evidence.
 Native component Help uses a framework-fixed generic summary; authored
 DESCRIPTION prose projects into Cozy metadata. Web/manual/OpenAPI/MCP routes
 have not been verified by these CLI checks. Starter operations remain outside
 MCP publication; the factory creates only the primary participant.
 
-Phase 1 remains in progress. STEP-2 proposal registration/lookup/resend and its
-executable specifications are authored, with acceptance pending. Evidence-aware editing/grounding/review,
+Phase 1 remains in progress. The STEP-2 contract covers proposal
+registration/lookup/resend and its executable specifications. Evidence-aware editing/grounding/review,
 approve/hold/reject, approval-target invalidation and List/Detail/edit/review
 views remain later Phase 1 work. Real KnowledgeHub Admission belongs to Phase
 1.1. TKL preparation, feedback and live provider adapters are follow-on work.

@@ -152,7 +152,7 @@
           "fields": [
             {
               "name": "proposalJson",
-              "type": "string",
+              "type": "ProposalJsonText",
               "multiplicity": "1",
               "required": true
             }
@@ -182,13 +182,13 @@
           "fields": [
             {
               "name": "producerRef",
-              "type": "string",
+              "type": "ProposalProducerRef",
               "multiplicity": "1",
               "required": true
             },
             {
               "name": "proposalId",
-              "type": "string",
+              "type": "SourceProposalId",
               "multiplicity": "1",
               "required": true
             }
@@ -253,6 +253,83 @@
               "required": false
             }
           ]
+        },
+        {
+          "name": "ProposalProducerRef",
+          "kind": "datatype",
+          "fields": [
+            {
+              "name": "value",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "SourceProposalId",
+          "kind": "datatype",
+          "fields": [
+            {
+              "name": "value",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "ProposalSourceKind",
+          "kind": "datatype",
+          "fields": [
+            {
+              "name": "value",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "ProposalJsonText",
+          "kind": "datatype",
+          "fields": [
+            {
+              "name": "value",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "CandidateContent",
+          "kind": "datatype",
+          "fields": [
+            {
+              "name": "value",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "CandidateContext",
+          "kind": "datatype",
+          "fields": [
+            {
+              "name": "value",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "ProposalPreparationState",
+          "kind": "powertype",
+          "fields": []
         }
       ],
       "entities": [
@@ -279,43 +356,43 @@
             },
             {
               "name": "producerRef",
-              "type": "string",
+              "type": "ProposalProducerRef",
               "multiplicity": "?",
               "required": false
             },
             {
               "name": "proposalId",
-              "type": "string",
+              "type": "SourceProposalId",
               "multiplicity": "?",
               "required": false
             },
             {
               "name": "sourceKind",
-              "type": "string",
+              "type": "ProposalSourceKind",
               "multiplicity": "?",
               "required": false
             },
             {
               "name": "originalProposal",
-              "type": "string",
+              "type": "ProposalJsonText",
               "multiplicity": "?",
               "required": false
             },
             {
               "name": "content",
-              "type": "string",
+              "type": "CandidateContent",
               "multiplicity": "?",
               "required": false
             },
             {
               "name": "context",
-              "type": "string",
+              "type": "CandidateContext",
               "multiplicity": "?",
               "required": false
             },
             {
               "name": "preparationState",
-              "type": "string",
+              "type": "ProposalPreparationState",
               "multiplicity": "?",
               "required": false
             },

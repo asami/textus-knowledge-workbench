@@ -1,12 +1,16 @@
 package org.simplemodeling.textus.knowledgeworkbench
 
 import java.nio.file.{Files, Path}
+import java.sql.DriverManager
+import domain.ProposalPreparationState
 import io.circe.Json
 import io.circe.parser.parse
 import org.goldenport.Consequence
 import org.goldenport.cncf.bootstrap.{BootstrapConfig, CncfBootstrap, CncfHandle}
 import org.goldenport.cncf.cli.RunMode
 import org.goldenport.cncf.subsystem.Subsystem
+import org.goldenport.convert.NumericCodeCodec
+import org.goldenport.observation.Taxonomy
 import org.goldenport.protocol.{Property, Request}
 import org.goldenport.protocol.operation.OperationResponse
 import org.goldenport.record.Record
@@ -17,7 +21,7 @@ import org.scalatest.wordspec.AnyWordSpec
 
 /*
  * @since   Oct. 14, 2026
- * @version Oct. 18, 2026
+ * @version Oct. 19, 2026
  */
 final class CandidateProposalSpec extends AnyWordSpec with Matchers with GivenWhenThen {
   private val _proposals = afterWord(
@@ -25,6 +29,45 @@ final class CandidateProposalSpec extends AnyWordSpec with Matchers with GivenWh
   )
 
   "Candidate proposal operations" should _proposals {
+    "generated preparation-state persistence correspondence" which {
+      "roundtrip both typed values through the common code and numeric JSON codecs while retaining symbolic records" in {
+        Given("the actual generated prepared and unprepared values with their declared common numeric codec")
+        val codec: NumericCodeCodec[ProposalPreparationState] = ProposalPreparationState.numericCodeCodec
+        val jsoncodec = codec.jsonCodec
+        val entries = Vector(ProposalPreparationState.prepared -> 1, ProposalPreparationState.unprepared -> 2)
+
+        When("both values are encoded and both fixed codes are decoded through the typed and JSON boundaries")
+        val encoded = entries.map { case (value, _) => codec.encodeC(value).toOption }
+        val decoded = entries.map { case (_, code) => codec.decodeC(code).toOption }
+        val encodedjson = entries.map { case (value, _) => jsoncodec(value) }
+        val decodedjson = entries.map { case (_, code) => jsoncodec.decodeJson(Json.fromInt(code)) }
+        val symbolic = entries.map { case (value, _) => value.toRecord().getString("value") }
+
+        Then("the fixed codes 1 and 2 restore the exact typed values and record presentation remains symbolic")
+        encoded shouldBe Vector(Some(1), Some(2))
+        decoded shouldBe entries.map { case (value, _) => Some(value) }
+        encodedjson shouldBe Vector(Json.fromInt(1), Json.fromInt(2))
+        decodedjson shouldBe entries.map { case (value, _) => Right(value) }
+        symbolic shouldBe Vector(Some("prepared"), Some("unprepared"))
+      }
+
+      "reject unknown codes and malformed numeric JSON without selecting a default preparation state" in {
+        Given("the generated common codec and inputs outside its fixed numeric correspondence")
+        val codec: NumericCodeCodec[ProposalPreparationState] = ProposalPreparationState.numericCodeCodec
+        val jsoncodec = codec.jsonCodec
+        val invalidjson = Vector(Json.fromInt(99), Json.fromString("1"), Json.fromBigDecimal(BigDecimal("1.5")))
+
+        When("the typed codec decodes 99 and the numeric JSON codec decodes each invalid representation")
+        val unknown = codec.decodeC(99)
+        val malformed = invalidjson.map(jsoncodec.decodeJson)
+
+        Then("an unknown code is a native failure and none of the JSON inputs becomes a preparation state")
+        unknown shouldBe a[Consequence.Failure[?]]
+        unknown.toOption shouldBe None
+        malformed.foreach(_.isLeft shouldBe true)
+      }
+    }
+
     "registration" when {
       "given a prepared TKL proposal (PROP-01)" should {
         "retain the exact original and typed source, evidence, material and run references" in {
@@ -39,13 +82,15 @@ final class CandidateProposalSpec extends AnyWordSpec with Matchers with GivenWh
             result.created shouldBe true
             candidate.id.print should not be empty
             candidate.name.value shouldBe "TKL prepared research note"
-            candidate.producerRef shouldBe Some("tkl-fixture")
-            candidate.proposalId shouldBe Some("tkl-proposal-1")
-            candidate.sourceKind shouldBe Some("tkl")
-            candidate.content shouldBe Some("A prepared research note for human formation.")
-            candidate.context shouldBe Some("TKL preparation fixture")
-            candidate.preparationState shouldBe Some("prepared")
-            candidate.originalProposal shouldBe Some(json)
+            candidate.producerRef.map(_.value) shouldBe Some("tkl-fixture")
+            candidate.proposalId.map(_.value) shouldBe Some("tkl-proposal-1")
+            candidate.sourceKind.map(_.value) shouldBe Some("tkl")
+            candidate.content.map(_.value) shouldBe Some("A prepared research note for human formation.")
+            candidate.context.map(_.value) shouldBe Some("TKL preparation fixture")
+            candidate.preparationState.map(_.value) shouldBe Some("prepared")
+            candidate.toDataStore().getInt("preparationState") shouldBe Some(1)
+            candidate.toRecord().getString("preparationState") shouldBe Some("prepared")
+            candidate.originalProposal.map(_.value) shouldBe Some(json)
             candidate.evidenceRefs.map(_.id) shouldBe Vector("evidence:tkl:1")
             candidate.evidenceRefs.head.kind shouldBe "evidence"
             candidate.evidenceRefs.head.revision shouldBe Some("1")
@@ -76,13 +121,15 @@ final class CandidateProposalSpec extends AnyWordSpec with Matchers with GivenWh
             Then("the capture remains unprepared with its source context and unknown version/snapshot")
             result.created shouldBe true
             candidate.name.value shouldBe "Confirmed book capture"
-            candidate.producerRef shouldBe Some("editing-studio-fixture")
-            candidate.proposalId shouldBe Some("book-capture-1")
-            candidate.sourceKind shouldBe Some("editing-studio")
-            candidate.content shouldBe Some("A capture-derived note awaiting preparation and human review.")
-            candidate.context shouldBe Some("Book chapter captured through Editing Studio")
-            candidate.preparationState shouldBe Some("unprepared")
-            candidate.originalProposal shouldBe Some(json)
+            candidate.producerRef.map(_.value) shouldBe Some("editing-studio-fixture")
+            candidate.proposalId.map(_.value) shouldBe Some("book-capture-1")
+            candidate.sourceKind.map(_.value) shouldBe Some("editing-studio")
+            candidate.content.map(_.value) shouldBe Some("A capture-derived note awaiting preparation and human review.")
+            candidate.context.map(_.value) shouldBe Some("Book chapter captured through Editing Studio")
+            candidate.preparationState.map(_.value) shouldBe Some("unprepared")
+            candidate.toDataStore().getInt("preparationState") shouldBe Some(2)
+            candidate.toRecord().getString("preparationState") shouldBe Some("unprepared")
+            candidate.originalProposal.map(_.value) shouldBe Some(json)
             candidate.preparedMaterialRefs shouldBe empty
             candidate.sourceRunRef shouldBe None
             candidate.sourceContextRef.map(_.id) shouldBe Some("editing-context:book:1")
@@ -95,7 +142,7 @@ final class CandidateProposalSpec extends AnyWordSpec with Matchers with GivenWh
             candidate.evidenceRefs.head.limitation shouldBe Some(
               "Reference metadata only; original scan and a stable version are not available in this fixture."
             )
-            _json(candidate.originalProposal.get).hcursor.get[Boolean]("captureConfirmed") shouldBe Right(true)
+            _json(candidate.originalProposal.get.value).hcursor.get[Boolean]("captureConfirmed") shouldBe Right(true)
             _items(subsystem).map(_.id) shouldBe Vector(candidate.id)
           }
         }
@@ -124,8 +171,8 @@ final class CandidateProposalSpec extends AnyWordSpec with Matchers with GivenWh
               val candidate = _register(subsystem, json).candidate
 
               Then("the supplied limits and opaque references are retained without a fabricated Run")
-              candidate.sourceKind shouldBe Some("another-provider")
-              candidate.context shouldBe Some("")
+              candidate.sourceKind.map(_.value) shouldBe Some("another-provider")
+              candidate.context.map(_.value) shouldBe Some("")
               candidate.sourceRunRef shouldBe None
               candidate.evidenceRefs.head.revision shouldBe Some("opaque-version-v7")
               candidate.evidenceRefs.head.snapshotRef shouldBe Some("snapshot:retained")
@@ -174,9 +221,12 @@ final class CandidateProposalSpec extends AnyWordSpec with Matchers with GivenWh
             "producerRef" -> "tkl-fixture", "proposalId" -> "tkl-proposal-1")
           val resend = _call(subsystem, "Candidate", "registerProposal", "proposalJson" -> json)
 
-          Then("both return an ambiguity failure and leave the two entities unchanged")
-          lookup shouldBe a[Consequence.Failure[?]]
-          resend shouldBe a[Consequence.Failure[?]]
+          Then("both report a structured state conflict and leave the two entities unchanged")
+          Vector(lookup, resend).foreach {
+            case Consequence.Failure(conclusion) =>
+              conclusion.causes.map(_.observation.taxonomy) should contain(Taxonomy.stateConflict)
+            case other => fail(s"Expected an ambiguous correspondence state conflict: $other")
+          }
           lookup.toString should include ("Ambiguous proposal correspondence")
           resend.toString should include ("Ambiguous proposal correspondence")
           before should have size 2
@@ -211,7 +261,7 @@ final class CandidateProposalSpec extends AnyWordSpec with Matchers with GivenWh
           _execute(subsystem, "entity", "updateInformationCandidate",
             "id" -> first.id.print, "content" -> "Human corrected content")
           val edited = _find(subsystem, "tkl-fixture", "tkl-proposal-1").get
-          edited.content shouldBe Some("Human corrected content")
+          edited.content.map(_.value) shouldBe Some("Human corrected content")
 
           When("a different valid incoming payload reuses the exact source key")
           val resend = _register(subsystem, _changed_payload(json))
@@ -219,9 +269,9 @@ final class CandidateProposalSpec extends AnyWordSpec with Matchers with GivenWh
           Then("resend returns the current human edit without replacing any original content or source metadata")
           resend.created shouldBe false
           resend.candidate.id shouldBe first.id
-          resend.candidate.content shouldBe Some("Human corrected content")
+          resend.candidate.content.map(_.value) shouldBe Some("Human corrected content")
           resend.candidate.toRecord() shouldBe edited.toRecord()
-          resend.candidate.originalProposal shouldBe Some(json)
+          resend.candidate.originalProposal.map(_.value) shouldBe Some(json)
           resend.candidate.name shouldBe first.name
           resend.candidate.context shouldBe first.context
           resend.candidate.sourceKind shouldBe first.sourceKind
@@ -258,12 +308,69 @@ final class CandidateProposalSpec extends AnyWordSpec with Matchers with GivenWh
 
           Then("lookup and resend retain all persisted current fields and the original references")
           found.toRecord() shouldBe stored._1.toRecord()
-          found.content shouldBe Some("Human edit retained across restart")
-          found.originalProposal shouldBe Some(json)
+          found.toDataStore().getInt("preparationState") shouldBe Some(1)
+          found.toRecord().getString("preparationState") shouldBe Some("prepared")
+          found.content.map(_.value) shouldBe Some("Human edit retained across restart")
+          found.originalProposal.map(_.value) shouldBe Some(json)
           capture.toRecord() shouldBe stored._2.toRecord()
+          capture.toDataStore().getInt("preparationState") shouldBe Some(2)
+          capture.toRecord().getString("preparationState") shouldBe Some("unprepared")
+          val preparedstorage = _stored_preparation(root, found.id.print)
+          val unpreparedstorage = _stored_preparation(root, capture.id.print)
+          preparedstorage._1 shouldBe 1
+          unpreparedstorage._1 shouldBe 2
+          Set("integer", "real") should contain (preparedstorage._2)
+          Set("integer", "real") should contain (unpreparedstorage._2)
           resend.created shouldBe false
           resend.candidate.toRecord() shouldBe stored._1.toRecord()
           _items(reopened).map(_.id).toSet shouldBe Set(stored._1.id, stored._2.id)
+        } finally reopenedhandle.close()
+      }
+
+      "fail lookup on an unknown stored preparation code without rewriting the database" in {
+        Given("a prepared proposal registered in a test-owned SQLite root, then closed with its stored code changed to 99")
+        val root = Files.createTempDirectory("workbench-proposal-unknown-code-")
+        val firsthandle = _handle(root)
+        val candidate = try {
+          _register(firsthandle.subsystem, _fixture("tkl-prepared.json")).candidate
+        } finally firsthandle.close()
+        _set_stored_preparation(root, candidate.id.print, 99)
+
+        When("a normal production subsystem reopens that root and looks up the existing proposal")
+        val reopenedhandle = _handle(root)
+        try {
+          val result = _call(reopenedhandle.subsystem, "Candidate", "findCandidateByProposal",
+            "producerRef" -> "tkl-fixture", "proposalId" -> "tkl-proposal-1")
+          val stored = _stored_preparation(root, candidate.id.print)
+
+          Then("lookup returns a native failure and leaves the unknown physical code unchanged")
+          result shouldBe a[Consequence.Failure[?]]
+          stored._1 shouldBe 99
+          Set("integer", "real") should contain (stored._2)
+        } finally reopenedhandle.close()
+      }
+
+      "retain actual optional preparation absence for a native manual candidate after reopen" in {
+        Given("a prepared proposal materializes the preparation column before a native manual candidate is registered without preparation metadata")
+        val root = Files.createTempDirectory("workbench-proposal-absent-state-")
+        val firsthandle = _handle(root)
+        val candidateid = try {
+          _register(firsthandle.subsystem, _fixture("tkl-prepared.json"))
+          _execute(firsthandle.subsystem, "Candidate", "registerCandidate",
+            "name" -> "Manual candidate without preparation").getString("id").get
+        } finally firsthandle.close()
+
+        When("the normal production subsystem reopens the same root and lists the manual candidate")
+        val reopenedhandle = _handle(root)
+        try {
+          val candidates = _items(reopenedhandle.subsystem).filter(_.id.print == candidateid)
+          val stored = _stored_preparation(root, candidateid)
+
+          Then("the candidate retains None for preparation and SQLite retains a null rather than an enum code")
+          candidates.size shouldBe 1
+          candidates.head.preparationState shouldBe None
+          candidates.head.toRecord().getAny("preparationState") shouldBe None
+          stored._2 shouldBe "null"
         } finally reopenedhandle.close()
       }
     }
@@ -412,6 +519,40 @@ final class CandidateProposalSpec extends AnyWordSpec with Matchers with GivenWh
     workbenchvalue.RegisterProposalResult.createC(
       _execute(subsystem, "Candidate", "registerProposal", "proposalJson" -> json)
     ).toOption.getOrElse(fail("registerProposal did not return its declared result"))
+
+  private def _stored_preparation(root: Path, entityid: String): (Int, String) = {
+    val database = root.resolve("org.simplemodeling.textus/knowledge-workbench/datastores/application.db")
+    Files.exists(database) shouldBe true
+    val connection = DriverManager.getConnection(s"jdbc:sqlite:${database.toUri}?mode=ro")
+    try {
+      val statement = connection.prepareStatement(
+        "SELECT preparationState, typeof(preparationState) FROM information_candidate WHERE id = ?"
+      )
+      try {
+        statement.setString(1, entityid)
+        val result = statement.executeQuery()
+        try {
+          result.next() shouldBe true
+          (result.getInt(1), result.getString(2))
+        } finally result.close()
+      } finally statement.close()
+    } finally connection.close()
+  }
+
+  private def _set_stored_preparation(root: Path, entityid: String, code: Int): Unit = {
+    val database = root.resolve("org.simplemodeling.textus/knowledge-workbench/datastores/application.db")
+    val connection = DriverManager.getConnection(s"jdbc:sqlite:${database.toUri}")
+    try {
+      val statement = connection.prepareStatement(
+        "UPDATE information_candidate SET preparationState = ? WHERE id = ?"
+      )
+      try {
+        statement.setInt(1, code)
+        statement.setString(2, entityid)
+        statement.executeUpdate() shouldBe 1
+      } finally statement.close()
+    } finally connection.close()
+  }
 
   private def _find(subsystem: Subsystem, producerref: String, proposalid: String): Option[entity.InformationCandidate] =
     workbenchvalue.FindCandidateByProposalResult.createC(_execute(subsystem, "Candidate", "findCandidateByProposal",

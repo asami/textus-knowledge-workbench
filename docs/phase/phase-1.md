@@ -85,6 +85,34 @@ Admission. Former item 6, TKL feedback and existing-Candidate preparation,
 remains follow-on work outside both Phases; see the
 [development-plan split note](../journal/2026/10/2026-10-02-workbench-development-plan.md#phase-split--2026-10-02).
 
+### STEP-2 dependency follow-up: fixed POWERTYPE codes (2026-10-19)
+
+Execution handoff: [POWERTYPE persistence-code handoff](../journal/2026/10/2026-10-19-powertype-persistence-code-handoff.md).
+
+Apply the [CML persistence-code specification](../../../../dev2025/cozy/docs/spec/cml-powertype-persistence-code.md)
+and [connected producer plan](../../../../dev2025/cozy/docs/phase/powertype-persistence-code-plan.md).
+ProposalPreparationState keeps its explicit `prepared=1` and `unprepared=2`
+mapping; JSON/CLI retain the symbolic strings. Core owns the generic typed
+bidirectional contract, each generated POWERTYPE owns its fixed mapping, and
+the declared persistence boundary selects it before external string projection.
+The database mapping is `XShort`, using the shared Short attribute path and
+retaining its signed 16-bit width through SQL type selection. The existing
+generic Int-valued correspondence API does not select the physical SQL type.
+
+First complete the actual generated save/read/provider-reopen route. Combine
+the producer rejection scenarios (missing/duplicate/invalid codes and persistent
+reuse of an uncoded transient type), stable mapping after reorder/label edits,
+and unknown stored-code failure into the same integration work. Display-only
+uncoded types remain valid. Preserve applicable existing test/review evidence
+and complete independent integrated review before recording acceptance.
+
+No ordinal assignment, textual-storage fallback, application-owned replacement
+codec or live database rewrite is introduced. This is STEP-2 dependency work;
+closed Core Phase 3, Cozy Phase 78 and CNCF Phase 100/115 remain closed. Its
+implementation and connected verification are accepted by the separate
+[STEP-2 execution ledger](phase-1-checklist.md). This plan retains its original
+scope; STEP-3, STEP-4 and the Phase release gate remain pending.
+
 ### Decisions within each work item
 
 Resolve the following as part of their owning work items. They clarify the

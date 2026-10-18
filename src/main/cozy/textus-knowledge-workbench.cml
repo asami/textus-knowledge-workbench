@@ -173,13 +173,13 @@ InformationCandidate
 | id          | entityid | 1            |
 | name        | name     | 1            |
 | description | InformationCandidateDescription | ?            |
-| producerRef | string | ? |
-| proposalId | string | ? |
-| sourceKind | string | ? |
-| originalProposal | string | ? |
-| content | string | ? |
-| context | string | ? |
-| preparationState | string | ? |
+| producerRef | ProposalProducerRef | ? |
+| proposalId | SourceProposalId | ? |
+| sourceKind | ProposalSourceKind | ? |
+| originalProposal | ProposalJsonText | ? |
+| content | CandidateContent | ? |
+| context | CandidateContext | ? |
+| preparationState | ProposalPreparationState | ? |
 | evidenceRefs | ProposalReference | * |
 | preparedMaterialRefs | ProposalReference | * |
 | sourceRunRef | ProposalReference | ? |
@@ -251,7 +251,7 @@ InformationCandidate
 
 | name | type | multiplicity |
 |------+------+--------------|
-| proposalJson | string | 1 |
+| proposalJson | ProposalJsonText | 1 |
 
 ## RegisterProposalResult
 
@@ -270,8 +270,8 @@ InformationCandidate
 
 | name | type | multiplicity |
 |------+------+--------------|
-| producerRef | string | 1 |
-| proposalId | string | 1 |
+| producerRef | ProposalProducerRef | 1 |
+| proposalId | SourceProposalId | 1 |
 
 ## FindCandidateByProposalResult
 
@@ -294,3 +294,62 @@ InformationCandidate
 | retrievalState | string | ? |
 | retentionUntil | string | ? |
 | limitation | string | ? |
+
+# DATATYPE
+
+## ProposalProducerRef
+
+### Attribute
+
+| name | type | multiplicity | min-length | pattern |
+|------+------|--------------|------------|---------|
+| value | string | 1 | 1 | (?s).*(?!(?!\x7f)\p{Cntrl})(?!\x20)..* |
+
+## SourceProposalId
+
+### Attribute
+
+| name | type | multiplicity | min-length | pattern |
+|------+------|--------------|------------|---------|
+| value | string | 1 | 1 | (?s).*(?!(?!\x7f)\p{Cntrl})(?!\x20)..* |
+
+## ProposalSourceKind
+
+### Attribute
+
+| name | type | multiplicity | min-length | pattern |
+|------+------|--------------|------------|---------|
+| value | string | 1 | 1 | (?s).*(?!(?!\x7f)\p{Cntrl})(?!\x20)..* |
+
+## ProposalJsonText
+
+### Attribute
+
+| name | type | multiplicity | min-length | pattern |
+|------+------|--------------|------------|---------|
+| value | string | 1 | 2 |  |
+
+## CandidateContent
+
+### Attribute
+
+| name | type | multiplicity | min-length | pattern |
+|------+------|--------------|------------|---------|
+| value | string | 1 | 1 | (?s).*(?!(?!\x7f)\p{Cntrl})(?!\x20)..* |
+
+## CandidateContext
+
+### Attribute
+
+| name | type | multiplicity | min-length | pattern |
+|------+------|--------------|------------|---------|
+| value | string | 1 | 0 |  |
+
+# POWERTYPE
+
+## ProposalPreparationState
+
+| name | value | label |
+|------|-------|-------|
+| prepared | 1 | Prepared |
+| unprepared | 2 | Unprepared |

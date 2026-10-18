@@ -18,11 +18,18 @@ persistence.
 
 The canonical authored ABI source is `src/main/car/abi-manifest.json`, in
 `cozy.car.abi-manifest.v2` format with `abi.version=1`. It declares the component
-coordinate, Candidate service, four operations, all eleven value types and the
+coordinate, Candidate service, four operations, eleven value types, six nominal
+DATATYPEs, the `ProposalPreparationState` POWERTYPE and the
 InformationCandidate entity with their complete fields, plus an empty
 dependency list. Later CML surface or component-coordinate changes must update
 the canonical ABI exports/version coherently and revalidate ordinary CAR
 packaging and runtime preparation.
+
+Preparation state uses explicit stable codes: `prepared=1`, `unprepared=2` in
+the native datastore, while JSON and CLI retain `prepared` / `unprepared`.
+Definition order does not assign codes. The remaining semantic scalar fields
+keep their text representation. Core Phase 3 collection semantics adopted
+through CNCF Phase 115 preserve empty list output as `{"items":[]}`.
 
 The starter `Candidate/registerCandidate` operation accepts a name and optional
 description; `Candidate/listCandidates` searches InformationCandidate entities.
@@ -30,8 +37,8 @@ description; `Candidate/listCandidates` searches InformationCandidate entities.
 candidate if its exact producer/proposal key is absent, and returns the current
 candidate on sequential resend without overwriting human edits.
 `Candidate/findCandidateByProposal` looks up that persisted key without writes.
-All Candidate operations remain outside MCP publication. STEP-2 implementation
-and GWT specifications are authored; its validation, review and commit are pending.
+All Candidate operations remain outside MCP publication. STEP-2 is accepted
+under the local acceptance binding in the [execution checklist](docs/phase/phase-1-checklist.md).
 
 See the [proposal specification](docs/spec/candidate-proposals.md),
 [component foundation specification](docs/spec/component-foundation.md),
@@ -156,8 +163,9 @@ packaging/help/lint and independent review were admitted, including focused
 hardbreak closure review. STEP-1/S1-A is accepted at local commit
 `70620d1aeaae4a3859df93d6ff6948bdcff5742c`, recorded by
 `tkw-phase1-step1-post-hardbreak-commit-acceptance-20261003@1` and review ledger
-`tkw-phase1-review-ledger-20261002@4`. STEP-2 changes require fresh focused
-proposal validation, representative CLI evidence, CAR lint, review and commit. These CLI checks do not
+`tkw-phase1-review-ledger-20261002@4`. STEP-2 has completed its focused
+proposal validation, representative CLI evidence, development CAR lint and independent
+review for its local acceptance binding. These CLI checks do not
 verify Web/manual/OpenAPI/MCP routes or complete Phase 1 acceptance.
 Runtime startup uses the Workbench-prepared classpath; scripts that invoke SBT
 use the serial command runner. The Phase 1 bootstrap release gate requires
@@ -172,8 +180,8 @@ keeps its evidence limitations. Capture confirmation is transfer only. Use the
 [user guide](src/main/car/manual/user-guide.md#register-and-look-up-proposals)
 for registration, lookup, generated content-only edit and same-key resend examples.
 
-Phase 1 is in progress. STEP-2 proposal implementation/specifications are authored;
-validation, independent review and local Step commit remain pending. Human
+Phase 1 is in progress. STEP-2 proposal registration, lookup, sequential resend
+and fixed-code XShort persistence are accepted under its local Step binding. Human
 formation/approval, List/Detail/edit/review, comprehensive Phase review, successful
 bootstrap full SBT suite and final release remain pending. Real KnowledgeHub
 Admission belongs to [Phase 1.1](docs/phase/phase-1.1.md); TKL preparation,

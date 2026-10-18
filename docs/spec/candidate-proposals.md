@@ -3,7 +3,7 @@
 Spec: `workbench-candidate-proposals`\
 Rules: `PROP-01` through `PROP-09`\
 Owner: PHASE-1 / STEP-2 / S2-A\
-Status: implementation and executable specifications authored; parent validation, independent review and Step commit pending
+Status: STEP-2 / S2-A accepted under local binding `tkw-step2-connected-acceptance-commit-20261019-01@1`
 
 This specification implements the parent-decided minimal proposal contract
 `tkw-phase1-step2-proposal-contract-20261003@1`. It consumes the accepted
@@ -118,25 +118,23 @@ ControlledTest profile or private framework UnitOfWork fabrication is used.
 | PROP-03 | Existing/absent/exact-case/exact-whitespace lookup without writes; ambiguous correspondence refuses lookup and resend |
 | PROP-04 | Identical sequential resend returns current candidate and one visible row |
 | PROP-05 | Generated native content-only edit survives changed valid same-key payload with first metadata retained |
-| PROP-06 | Shutdown/reopen of the same production datastore retains both fixtures and edited resend behavior |
+| PROP-06 | Shutdown/reopen of the same production datastore retains both fixtures and edited resend behavior, with read-only SQL confirming physical numeric preparation codes 1/2 and textual external state round trips |
 | PROP-07 | Different producer or proposal isolates correspondence, including significant whitespace |
 | PROP-08 | Table of invalid JSON, missing/blank/wrong-type scalars, evidence/reference/preparation errors and blank lookup keys leaves rows unchanged |
 | PROP-09 | Starter name/description creation, description/name search and native paging retain behavior; legacy rows have no proposal key |
 
-These are authoring records, not executed acceptance evidence. The parent owns
-clean generation, runtime preparation, focused tests including retained
-ComponentFactorySpec, CAR packaging, representative separate-process CLI
-registration/lookup/edit/resend, mechanical checks, CAR lint, independent review
-and local Step commit. [The checklist](../phase/phase-1-checklist.md) projects
-only accepted evidence. The successful full SBT suite remains a Phase release
+The [execution checklist](../phase/phase-1-checklist.md) records STEP-2 acceptance
+under the local binding above, including the generated consumer and fixed-code
+XShort persistence contract. Detailed execution and review material remains in
+private local evidence. The successful full SBT suite remains a Phase release
 gate after all Step commits and comprehensive Phase review.
 
 ## Preserved behavior and later owners
 
 `registerCandidate` and `listCandidates` retain inputs/results, description
 filtering and paging. Lists may expose the additive proposal fields. Native
-Record.dataAuto omits absent optional values and empty arrays, so an absent
-lookup or empty list renders as `{}`. Canonical component coordinates,
+Record.dataAuto omits absent optional values and preserves empty arrays. An absent
+lookup renders as `{}`; an empty list renders as `{"items":[]}`. Canonical component coordinates,
 `abi.version=1` initial additive surface, explicit CNCF version selection,
 Subsystem/user/store ownership and empty MCP publication policy remain intact.
 
@@ -147,3 +145,42 @@ owns actual KnowledgeHub Admission. Live provider integrations, TKL feedback
 and existing-candidate preparation retain their follow-on owners. Concurrent
 receipt uniqueness, payload conflict/canonicalization/hashes, independent
 receipt state, key retirement and a general recovery engine are excluded.
+
+## Semantic scalar adoption — 2026-10-19
+
+The developer approved the STEP-2 semantic model addition after current CAR lint
+rejected raw Entity string attributes. This supersedes the primitive Scala type
+selection in the 2026-10-03 minimal contract while preserving scalar JSON/CLI
+text, exact identity strings, raw first-proposal text and existing validation.
+The six scalar DATATYPEs retain SQL text; preparation state uses the fixed
+numeric persistence codes defined below.
+The semantic scalar amendment is included in STEP-2's accepted local binding.
+
+| Field | Declared type | Contract |
+| --- | --- | --- |
+| producerRef | ProposalProducerRef | Nonblank exact external source key |
+| proposalId | SourceProposalId | Nonblank exact producer-owned key |
+| sourceKind | ProposalSourceKind | Nonblank open source vocabulary |
+| originalProposal / proposalJson | ProposalJsonText | Raw JSON text of at least two characters; registration owns full object/schema validation |
+| content | CandidateContent | Nonblank exact text; no imposed maximum or locale transformation |
+| context | CandidateContext | Optional text, including an explicitly supplied empty string |
+| preparationState | ProposalPreparationState | Closed POWERTYPE accepting exactly lowercase prepared/unprepared in JSON/CLI, with fixed database codes 1/2 respectively, without lifecycle transitions |
+
+The six nominal DATATYPEs use the library scalar conversion contract.
+ProposalPreparationState is a closed POWERTYPE preserving the exact lowercase
+`prepared` and `unprepared` values in scalar JSON and CLI output. Its CML table
+declares explicit database codes: `prepared = 1` and `unprepared = 2`. Table order
+must not determine these codes, and codes must never be reassigned or reused.
+The declared database mapping is `XShort`. It shares the ordinary Short attribute
+path: exact signed 16-bit values become Scala `Short`, PostgreSQL/MySQL
+`SMALLINT`, or SQLite `INTEGER`. The common persistence boundary rejects
+fractional and out-of-range values before restoring a domain value; the type's
+fixed correspondence rejects unknown codes. Zero is a value, not optional absence.
+Native persistence and reads, including shutdown/reopen, preserve the mapping
+between numeric database codes and textual JSON/CLI values. No existing database
+migration is introduced. FindCandidateByProposal uses the same identity types.
+The nonblank pattern excludes exactly strings removed by
+the established String.trim check, without trimming the admitted string.
+Missing legacy fields remain optional. ProposalReference remains a composite
+Value carrying the supplied opaque version/retrieval facts; advisory reference
+field modeling debt does not authorize new validation constraints.

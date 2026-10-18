@@ -11,7 +11,7 @@ import org.goldenport.record.Record
 
 /*
  * @since   Oct.  3, 2026
- * @version Oct. 18, 2026
+ * @version Oct. 19, 2026
  */
 final class ComponentFactory extends Component.BundleFactory {
   def primaryFactory: Component.PrimaryComponentFactory =
@@ -60,6 +60,7 @@ object KnowledgeWorkbenchPrimaryFactory extends KnowledgeWorkbenchParticipantFac
 
 final class DefaultCandidateServiceFactory extends KnowledgeWorkbenchComponent.CandidateServiceFactory {
   import KnowledgeWorkbenchComponent.CandidateService.*
+  import DefaultCandidateServiceFactory.*
 
   override def createRegisterCandidateActionCall(
     core: org.goldenport.cncf.action.ActionCall.Core,
@@ -84,6 +85,12 @@ final class DefaultCandidateServiceFactory extends KnowledgeWorkbenchComponent.C
     action: FindCandidateByProposal
   ): FindCandidateByProposalActionCall =
     FindCandidateByProposalActionCallImpl(core, action)
+}
+
+object DefaultCandidateServiceFactory {
+  import KnowledgeWorkbenchComponent.CandidateService.*
+
+  def apply(): DefaultCandidateServiceFactory = new DefaultCandidateServiceFactory()
 
   private final case class RegisterProposalActionCallImpl(
     core: org.goldenport.cncf.action.ActionCall.Core,
@@ -92,7 +99,7 @@ final class DefaultCandidateServiceFactory extends KnowledgeWorkbenchComponent.C
     protected def build_Program: ExecUowM[OperationResponse] =
       for {
         input <- exec_from(value.RegisterProposal.createC(action.request.toRecord))
-        proposal <- exec_from(CandidateProposal.parse(input.proposalJson))
+        proposal <- exec_from(CandidateProposal.parse(input.proposalJson.value))
         query <- exec_from(CandidateProposal.key(proposal.producerref, proposal.proposalid))
         rewrittenquery = EntityQueryFieldResolver(core.component, "InformationCandidate").rewrite(query)
         matches <- entity_search[entity.InformationCandidate](entity.query.InformationCandidate.collectionId, rewrittenquery)
@@ -115,7 +122,7 @@ final class DefaultCandidateServiceFactory extends KnowledgeWorkbenchComponent.C
     protected def build_Program: ExecUowM[OperationResponse] =
       for {
         input <- exec_from(value.FindCandidateByProposal.createC(action.request.toRecord))
-        query <- exec_from(CandidateProposal.key(input.producerRef, input.proposalId))
+        query <- exec_from(CandidateProposal.key(input.producerRef.value, input.proposalId.value))
         rewrittenquery = EntityQueryFieldResolver(core.component, "InformationCandidate").rewrite(query)
         matches <- entity_search[entity.InformationCandidate](entity.query.InformationCandidate.collectionId, rewrittenquery)
         candidate <- exec_from(CandidateProposal.current(matches.data))
@@ -154,11 +161,7 @@ final class DefaultCandidateServiceFactory extends KnowledgeWorkbenchComponent.C
         result <- entity_search[entity.InformationCandidate](entity.query.InformationCandidate.collectionId, rewrittenquery)
       } yield OperationResponse(value.ListCandidatesResult(result.data).toRecord())
   }
-  }
-
-object DefaultCandidateServiceFactory {
-  def apply(): DefaultCandidateServiceFactory = new DefaultCandidateServiceFactory()
-  }
+}
 
 final class DefaultEntityServiceFactory extends KnowledgeWorkbenchComponent.EntityServiceFactory
 

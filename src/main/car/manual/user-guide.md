@@ -120,8 +120,8 @@ bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class o
 ```
 
 With a single accessible row, that offset produces an empty page. Empty search
-or page results render as `{}` because generated `Record.dataAuto` omits empty
-`items`. This is also the expected shape of a list with no accessible rows.
+or page results render as `{"items":[]}` under the Core Phase 3 Record convention.
+This is also the expected shape of a list with no accessible rows.
 The [reference examples](index.md#listcandidates) show nonempty YAML/JSON output.
 
 ## Register and look up proposals
@@ -196,7 +196,8 @@ bin/launcher --classpath-file target/cncf.d/runtime-classpath.txt --main-class o
 
 See the [proposal reference](index.md#registerproposal) for complete validation
 and candidate/reference fields. These examples describe the implemented
-operation sequence; STEP-2 runtime validation and acceptance are still pending.
+operation sequence. STEP-2 acceptance checks this sequence in isolated native
+storage through separate CLI processes and a read-only SQL inspection.
 
 ## Troubleshooting and validation boundary
 
@@ -221,8 +222,8 @@ CAR packaging/manual/help/lint and independent reviews were admitted before
 local commit `70620d1aeaae4a3859df93d6ff6948bdcff5742c`. Parent record
 `tkw-phase1-step1-post-hardbreak-commit-acceptance-20261003@1` and review ledger
 `tkw-phase1-review-ledger-20261002@4` close STEP-1/S1-A only. STEP-2 proposal
-implementation and GWT scenarios are authored; fresh focused validation,
-representative CLI evidence, CAR lint, independent review and local Step commit
-remain pending. Phase 1 retains human lifecycle work, views, comprehensive
+registration/lookup, sequential resend and fixed-code XShort persistence are
+accepted under local binding `tkw-step2-connected-acceptance-commit-20261019-01@1`.
+Phase 1 retains human lifecycle work, views, comprehensive
 Phase review and its final successful bootstrap full SBT suite/closure/release.
 Actual KnowledgeHub Admission belongs to Phase 1.1.
