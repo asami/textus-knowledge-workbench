@@ -1,6 +1,8 @@
 # Workbench migration to asamiair
 
-status=in-progress
+status=completed
+completed_at=2026-10-18
+release_binding=phase100-final-closure-20261018-01@1
 updated_at=2026-10-18
 owner=textus-knowledge-workbench
 scope=canonical checkout integration and CNCF Phase 100 completion
@@ -50,12 +52,12 @@ independent review; its comparison bases are not historical Phase start bases.
 - [x] Confirm completed Phase 96 and preserve its existing main history.
 - [x] Fetch the five repositories and select the mac mini source handoff.
 - [x] Prepare canonical main/scala12 source merges and resolve textual conflicts,
-  retaining current-main changes. Core and Cozy integrations are committed in
-  their existing histories; SimpleModeler, Workbench and CNCF remain pending.
+  retaining current-main changes. Core, Cozy, SimpleModeler, Workbench and CNCF
+  integrations are committed in their existing histories.
 - [x] Establish Core's canonical structured types and existing shared artifact route.
 - [x] Address the retained SimpleModeler producer obligations in source and
   executable specifications, including compiled consumer verification.
-- [ ] Finish CNCF DSM-100-01 through DSM-100-06 against its owning checklist.
+- [x] Finish CNCF DSM-100-01 through DSM-100-06 against its owning checklist.
 - [x] Complete current CNCF full validation; retain completed Cozy validation.
 - [x] Run the selected direct downstream consumer checks using refreshed dependencies.
 - [x] Assign the separate NICT CAR preparation failure to its application owner,
@@ -64,21 +66,25 @@ independent review; its comparison bases are not historical Phase start bases.
   using refreshed ordinary SNAPSHOT dependencies.
 - [x] Close the original independent comparison findings through focused review.
 - [x] Complete the sole Phase recovery-full review and the focused specification
-  fixture-ownership correction; retain its unresolved historical criterion.
-- [ ] Resolve the historical producer ABI handoff criterion, complete source
+  fixture-ownership correction; retain the unproved chronology and its explicit replacement.
+- [x] Resolve the historical producer ABI handoff criterion, complete source
   integration and record Phase release/closure.
 
-No new Git integration commit, push or Phase closure is claimed here.
+The source integrations and Phase 100 closure are local to this migration scope.
 
-## Current acceptance gates
+## Phase 100 acceptance
 
 The original six comparison findings are independently closed. The sole Phase
-recovery-full review and its focused continuation retain one open criterion:
-the exact producer-facing ABI handoff revision before implementation, required
+recovery-full review and its focused continuations are closed. The original
+exact producer-facing ABI handoff revision before implementation was required
 by CNCF checklist DSM-100-02 item 02.02. No current test proves that historical
-order. Closure requires attributable contemporaneous evidence or an explicit
-human disposition; neither has been supplied. The subsequent specification
-fixture-ownership finding is independently resolved.
+order. On 2026-10-18 the user explicitly replaced the historical ordering
+condition with current frozen ABI/generated-fixture conformance, completed
+functional validation and independent assessment. The original chronology
+remains UNPROVEN. This dated disposition is recorded in CNCF's owning checklist
+and journal; the final focused continuation accepted this replacement and
+closed the remaining review finding. The specification fixture-ownership finding
+is independently resolved. CNCF's owning checklist records all 47 items satisfied.
 
 Earlier re-review also identified the static generated entity-object
 List Query defect `CPB-PHASE100-GENERATED-OBJECT-QUERY-CONTAINER`. The user's new
@@ -131,18 +137,19 @@ approved five-repository repair boundary. Its direct tests use admitted fixtures
 and recording collaborators; they do not repair runtime preparation or establish
 CAR startup readiness. The boundary is documented in CNCF's
 `docs/journal/2026/10/2026-10-18-phase100-phase115-collection-boundary.md`.
-The original comparison is closed; the Phase review retains the historical ABI
-criterion above. Detailed results and the unchanged review/repair history remain
+The original comparison and Phase review chain are closed; the original
+historical ABI chronology remains UNPROVEN under the explicit replacement above.
+Detailed results and the unchanged review/repair history remain
 in private workflow evidence.
 
-## Pending source integration
+## Source integration
 
-SimpleModeler and Workbench each have two incoming entries in their native
-`MERGE_HEAD`, in addition to their current HEAD; CNCF has one incoming entry.
+The retained SimpleModeler and Workbench merges each selected two incoming
+entries in addition to their local HEAD; CNCF selected one incoming entry.
 The earlier commit adapter represented only one incoming entry and stopped
-during request preparation. That attempt created no integration commit. All selected
-source changes and native merge entries are retained; no merge entry may be
-discarded merely to fit the adapter.
+during request preparation. That attempt created no integration commit. All
+selected source changes and incoming histories are preserved in the commits
+below; no merge entry was discarded to fit the adapter.
 
 On 2026-10-18 the user approved the narrowly added development-workstation
 tool scope to preserve every incoming parent, with validation and independent
@@ -155,6 +162,19 @@ criterion nor Phase 115 scope. The previous integration request must not be
 replayed; use a new current request with the complete native parent list and
 the final management-document content.
 
+The fresh registered execution completed SimpleModeler `ed6fbe79876f` and
+Workbench `9e0efcef7748`, preserving all three ordered parents in each native
+commit. CNCF stopped before commit because its four new generated nested
+fixtures have a final blank line flagged relative to both selected parents.
+The consumed partial request and its successful commits remain retained. The
+user approved and the parent applied a persistent `.gitattributes` convention
+permitting final blank lines only for those four exact generated paths. Fixture
+bytes remain intact. A new CNCF-only registered execution completed `507a864507d8`,
+preserving both ordered native parents and the reviewed 91-path tree under the
+changed whitespace policy. All source merges are complete. Final Phase acceptance
+uses the closed review/checklist and the local release binding above. The earlier
+partial execution was not replayed.
+
 ## Local execution evidence
 
 Command receipts and logs remain in ignored private workflow storage on
@@ -166,3 +186,13 @@ investigation and superseded DB-access questions without making those questions
 current blockers. Active evidence has no expiry; archive and retention are
 recorded after the producing workflow finishes under the shared local-evidence
 policy. Detailed execution reports are not publication inputs.
+
+## Completion and next boundary
+
+The canonical source migration and CNCF Phase 100 acceptance are complete within
+this record's declared scope. The local final release binds the completed
+checklist, review/validation and final management documents. The entire Workbench
+application and its separate Phase 1 are not declared complete by this record.
+Phase 115 remains planned for Core Phase 3 Record and canonical collections;
+it may proceed on this accepted foundation under its own implementation scope.
+No original DB transfer, remote push or public publication is included.
