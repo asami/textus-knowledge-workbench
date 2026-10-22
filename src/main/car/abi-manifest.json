@@ -17,6 +17,9 @@
       "services": [
         {
           "name": "Candidate"
+        },
+        {
+          "name": "MaterialWork"
         }
       ],
       "operations": [
@@ -47,6 +50,27 @@
           "kind": "QUERY",
           "input": "FindCandidateByProposal",
           "output": "FindCandidateByProposalResult"
+        },
+        {
+          "service": "MaterialWork",
+          "name": "searchMaterials",
+          "kind": "QUERY",
+          "input": "MaterialSearchQuery",
+          "output": "MaterialSearchResult"
+        },
+        {
+          "service": "MaterialWork",
+          "name": "inspectMaterial",
+          "kind": "QUERY",
+          "input": "MaterialSelectionQuery",
+          "output": "MaterialMetadata"
+        },
+        {
+          "service": "MaterialWork",
+          "name": "readOriginal",
+          "kind": "QUERY",
+          "input": "OriginalSelectionQuery",
+          "output": "MaterialOriginalResult"
         }
       ],
       "types": [
@@ -330,6 +354,198 @@
           "name": "ProposalPreparationState",
           "kind": "powertype",
           "fields": []
+        },
+        {
+          "name": "MaterialSearchQuery",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "text",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "offset",
+              "type": "int",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "limit",
+              "type": "int",
+              "multiplicity": "?",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "MaterialSelectionQuery",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "materialRef",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "OriginalSelectionQuery",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "materialRef",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "resourceId",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "MaterialOriginalResult",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "content",
+              "type": "blob",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "MaterialSearchResult",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "items",
+              "type": "MaterialSummary",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "offset",
+              "type": "int",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "limit",
+              "type": "int",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "hasMore",
+              "type": "boolean",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "MaterialMetadata",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "materialRef",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "title",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "resources",
+              "type": "MaterialResource",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "provenance",
+              "type": "MaterialProvenance",
+              "multiplicity": "*",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "MaterialSummary",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "materialRef",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "title",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "MaterialResource",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "resourceId",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "role",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "mediaType",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "byteLength",
+              "type": "long",
+              "multiplicity": "?",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "MaterialProvenance",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "kind",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "reference",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
         }
       ],
       "entities": [

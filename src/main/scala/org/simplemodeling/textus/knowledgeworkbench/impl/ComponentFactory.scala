@@ -11,7 +11,7 @@ import org.goldenport.record.Record
 
 /*
  * @since   Oct.  3, 2026
- * @version Oct. 19, 2026
+ * @version Oct. 21, 2026
  */
 final class ComponentFactory extends Component.BundleFactory {
   def primaryFactory: Component.PrimaryComponentFactory =
@@ -25,6 +25,7 @@ abstract class KnowledgeWorkbenchParticipantFactoryBase extends KnowledgeWorkben
   protected final val shared_services =
     Vector(
       KnowledgeWorkbenchComponent.CandidateService,
+      KnowledgeWorkbenchComponent.MaterialWorkService,
       KnowledgeWorkbenchComponent.AggregateService,
       KnowledgeWorkbenchComponent.ViewService,
       KnowledgeWorkbenchComponent.EntityService
@@ -37,6 +38,7 @@ abstract class KnowledgeWorkbenchParticipantFactoryBase extends KnowledgeWorkben
     spec_create(name, componentId, shared_services)
 
   override val Candidate: KnowledgeWorkbenchComponent.CandidateServiceFactory = DefaultCandidateServiceFactory()
+  override val MaterialWork: KnowledgeWorkbenchComponent.MaterialWorkServiceFactory = MaterialWorkServiceFactory()
   override val aggregate: KnowledgeWorkbenchComponent.AggregateServiceFactory = AggregateServiceFactoryImpl()
   override val view: KnowledgeWorkbenchComponent.ViewServiceFactory = ViewServiceFactoryImpl()
   override val entity: KnowledgeWorkbenchComponent.EntityServiceFactory = DefaultEntityServiceFactory()

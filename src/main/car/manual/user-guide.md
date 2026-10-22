@@ -199,6 +199,58 @@ and candidate/reference fields. These examples describe the implemented
 operation sequence. STEP-2 acceptance checks this sequence in isolated native
 storage through separate CLI processes and a read-only SQL inspection.
 
+## Material work sequence
+
+Use `KnowledgeWorkbench.MaterialWork` with a host that includes the owning
+KnowledgeLake component and admits the actual caller to both components.
+Workbench's authenticated-only gate is independent of TKL native authorization,
+producer configuration and managed provider custody. The standalone Candidate
+instance setup above alone does not establish that composed route; Workbench
+adds no connection setting or credential bootstrap for these operations.
+
+For an already available Material, call `searchMaterials` with optional `text`,
+`offset` and `limit`, inspect its exact logical `materialRef` with
+`inspectMaterial`, then select an original using `readOriginal` with that
+`materialRef` and the returned `resourceId`. Metadata, provenance and original
+binary response come from TKL. Preserve the producer MIME type and safety
+headers. These reads can precede Candidate work and require no new registration,
+OpenClaw processing or dummy Candidate.
+
+For an explicitly authorized first registration:
+
+1. Construct one complete neutral `textus.material-contribution/1` JSON value
+   from the application's authorized source. Supply it as the typed
+   `contribution` input to `createMaterialRegistration`. Preserve source
+   references, opaque documents, provenance, histories, nulls, array order and
+   Unicode. Workbench forwards the entire JSON to the fixed public TKL owner.
+2. Retain the returned native `registration_id` exactly. Observe `revision`,
+   `state` and the planned `material_ref`; a prepared/materializing reference
+   is not an available original. Status and materialization requests use the
+   camelCase input name `registrationId`, without trimming or normalization.
+3. Explicitly call `getMaterialRegistration` for that ID when status is needed,
+   or request `materializeMaterial` according to the owning TKL admission and
+   lifecycle contract. Both return the same four logical fields from the
+   producer's actual saved snapshot. No physical receipt or grant is exposed.
+4. After observing `registered`, use the existing `inspectMaterial` and
+   `readOriginal` operations with the observed logical Material/resource
+   references. Candidate evidence selection and human approval are separate work.
+
+All six operations target only `org.simplemodeling.textus.KnowledgeLake` /
+`Material`. Do not supply a Book/ISBN/App key, owner, provider selector, token,
+connection or alternate target as a work input. Opaque nested contribution
+content remains data and confers no authority. A domain-neutral application
+uses the same contribution and selector inputs.
+
+Preserve any structured failure and uncertainty returned by the producer.
+An unknown creation outcome is unresolved; do not automatically create again.
+Materialization failure may retain Materializing and remote bytes, or an
+uncertain final acknowledgement may leave Registered. Explicit status reads
+report saved state without authorizing replay, reset or deletion. Workbench
+does not retry or substitute a direct provider call. Its controlled producer
+specifications describe forwarding/context behavior only; parent focused
+validation, actual composed PostgreSQL outcomes, Studio original display,
+private CAR and real Google/App evidence remain required for connected acceptance.
+
 ## Troubleshooting and validation boundary
 
 If startup fails, confirm the prepared classpath exists and is nonempty, the
