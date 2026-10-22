@@ -2,7 +2,7 @@ package org.simplemodeling.textus.knowledgeworkbench
 
 import java.nio.file.{Files, Path}
 import org.goldenport.configuration.{Configuration, ConfigurationTrace, ConfigurationValue, ResolvedConfiguration}
-import org.goldenport.cncf.component.{ComponentCreate, ComponentOrigin}
+import org.goldenport.cncf.component.{ComponentCreate, ComponentId, ComponentOrigin}
 import org.goldenport.cncf.config.RuntimeConfig
 import org.goldenport.cncf.subsystem.{
   DefaultSubsystemFactory,
@@ -22,7 +22,8 @@ import org.scalatest.wordspec.AnyWordSpec
 
 /*
  * @since   Oct.  3, 2026
- * @version Oct. 18, 2026
+ *  version Oct. 18, 2026
+ * @version Oct. 22, 2026
  */
 final class ComponentFactorySpec extends AnyWordSpec with Matchers with GivenWhenThen {
   private val _foundation = afterWord(
@@ -83,7 +84,7 @@ final class ComponentFactorySpec extends AnyWordSpec with Matchers with GivenWhe
     "assembly startup" when {
       "given the complete authored assembly" should {
         "admit the canonical Workbench and its Candidate operations in fixed-user command mode" in {
-          Given("the authored assembly with a test-owned local subject and an explicit Workbench development repository")
+          Given("the authored Workbench and Lake assembly with a test-owned local subject and two prepared native development repositories")
           val descriptor = _instance_descriptor()
           val configuration = _runtime_configuration()
 
@@ -93,8 +94,9 @@ final class ComponentFactorySpec extends AnyWordSpec with Matchers with GivenWhe
             val component = subsystem.findComponent(KnowledgeWorkbenchComponent.componentId)
               .getOrElse(fail("the canonical Workbench component was not constructed"))
 
-            Then("the canonical component exposes both Candidate operations and admits the fixed-user execution profile")
+            Then("the canonical Workbench exposes both Candidate operations, the canonical Lake is present, and the fixed-user execution profile is admitted")
             component.componentId shouldBe KnowledgeWorkbenchComponent.componentId
+            subsystem.findComponent(ComponentId("org.simplemodeling.textus.KnowledgeLake")).isDefined shouldBe true
             component.operationDefinitions.map(_.name) should contain allOf (
               "registerCandidate",
               "listCandidates"
@@ -108,7 +110,7 @@ final class ComponentFactorySpec extends AnyWordSpec with Matchers with GivenWhe
 
       "given the same assembly without its capability providers" should {
         "reject production admission with the required-capability diagnostic" in {
-          Given("the same authored assembly and local subject with an explicitly empty native subsystem capability providers override")
+          Given("the same authored Workbench and Lake assembly, local subject, and two prepared native development repositories with an explicitly empty native subsystem capability providers override")
           val descriptor = _without_capability_providers(_instance_descriptor())
           val configuration = _runtime_configuration()
           var constructed: Option[Subsystem] = None
@@ -154,7 +156,9 @@ final class ComponentFactorySpec extends AnyWordSpec with Matchers with GivenWhe
   private def _runtime_configuration(): ResolvedConfiguration =
     ResolvedConfiguration(
       Configuration(Map(
-        RuntimeConfig.repositoryDirKey -> ConfigurationValue.StringValue(s"component-dev-dir:${_repository_root}"),
+        RuntimeConfig.repositoryDirKey -> ConfigurationValue.StringValue(
+          s"component-dev-dir:${_repository_root},component-dev-dir:${_lake_repository_root}"
+        ),
         "textus.local-data.root" -> ConfigurationValue.StringValue(
           Files.createTempDirectory("workbench-assembly-spec-").toString
         )
@@ -163,4 +167,11 @@ final class ComponentFactorySpec extends AnyWordSpec with Matchers with GivenWhe
     )
 
   private def _repository_root: Path = Path.of(".").toAbsolutePath.normalize()
+
+  private def _lake_repository_root: Path = Path.of(
+    sys.props.getOrElse(
+      "textus.test.knowledge-lake.repository",
+      _repository_root.resolveSibling("textus-knowledge-lake").toString
+    )
+  ).toAbsolutePath.normalize()
 }
