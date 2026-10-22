@@ -71,6 +71,27 @@
           "kind": "QUERY",
           "input": "OriginalSelectionQuery",
           "output": "MaterialOriginalResult"
+        },
+        {
+          "service": "MaterialWork",
+          "name": "createMaterialRegistration",
+          "kind": "COMMAND",
+          "input": "MaterialRegistrationCreateCommand",
+          "output": "MaterialRegistrationResult"
+        },
+        {
+          "service": "MaterialWork",
+          "name": "getMaterialRegistration",
+          "kind": "QUERY",
+          "input": "MaterialRegistrationSelectionQuery",
+          "output": "MaterialRegistrationResult"
+        },
+        {
+          "service": "MaterialWork",
+          "name": "materializeMaterial",
+          "kind": "COMMAND",
+          "input": "MaterialRegistrationMaterializeCommand",
+          "output": "MaterialRegistrationResult"
         }
       ],
       "types": [
@@ -546,6 +567,72 @@
               "required": true
             }
           ]
+        },
+        {
+          "name": "MaterialRegistrationResult",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "registrationId",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "revision",
+              "type": "long",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "state",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "materialRef",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "MaterialRegistrationCreateCommand",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "contribution",
+              "type": "json",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "MaterialRegistrationSelectionQuery",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "registrationId",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "MaterialRegistrationMaterializeCommand",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "registrationId",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
         }
       ],
       "entities": [
@@ -640,6 +727,12 @@
         }
       ]
     },
-    "dependencies": []
+    "dependencies": [
+      {
+        "namespace": "org.simplemodeling.textus",
+        "id": "KnowledgeLake",
+        "abiRange": "[0.1.0,0.2.0)"
+      }
+    ]
   }
 }
