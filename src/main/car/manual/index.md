@@ -173,6 +173,54 @@ immutability against arbitrary generated low-level patches is not claimed.
 Use the [proposal CLI guide](user-guide.md#register-and-look-up-proposals) for both
 fixtures, lookup, content-only native edit and resend.
 
+## Material work reference and registration
+
+`KnowledgeWorkbench.MaterialWork` provides the following authenticated-only
+work operations. Every producer target is fixed to
+`org.simplemodeling.textus.KnowledgeLake`, service `Material`.
+
+| Work operation | Kind | Inputs | Producer operation / result |
+| --- | --- | --- | --- |
+| `searchMaterials` | QUERY | Optional `text`, `offset`, `limit` | `searchMaterials` / logical Material search result |
+| `inspectMaterial` | QUERY | Required `materialRef` string | `getMaterial` / logical metadata, resources and provenance |
+| `readOriginal` | QUERY | Required `materialRef`, `resourceId` strings | `readOriginal` / original binary response with producer MIME type and headers |
+| `createMaterialRegistration` | COMMAND | Required `contribution` JSON value | `createMaterialRegistration` / logical registration result |
+| `getMaterialRegistration` | QUERY | Required `registrationId` string | `getMaterialRegistration` / logical registration result |
+| `materializeMaterial` | COMMAND | Required `registrationId` string | `materializeMaterial` / logical registration result |
+
+Create accepts one complete neutral `textus.material-contribution/1` JSON value,
+including its schema, title, creation time, classifications, provenance,
+originals and documents. The JSON remains typed JSON, including opaque nested
+source references, histories, null bodies, array order and Unicode. Workbench
+does not parse those fields into provider authority. Domain applications own
+authorized source conversion. Selectors are exact opaque logical strings;
+neither Book/ISBN/App identity nor a Google key or operation target is an input.
+
+The registration result has exactly `registrationId: string`, `revision: long`,
+`state: string` and `materialRef: string`. Native default result JSON names are
+`registration_id`, `revision`, `state` and `material_ref`; request names remain
+`registrationId` and `contribution`. The producer's complete response is
+returned unchanged. Revision and prepared/materializing/registered state are
+the observed committed native snapshot. Workbench never synthesizes them.
+A planned Material reference is unavailable until registration is `registered`.
+Consumers then use the independent metadata/original read route.
+
+The caller's CNCF execution, security and observability context is retained.
+Workbench authentication grants no TKL permission: TKL independently owns
+producer configuration, allowed subjects, native storage authorization,
+source/destination bindings and managed provider custody. Workbench supplies no
+privileged grant, connection setting or credential bootstrap. Structured
+producer failures and uncertain acknowledgements remain intact, with one
+producer call per explicit work request. Unknown create outcomes stay unresolved;
+explicit status reads do not authorize automatic replay, reset or deletion.
+
+These operations create no Candidate, evidence association or human approval.
+Existing reference reads require no registration, continuation, OpenClaw or
+Candidate creation. The authored forwarding specifications use controlled
+producer responses through native dispatch; focused validation and actual
+composed Studio/TKL PostgreSQL, private CAR and real Google/App acceptance
+remain parent-owned gates. See the [Material work sequence](user-guide.md#material-work-sequence).
+
 ## Failures and scope
 
 Prepare the classpath and select a readable regular assembly file before

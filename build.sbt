@@ -20,6 +20,8 @@ lazy val root = project
     resolvers += "Local Maven Repository" at ("file://" + Path.userHome.absolutePath + "/.m2/repository"),
     resolvers += "SimpleModeling.org" at "https://www.simplemodeling.org/repository/maven",
     libraryDependencies ++= ProjectYamlBuild.dependencies(cozyProjectMetadata.value),
+    // Native fixture/bootstrap process-global lifecycle must be serialized.
+    Test / parallelExecution := false,
 
     cozyGeneratorBackend := "cozy",
     cozyDelegateProjectDir := None,

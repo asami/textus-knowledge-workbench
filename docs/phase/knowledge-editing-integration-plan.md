@@ -4,6 +4,11 @@ status=planned
 planned_at=2026-10-21
 spec=../spec/knowledge-editing-component-boundary.md
 
+K01/K02 reference contract: [Material work reference v1](../spec/material-work-reference-v1.md).
+The first slice defines read-only search/inspection/original access before
+Candidate creation. Generated producer/consumer bindings and connected
+acceptance remain pending; the OPEN entries below are unchanged.
+
 Preserve accepted Phase 1 STEP-1/2. STEP-3/4 continue delivering common Candidate
 editing/review and reusable views. This named integration workstream owns live
 Material reference access, previously deferred from the fixture-based Phase 1;
@@ -39,6 +44,49 @@ available Phase 1 STEP-3/4 contracts. No requirement to finish all TKL processin
 or Phase 1.1 before the first original is displayed. Bind the actual shared
 APIs once; report missing TKL capability to its owner rather than implementing
 an editor-local/provider-local workaround.
+
+## Connected first-Material registration work
+
+ESS3-02 / TKL-M03 requires work-assisted initial Material registration within
+the same TKW-K01/K02 route and original whole Phase 3 Goal. This extends the
+[Material work contract](../spec/material-work-reference-v1.md#explicit-initial-material-registration-work)
+alongside its three read-only reference queries; it is not TKW-K03 Candidate
+acceptance or a new Phase/Goal. All existing OPEN entries, checklist states and
+accepted Phase 1 history above retain their current scope and status.
+
+| Required MaterialWork capability | Fixed public TKL Material capability | Ownership |
+| --- | --- | --- |
+| `createMaterialRegistration(contribution)` | `createMaterialRegistration` | Studio authorizes its source and constructs complete neutral `textus.material-contribution/1` JSON; Workbench forwards it with the same caller; TKL owns native registration creation. |
+| `getMaterialRegistration(registrationId)` | `getMaterialRegistration` | TKL owns the exact native ID, committed revision, actual state and planned Material reference; Workbench preserves the response without status synthesis or retry authority. |
+| `materializeMaterial(registrationId)` | `materializeMaterial` | TKL owns native authorization, managed OAuth/source/destination, acknowledged progress and physical effects; Workbench forwards the fixed request without replay or duplicate state. |
+
+The owning
+[TKL public registration contract](../../../textus-knowledge-lake/docs/spec/material-registration-operations-v1.md)
+defines producer behavior. Existing reference reads remain available
+independently of registration commands, continuation and Candidate work.
+Material registration is not human review, approval or a persisted Candidate
+selection. Workbench adds no Material database, provider adapter, credential
+surface or general TKL gateway.
+
+Delivery continues in the existing connected route:
+
+1. Bind owning TKL public contract/runtime and retain its producer evidence
+   separately from Workbench/Studio availability.
+2. Run normal Workbench generation, inspect actual generated DTO/action/factory
+   APIs, then implement the fixed same-caller forwards and focused executable
+   specifications.
+3. Add Studio's authorized immutable-source neutral conversion/action and compose
+   registration/status/materialization with its original display through
+   Workbench/TKL, including actual native PostgreSQL outcomes and no replay.
+4. Complete integrated independent protected Step review, private CAR and real
+   Google/App evidence, final full validation/review and original whole Phase
+   gates. Retain the existing Candidate acceptance boundary and second neutral
+   consumer requirement.
+
+This contract/CML authoring does not establish generation, runtime execution,
+successful integration or acceptance. The connected work remains pending under
+the existing checklist; no per-helper acceptance review or commit replaces the
+integrated gates.
 
 Producer: [TKL plan](../../../textus-knowledge-lake/docs/phase/material-access-and-processing-plan.md).
 Consumer: [Studio Phase 3](../../../../Project2026/nict-editing-studio/docs/phase/phase-3.md).

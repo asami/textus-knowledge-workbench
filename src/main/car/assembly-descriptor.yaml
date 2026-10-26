@@ -4,6 +4,9 @@ components:
   - namespace: org.simplemodeling.textus
     id: KnowledgeWorkbench
     version: 0.1.0-SNAPSHOT
+  - namespace: org.simplemodeling.textus
+    id: KnowledgeLake
+    version: 0.1.0-SNAPSHOT
 subsystemCapabilities:
   providers:
     - name: workbench-runtime-facilities

@@ -162,6 +162,324 @@ entity-search
 ##### ENTITY
 InformationCandidate
 
+# SERVICE
+
+## MaterialWork
+
+### DESCRIPTION
+
+Supports Material search, metadata inspection and original preview before Candidate
+creation. Dispatch uses the public KnowledgeLake/Material Operations through normal
+CNCF caller execution, security and observability context. TKL owns Material identity
+and the logical wire schema; these consumer bindings do not define another Material
+index or provider model. Reads never access Drive or private TKL implementation APIs,
+mutate Candidates, or require or start OpenClaw processing. Local preview is not a
+persisted evidence selection; later K03 owns Candidate-to-evidence associations.
+Structured upstream failures remain unchanged without privileged fallback. Existing
+reads remain read-only; separate explicit neutral registration work requests target
+the fixed public KnowledgeLake/Material producer. TKL owns registration identity,
+status, authorization, managed custody and physical effects. These declarations do
+not establish implementation availability or expose a credential or general proxy
+operation.
+
+### OPERATION
+
+#### searchMaterials
+
+##### TYPE
+
+QUERY
+
+##### ACCESS
+
+###### POLICY
+
+authenticated_only
+
+##### DESCRIPTION
+
+Dispatch to public KnowledgeLake/Material/searchMaterials with the caller's context.
+Use case-insensitive title/reference substring search with text at most 256
+characters. Offset defaults to 0 and must be nonnegative; limit defaults to 20 and
+must be between 1 and 100. Authorization precedes stable reference ordering and
+paging, including hasMore, without disclosing unauthorized metadata. Empty results
+contain an empty items collection. Searching does not persist an evidence selection.
+
+##### INPUT
+
+###### VALUE
+
+####### MaterialSearchQuery
+
+######## EXTENDS
+
+QueryAction
+
+######## ATTRIBUTE
+
+| name   | type   | multiplicity |
+|--------|--------|--------------|
+| text   | string | ?            |
+| offset | int    | ?            |
+| limit  | int    | ?            |
+
+##### OUTPUT
+
+###### TYPE
+
+MaterialSearchResult
+
+#### inspectMaterial
+
+##### TYPE
+
+QUERY
+
+##### ACCESS
+
+###### POLICY
+
+authenticated_only
+
+##### DESCRIPTION
+
+Dispatch to public KnowledgeLake/Material/getMaterial with the caller's context.
+Pass the opaque TKL-issued materialRef unchanged. Caller admission and Material
+read authorization precede resource access. Return the producer's logical metadata,
+resources and attributed provenance unchanged without physical provider details.
+Inspection is local preview and does not persist a Candidate evidence association.
+
+##### INPUT
+
+###### VALUE
+
+####### MaterialSelectionQuery
+
+######## EXTENDS
+
+QueryAction
+
+######## ATTRIBUTE
+
+| name        | type   | multiplicity |
+|-------------|--------|--------------|
+| materialRef | string | 1            |
+
+##### OUTPUT
+
+###### TYPE
+
+MaterialMetadata
+
+#### readOriginal
+
+##### TYPE
+
+QUERY
+
+##### ACCESS
+
+###### POLICY
+
+authenticated_only
+
+##### DESCRIPTION
+
+Dispatch to public KnowledgeLake/Material/readOriginal with the caller's context,
+passing the opaque materialRef and logical resourceId unchanged. Caller
+authentication, Operation admission and Material/resource read authorization remain
+with the public producer route. Preserve the admitted original bytes, media type,
+private/no-store, nosniff, sandbox and attachment headers unchanged, without another
+byte store or resource substitution on failure. Reading provides local preview;
+it does not persist an evidence selection or start preparation or registration.
+
+##### INPUT
+
+###### VALUE
+
+####### OriginalSelectionQuery
+
+######## EXTENDS
+
+QueryAction
+
+######## ATTRIBUTE
+
+| name        | type   | multiplicity |
+|-------------|--------|--------------|
+| materialRef | string | 1            |
+| resourceId  | string | 1            |
+
+##### OUTPUT
+
+###### VALUE
+
+####### MaterialOriginalResult
+
+######## EXTENDS
+
+OperationResult
+
+######## ATTRIBUTE
+
+| name    | type | multiplicity |
+|---------|------|--------------|
+| content | blob | 1            |
+
+#### createMaterialRegistration
+
+##### TYPE
+
+COMMAND
+
+##### ACCESS
+
+###### POLICY
+
+authenticated_only
+
+##### DESCRIPTION
+
+Forward one complete textus.material-contribution/1 contribution JSON unchanged to
+org.simplemodeling.textus.KnowledgeLake/Material/createMaterialRegistration through
+the same caller's CNCF execution, security and observability context. Preserve opaque
+documents, source references, histories and Unicode; Studio owns authorized source
+conversion and TKL alone interprets provider receipts. No Book, owner, location,
+connection or target selector is added. TKL independently admits producer mode,
+configuration, subject and native create authorization, then acknowledges Prepared
+only after durable native creation without provider IO. Preserve OperationResponse,
+registrationId, positive native revision, state and planned materialRef unchanged;
+default result JSON retains registration_id/material_ref. Only registered is
+available to normal reads. Native admission/storage/uncertainty Conclusions remain
+unchanged. Unknown creation stays unresolved: no automatic retry, App-key dedupe,
+grant copying, privileged fallback or Candidate mutation. This is a declaration
+pending normal generation and fixed-forward implementation.
+
+##### INPUT
+
+###### VALUE
+
+####### MaterialRegistrationCreateCommand
+
+######## EXTENDS
+
+CommandAction
+
+######## ATTRIBUTE
+
+| name         | type | multiplicity |
+|--------------|------|--------------|
+| contribution | json | 1            |
+
+##### OUTPUT
+
+###### TYPE
+
+MaterialRegistrationResult
+
+#### getMaterialRegistration
+
+##### TYPE
+
+QUERY
+
+##### ACCESS
+
+###### POLICY
+
+authenticated_only
+
+##### DESCRIPTION
+
+Forward the exact opaque native registrationId to
+org.simplemodeling.textus.KnowledgeLake/Material/getMaterialRegistration through the
+same caller's CNCF execution, security and observability context. Never normalize
+or derive the ID from a Material URN, provider or App/business key. TKL independently
+applies producer mode, actual caller admission and native read authorization.
+Preserve its OperationResponse, registrationId, positive committed native revision,
+actual prepared/materializing/registered state and planned materialRef unchanged;
+default result JSON retains registration_id/material_ref. A planned reference is
+unavailable until registered. Missing/unauthorized records and native load failures
+retain their exact Conclusions. Status reads perform no write, credential/provider
+access, Candidate mutation or replay and authorize no retry, reset or deletion.
+No polling, resume or bulk parameter is accepted. This declaration alone does not
+establish generated or runtime availability.
+
+##### INPUT
+
+###### VALUE
+
+####### MaterialRegistrationSelectionQuery
+
+######## EXTENDS
+
+QueryAction
+
+######## ATTRIBUTE
+
+| name           | type   | multiplicity |
+|----------------|--------|--------------|
+| registrationId | string | 1            |
+
+##### OUTPUT
+
+###### TYPE
+
+MaterialRegistrationResult
+
+#### materializeMaterial
+
+##### TYPE
+
+COMMAND
+
+##### ACCESS
+
+###### POLICY
+
+authenticated_only
+
+##### DESCRIPTION
+
+Forward only the exact opaque native registrationId to
+org.simplemodeling.textus.KnowledgeLake/Material/materializeMaterial through the
+same caller's CNCF execution, security and observability context. TKL independently
+owns producer mode/configuration/subject, native read/write and managed custody
+authorization, retained destination admission and physical source/writer execution.
+Its acknowledged durable Materializing transition must precede physical effects;
+only confirmed native persistence returns Registered. Preserve OperationResponse,
+registrationId, positive committed native revision, actual state and materialRef
+unchanged, including native default registration_id/material_ref result JSON.
+Only registered enables ordinary search/get/read. Exact native authorization,
+state-conflict, provider and uncertain-acknowledgement Conclusions remain unchanged.
+Failure can retain Materializing and bytes, or unknown final acknowledgement can
+leave Registered; explicit getMaterialRegistration reads actual status without
+authorizing replay. Never automatically retry/reset/delete, add a write, substitute
+direct provider access or a privileged identity, or mutate a Candidate. This
+declaration does not establish generated or runtime implementation availability.
+
+##### INPUT
+
+###### VALUE
+
+####### MaterialRegistrationMaterializeCommand
+
+######## EXTENDS
+
+CommandAction
+
+######## ATTRIBUTE
+
+| name           | type   | multiplicity |
+|----------------|--------|--------------|
+| registrationId | string | 1            |
+
+##### OUTPUT
+
+###### TYPE
+
+MaterialRegistrationResult
+
 # ENTITY
 
 ## InformationCandidate
@@ -294,6 +612,68 @@ InformationCandidate
 | retrievalState | string | ? |
 | retentionUntil | string | ? |
 | limitation | string | ? |
+
+## MaterialSearchResult
+
+### Attribute
+
+| name    | type            | multiplicity |
+|---------|-----------------|--------------|
+| items   | MaterialSummary | *            |
+| offset  | int             | 1            |
+| limit   | int             | 1            |
+| hasMore | boolean         | 1            |
+
+## MaterialMetadata
+
+### Attribute
+
+| name        | type               | multiplicity |
+|-------------|--------------------|--------------|
+| materialRef | string             | 1            |
+| title       | string             | 1            |
+| resources   | MaterialResource   | *            |
+| provenance  | MaterialProvenance | *            |
+
+## MaterialSummary
+
+### Attribute
+
+| name        | type   | multiplicity |
+|-------------|--------|--------------|
+| materialRef | string | 1            |
+| title       | string | 1            |
+
+## MaterialResource
+
+### Attribute
+
+| name       | type   | multiplicity |
+|------------|--------|--------------|
+| resourceId | string | 1            |
+| role       | string | 1            |
+| mediaType  | string | 1            |
+| byteLength | long   | ?            |
+
+## MaterialProvenance
+
+### Attribute
+
+| name      | type   | multiplicity |
+|-----------|--------|--------------|
+| kind      | string | 1            |
+| reference | string | 1            |
+
+## MaterialRegistrationResult
+
+### Attribute
+
+| name           | type   | multiplicity |
+|----------------|--------|--------------|
+| registrationId | string | 1            |
+| revision       | long   | 1            |
+| state          | string | 1            |
+| materialRef    | string | 1            |
 
 # DATATYPE
 
