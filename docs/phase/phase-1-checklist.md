@@ -7,6 +7,12 @@ Update rule: update only from accepted validation/review/commit evidence
 The [Phase 1 plan](phase-1.md) owns scope and completion criteria. This checklist
 tracks execution without changing the preserved planning document.
 
+2026-10-21: STEP-3/4 consume the
+[shared editing boundary](../spec/knowledge-editing-component-boundary.md).
+Live Material access has its own [integration checklist](knowledge-editing-integration-plan.md);
+it does not reopen accepted Steps, silently add provider gates here or reset
+history. Existing review/full-validation/release obligations remain unchanged.
+
 | Step | Scope | Status | Accepted evidence |
 | --- | --- | --- | --- |
 | STEP-1 / S1-A | Runnable standard CAR foundation | accepted | commit `70620d1aeaae4a3859df93d6ff6948bdcff5742c`; clean generation/runtime preparation, four factory/assembly scenarios, CAR packaging/manual/help/lint, separate-process registration/list/search/paging with SQLite evidence, 16 normal/debug routing cases, mechanical checks and admitted independent/closure reviews |

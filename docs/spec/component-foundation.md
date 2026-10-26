@@ -1,5 +1,11 @@
 # Workbench component foundation
 
+2026-10-21 clarification: the
+[shared editing contract](knowledge-editing-component-boundary.md) defines
+Workbench's public role for multiple editors and its TKL dependency. This
+preserves accepted foundation/proposal behavior; it does not claim the new
+live Material APIs are implemented.
+
 Spec: `workbench-component-foundation`\
 Rules: `FND-01` through `FND-05`\
 Owner: PHASE-1 / STEP-1 / S1-A\

@@ -1,5 +1,12 @@
 # Phase 1.1 — KnowledgeHub Information Admission and Trace
 
+2026-10-21 clarification: domain editing applications share this Workbench
+admission contract under the
+[component boundary](../spec/knowledge-editing-component-boundary.md).
+TKL access/processing does not own human approval or parallel admission.
+The [Material integration plan](knowledge-editing-integration-plan.md) has
+separate reference acceptance and does not replace this Phase's obligations.
+
 status=planned
 split_full_test_policy=final-only
 split_full_validation_method=sbt-full-suite

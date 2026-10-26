@@ -12,6 +12,16 @@ Successor: [Phase 1.1 — KnowledgeHub Admission](phase-1.1.md)
 
 ## Goal
 
+Current direction (2026-10-21): the
+[shared editing contract](../spec/knowledge-editing-component-boundary.md)
+clarifies common Candidate operations for multiple domain editing applications.
+STEP-3/4 retain that reusable boundary; accepted STEP-1/2 are not reopened.
+Live Material access is owned by the separate
+[integration workstream](knowledge-editing-integration-plan.md), consuming TKL
+public Operations without Drive/provider code here. Its first reference slice
+does not wait for full Phase 1.1 admission or OpenClaw processing. Live provider
+acceptance is not silently added to the fixture-based Phase 1 closure.
+
 Establish a runnable Textus Knowledge Workbench component that registers producer
 proposals, supports evidence-aware Candidate formation and views, and records
 explicit human review/approval. Produce the accepted Candidate and approval-target

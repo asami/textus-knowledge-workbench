@@ -1,5 +1,13 @@
 # Textus Knowledge Workbench Architecture
 
+Current refinement (2026-10-21): the
+[shared editing specification](../spec/knowledge-editing-component-boundary.md)
+makes domain editors' normal work-oriented Material access pass through TKW to
+TKL public Operations. TKW is reusable application logic, not a mandatory
+separate UI/server or generic proxy for every Lake API. Ordinary TKL queries
+and OpenClaw continuation processing share one Material model. See the
+[integration plan](../phase/knowledge-editing-integration-plan.md).
+
 ## Purpose
 
 Textus Knowledge Workbench (TKW) is the reusable application/admission layer for registering raw/prepared proposals as its own Information Candidates and forming reviewed, human-approved **KnowledgeHub Information**.

@@ -1,5 +1,13 @@
 # Textus Knowledge Workbench
 
+Shared editing direction (2026-10-21): Workbench supplies common knowledge-work
+and Candidate operations to Editing Studio and other domain editors. It composes
+TKL's public Material APIs; TKL shares its ordinary access model with OpenClaw
+continuation processing. See the
+[component specification](docs/spec/knowledge-editing-component-boundary.md) and
+[integration plan](docs/phase/knowledge-editing-integration-plan.md).
+This planned connection does not imply live TKL acceptance.
+
 Textus Knowledge Workbench (TKW) forms Information Candidates for human review
 and approval. The current development foundation is a standard Cozy-generated
 CAR with canonical component identity `org.simplemodeling.textus.KnowledgeWorkbench`,
