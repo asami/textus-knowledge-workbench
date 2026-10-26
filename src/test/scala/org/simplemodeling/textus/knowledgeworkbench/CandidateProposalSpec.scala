@@ -21,7 +21,7 @@ import org.scalatest.wordspec.AnyWordSpec
 
 /*
  * @since   Oct. 14, 2026
- * @version Oct. 19, 2026
+ * @version Oct. 27, 2026
  */
 final class CandidateProposalSpec extends AnyWordSpec with Matchers with GivenWhenThen {
   private val _proposals = afterWord(
@@ -614,6 +614,12 @@ final class CandidateProposalSpec extends AnyWordSpec with Matchers with GivenWh
 
   private def _handle(root: Path): CncfHandle = {
     val repository = Path.of(".").toAbsolutePath.normalize()
+    val lakerepository = Path.of(
+      sys.props.getOrElse(
+        "textus.test.knowledge-lake.repository",
+        repository.resolveSibling("textus-knowledge-lake").toString
+      )
+    ).toAbsolutePath.normalize()
     val authored = Files.readString(repository.resolve("src/main/car/assembly-descriptor.yaml"))
     val instance = root.resolve("assembly-instance.yaml")
     Files.writeString(instance, authored.replace(
@@ -625,6 +631,7 @@ final class CandidateProposalSpec extends AnyWordSpec with Matchers with GivenWh
       args = Array(
         "--discover=classes",
         s"--component-dev-dir=$repository",
+        s"--component-dev-dir=$lakerepository",
         s"--textus.assembly.descriptor=$instance",
         s"--textus.local-data.root=$root",
         "command"
