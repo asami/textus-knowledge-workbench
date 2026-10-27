@@ -19,6 +19,12 @@ must use its public schema without copying physical provider DTOs. These
 selectors are the intended v1 contract, not evidence of generated/live APIs.
 Bind actual artifacts and ABI through the normal producer build before acceptance.
 
+Phase 2 binds explicit Candidate creation in
+[Material-backed Candidate work v1](material-candidate-work-v1.md). Its authored
+command is separate from these queries; implementation and acceptance remain
+pending. The logical Material/resource selection is retained in the existing
+Candidate's first proposal, without a second Material registry.
+
 For this first slice, searching/inspecting/reading may precede Candidate creation
 and performs no work/Candidate mutation. It must not create dummy Candidates to
 display an original. Subsequent K03 binds selection/evidence to Workbench-owned

@@ -1,13 +1,14 @@
 # Phase 2 Checklist — Material-backed Candidate Work
 
-status=planned
+status=in-progress
 planned_at=2026-10-28
 owner=textus-knowledge-workbench
-execution_started=false
+execution_started=true
 phase=phase-2.md
 
-This is the execution ledger for [TKW Phase 2](phase-2.md). All stages are OPEN;
-no implementation, runtime Plan adoption or acceptance is claimed. Update an
+This is the execution ledger for [TKW Phase 2](phase-2.md). Native Session
+`8e7f63e6e34ec5b0aefe9aff93509af9` issued ImplementStep P2-01; its contract
+is authored, with validation and independent acceptance pending. Update an
 item only from actual accepted evidence, and retain failed attempts and limits.
 The [Phase index](README.md) owns navigation; the
 [implementation considerations](../notes/material-candidate-work-design.md)
@@ -16,9 +17,12 @@ remain non-normative design input.
 ## P2-01 — Selected-Material creation contract
 
 Stage Status:
-- Current status: OPEN
+- Current status: IN_PROGRESS
 - Owner: TKW development parent
 - Update rule: Close from the reviewed contract and dependency findings below.
+
+Authored contract: [Material-backed Candidate work v1](../spec/material-candidate-work-v1.md).
+All items below remain unchecked until accepted by the owning runtime.
 
 - [ ] P2-01-A: Bind the actual consumed MaterialWork/TKL Operations and logical result
   fields, including authorization and missing revision/snapshot facts.

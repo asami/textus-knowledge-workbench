@@ -48,3 +48,21 @@ draft's historical state; it is not the current Phase organization.
 
 Only documentation was reorganized. No native Start/adopted Plan, implementation,
 test result, review acceptance or commit was fabricated by assigning Phase 2.
+
+## Native Phase 2 entry and P2-01 authoring
+
+The user invoked sm-goal-phase 2. The Codex Goal was registered; the dedicated
+branch `codex/tkw-phase2-material-work` starts at committed plan `0be13b99`.
+The existing installed caller prepared the selected four-Step Plan and started
+native Session `8e7f63e6e34ec5b0aefe9aff93509af9`. Ordinary Advance issued
+ImplementStep P2-01. Earlier host preparation failed before a Session was
+issued because unused old capability grants were retained; correcting that
+configuration produced the successful normal preparation. No Session history
+or storage was edited to obtain entry.
+
+P2-01 authored [Material-backed Candidate work v1](../../../spec/material-candidate-work-v1.md):
+one explicit creation command composes public Material metadata and existing
+Candidate lookup/registration; source correspondence stays in first proposal.
+No resource version or prepared-source facts are invented. Real inspection,
+Edit/Hold and separately ready evidence retain distinct meanings. Generated
+implementation, checks, independent review and Step acceptance remain pending.

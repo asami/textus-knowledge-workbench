@@ -5,6 +5,18 @@ Status: planning proposal; not a new public API specification
 Phase: [Phase 2](../phase/phase-2.md)
 Execution ledger: [Phase 2 Checklist](../phase/phase-2-checklist.md)
 
+## P2-01 contract selection — 2026-10-28
+
+The initial alternatives below are retained as planning history. The authored
+[public work contract](../spec/material-candidate-work-v1.md) now selects one
+MaterialWork creation command over the existing public Candidate registration
+and lookup. Its first proposal retains logical Material/resource correspondence
+and the observed public metadata; no new Entity/table or source-version claim
+is introduced. Explicit caller creation intent is distinct from Material identity.
+Ready evidence and approval remain governed by the existing human-work contract.
+Generated bindings, implementation, validation and independent acceptance are
+still pending. This note supplies no runtime acceptance or cloud execution proof.
+
 ## Confirmed starting point
 
 MaterialWork already forwards `searchMaterials`, `inspectMaterial` and

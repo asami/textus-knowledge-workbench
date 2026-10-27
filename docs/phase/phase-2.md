@@ -1,9 +1,9 @@
 # Phase 2 — Material-backed Candidate Work
 
-status=planned
+status=in-progress
 planned_at=2026-10-28
 owner=textus-knowledge-workbench
-execution_started=false
+execution_started=true
 predecessor=phase-1.1.md
 checklist=phase-2-checklist.md
 validation_ownership=phase-owner
@@ -21,6 +21,16 @@ This is ordinary TKW Phase 2 following completed Phase 1 and Phase 1.1. Its
 execution ledger is [Phase 2 Checklist](phase-2-checklist.md). The earlier
 unnumbered delivery draft is superseded; it is not a parallel execution ledger.
 Phase planning does not start a Goal, adopt a native Plan or claim acceptance.
+
+## Current execution — 2026-10-28
+
+Native Session `8e7f63e6e34ec5b0aefe9aff93509af9` started from plan commit
+`0be13b99f4fbdb1829b7a128d418e1b7bc82b834` on dedicated branch
+`codex/tkw-phase2-material-work`. Ordinary Advance issued ImplementStep P2-01.
+The selected four-Step Plan and required focused/full/review boundary are saved
+by the runtime. [Material-backed Candidate work v1](../spec/material-candidate-work-v1.md)
+is the authored P2-01 contract; validation and independent acceptance are pending.
+No Step or Phase is closed by this status update.
 
 ## Inputs and preserved acceptance
 
