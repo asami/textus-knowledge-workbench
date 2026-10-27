@@ -1,11 +1,13 @@
 # Phase 1 execution checklist
 
-Current status: in progress\
+Current status: closed
+
 Owner: TKW development parent\
 Update rule: update only from accepted validation/review/commit evidence
 
 The [Phase 1 plan](phase-1.md) owns scope and completion criteria. This checklist
-tracks execution without changing the preserved planning document.
+tracks accepted execution; the plan preserves scope and dated decisions while
+its current status reflects closure.
 
 2026-10-21: STEP-3/4 consume the
 [shared editing boundary](../spec/knowledge-editing-component-boundary.md).
@@ -19,7 +21,7 @@ history. Existing review/full-validation/release obligations remain unchanged.
 | STEP-2 / S2-A | Provider-neutral proposal fixtures, durable registration/lookup and sequential resend preserving human edits | accepted | frozen contract `tkw-phase1-step2-proposal-contract-20261003@1`; local acceptance binding `tkw-step2-connected-acceptance-commit-20261019-01@1`; connected fixed-code XShort contract, generated consumer verification and independent focused closure accepted |
 | STEP-3 | Evidence-aware formation, grounding, human decisions and approval-target invalidation | accepted | [formation contract](../spec/candidate-formation-and-review.md); local acceptance binding `tkw-step3-acceptance-20261027-01@1`; native Detached revision commands, focused regression and independent closure accepted |
 | STEP-4 | Available List/Detail/edit/review and both input fixtures | accepted | [view contract](../spec/candidate-workbench-views.md); local acceptance binding `tkw-step4-acceptance-20261027-01@1`; native Display/HTTP and both fixture workflows, explicit browser editing and independent focused closure accepted |
-| Phase release | Comprehensive Phase review, closure ledger, successful bootstrap full SBT suite and validated local release commit | pending | pending |
+| Phase release | Comprehensive Phase review, closure ledger, successful bootstrap full SBT suite and validated local release commit | accepted | local release binding `tkw-phase1-final-closure-20261027@1`; current incomplete-history comparison and full Phase review accepted; mandatory bootstrap full validation succeeded; canonical findings retained |
 
 STEP-1 implements the [foundation specification](../spec/component-foundation.md).
 Its closure basis is parent receipt
@@ -62,9 +64,12 @@ Its [decision record](../journal/2026/10/2026-10-27-phase-1-step4-workbench-view
 retains the generated Display boundary and ordinary business-operation ownership.
 Both input types use the same native List/Detail/edit/review workflow.
 
-Phase release remains pending. No Step acceptance closes
-the Phase or satisfies its later comprehensive review and successful bootstrap
-full SBT suite/release obligations.
+Phase 1 is closed under `tkw-phase1-final-closure-20261027@1`. Its independent
+current full Phase review, successful mandatory bootstrap full SBT validation,
+canonical finding projection and validated local release are separate from
+the retained Step acceptances. The
+[current closure](phase-1.md#current-closure--2026-10-27) records the qualified
+comparison basis, unknown historical counters and private evidence retention.
 
 Real KnowledgeHub Admission belongs to [Phase 1.1](phase-1.1.md).
 TKL feedback, existing-Candidate preparation, provider adapters and deferred

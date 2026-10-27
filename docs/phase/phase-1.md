@@ -1,13 +1,13 @@
 # Phase 1 — Information Candidate Formation Vertical Slice
 
-status=planned
+status=closed
 split_full_test_policy=final-only
 split_full_validation_method=sbt-full-suite
 split_validation_bootstrap=bootstrap-structural
 validation_ownership=aggregate-deferred
 aggregate_validation_owner=PHASE-1.1
 aggregate_validation_sequence=["PHASE-1","PHASE-1.1"]
-Updated: 2026-10-02
+Updated: 2026-10-27
 Successor: [Phase 1.1 — KnowledgeHub Admission](phase-1.1.md)
 
 ## Goal
@@ -121,7 +121,9 @@ codec or live database rewrite is introduced. This is STEP-2 dependency work;
 closed Core Phase 3, Cozy Phase 78 and CNCF Phase 100/115 remain closed. Its
 implementation and connected verification are accepted by the separate
 [STEP-2 execution ledger](phase-1-checklist.md). This plan retains its original
-scope; STEP-3, STEP-4 and the Phase release gate remain pending.
+scope. STEP-3, STEP-4 and the Phase release gate were pending at this dated
+follow-up; their accepted completion is recorded in the execution checklist
+and current closure below.
 
 ### Decisions within each work item
 
@@ -221,7 +223,38 @@ the whole serial sequence, including both Phases' accepted ancestry.
 Phase 1 closure proves Candidate formation. The original end-to-end criterion,
 including real canonical KnowledgeHub Information and its Admission trace,
 is retained as [Phase 1.1 completion](phase-1.1.md#validation-and-completion-criteria).
-This plan records scope and order, not implementation or acceptance evidence.
+The execution checklist records accepted implementation and closure separately
+from this plan's preserved scope and order.
+
+## Current closure — 2026-10-27
+
+Phase 1 is closed under local release binding
+`tkw-phase1-final-closure-20261027@1`. STEP-1 through STEP-4 remain accepted in
+the [execution checklist](phase-1-checklist.md). The independent complete
+comparison assessment and current full Phase review are accepted, and the
+mandatory bootstrap repository-full SBT validation succeeded. Accepted
+nonblocking maintenance remains in its original owner journals; no deferred
+guarantee is promoted to completion.
+
+The current closure uses an explicit incomplete-history reassessment. The
+docs-only ancestor `c468590b94031ad3476149c3789db55f05a9442f` is a comparison
+base covering all implementation, not evidence of a historically adopted
+Phase start. Earlier Step acceptance, failures and review records remain
+preserved. Missing historical PLAN/review/repair totals remain unknown; the
+current separately identified review chain neither reconstructs nor resets
+them. The release's selected comparison basis retains that qualification.
+
+[Phase 1.1](phase-1.1.md) remains planned and consumes the accepted runnable
+component, producer fixtures, durable source/proposal correspondence, native
+revision and explicit human approval-target contracts, and available
+evidence-aware Workbench views. It owns actual KnowledgeHub Admission and
+the complete serial sequence's final validation. Its execution has not started
+through this closure. Live Material integration retains its separate owner.
+
+Detailed execution evidence is private local material. Its selected archive location
+is `asamiair:~/backup/journal/2026/10/textus-knowledge-workbench/phase-1/tkw-phase1-closure-20261027/`,
+with retention through 2026-11-26 and a hold while Phase 1.1 consumes the
+handoff. This local release does not integrate main or publish externally.
 
 ## Applied split — 2026-10-02
 

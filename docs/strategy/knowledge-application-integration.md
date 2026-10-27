@@ -170,6 +170,17 @@ Their minimal representation is owned by TKW; preparation execution stays with T
 | 1 | [TKW Phase 1 — Candidate Formation](../phase/phase-1.md) | Existing items 1-4: runnable component, durable registration/lookup, evidence-aware edit/ground/review/approval and both fixture views; create root build.sbt and pass bootstrap full validation |
 | 2 | [TKW Phase 1.1 — KnowledgeHub Admission](../phase/phase-1.1.md) | Former item 5: actual canonical Information Admission, confirmed outcome and Candidate/Evidence trace; final owner of the repository-complete SBT suite for both Phases |
 
+Current status (2026-10-27): Phase 1 is closed by local release binding
+`tkw-phase1-final-closure-20261027@1`, retaining all four accepted Steps,
+the current independent full Phase review and successful mandatory bootstrap
+full validation. Phase 1.1 remains planned; it consumes the accepted Candidate
+formation and human approval-target contracts and owns real KnowledgeHub
+Admission and final validation of the serial sequence. Live Material access
+and the Studio App test-server work retain their separate owners. The
+[Phase 1 closure](../phase/phase-1.md#current-closure--2026-10-27) records the
+incomplete-history reassessment qualification. No main integration, push or
+external publication is part of this local closure.
+
 Applied split on 2026-10-02: `Phase 1 -> Phase 1.1`, each expected 6h (range
 5-8h, low confidence; no comparable timing calibration). Both execution parents
 are recommended `gpt-6.1-sol / high`, standard mode. The policy is
