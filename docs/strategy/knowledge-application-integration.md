@@ -2,7 +2,7 @@
 
 status=active
 owner=textus-knowledge-workbench
-updated_at=2026-10-17
+updated_at=2026-10-28
 
 ## Purpose
 
@@ -169,8 +169,22 @@ Their minimal representation is owned by TKW; preparation execution stays with T
 | --- | --- | --- |
 | 1 | [TKW Phase 1 — Candidate Formation](../phase/phase-1.md) | Existing items 1-4: runnable component, durable registration/lookup, evidence-aware edit/ground/review/approval and both fixture views; create root build.sbt and pass bootstrap full validation |
 | 2 | [TKW Phase 1.1 — KnowledgeHub Admission](../phase/phase-1.1.md) | Former item 5: actual canonical Information Admission, confirmed outcome and Candidate/Evidence trace; final owner of the repository-complete SBT suite for both Phases |
+| 3 | [TKW Phase 2 — Material-backed Candidate Work](../phase/phase-2.md) | Existing Material -> Candidate/source correspondence -> Workbench edit/decision, neutral consumer and Phase-local full validation/review/closure; planned, not started. |
 
-Current status (2026-10-27): Phase 1 is closed by local release binding
+Current handoff (2026-10-28): Phase 1.1's native Session
+`dc5aec0f04843c377ad539f04783861f` completed at local release
+`43205e2db92a3fb70ea618971b5e7a6e2b82a856`. KnowledgeHub's accepted change is
+locally committed at `4fad532f798925c797736a2e7c1bb8cd7ecdeb7f`. Retain both
+closures and their independent review/validation evidence. Editing Studio
+Phase 1.2 is on hold by user direction. The next proposed delivery is
+[TKW Phase 2 — Material-backed Candidate Work](../phase/phase-2.md),
+using the Workbench browser and a neutral consumer fixture under K03/K04.
+Actual Studio consumer integration remains separately owned. The
+[Phase index](../phase/README.md) and [Phase 2 checklist](../phase/phase-2-checklist.md)
+make numbering, execution ownership and acceptance explicit. Planning Phase 2
+starts no Goal, implementation, main integration, push or publication.
+
+Historical status (2026-10-27): Phase 1 is closed by local release binding
 `tkw-phase1-final-closure-20261027@1`, retaining all four accepted Steps,
 the current independent full Phase review and successful mandatory bootstrap
 full validation. Phase 1.1 remains planned; it consumes the accepted Candidate
