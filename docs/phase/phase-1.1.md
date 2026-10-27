@@ -7,7 +7,7 @@ TKL access/processing does not own human approval or parallel admission.
 The [Material integration plan](knowledge-editing-integration-plan.md) has
 separate reference acceptance and does not replace this Phase's obligations.
 
-status=in-progress
+status=release-candidate
 split_full_test_policy=final-only
 split_full_validation_method=sbt-full-suite
 split_validation_bootstrap=none
@@ -22,9 +22,23 @@ Successor: none selected; feedback/preparation remain future work
 
 Current execution: the [checklist](phase-1.1-checklist.md) tracks the native
 `P11-01` connected work item covering the unchanged items 5a/5b/5c below.
-Phase 1 is closed. The owning KnowledgeHub Admission extension is delivered under
-explicit dependency approval; TKW integration and native qualification are in
-progress. No item is accepted by startup or dependency publication.
+Phase 1 remains closed at `f96057bd85f17b5647c520e2f00e690e14c63363`.
+Native Session `dc5aec0f04843c377ad539f04783861f` accepted the independent
+P11-01 review and closed that Step at
+`b0008147d997002ad0b95cf3fc9f332a09b20bf3`. Step receipt
+`dc5aec0f04843c377ad539f04783861f:ordered-validation:455:validation`
+passed TKW compile/test (60 tests) and KnowledgeHub compile/test (19 tests,
+including real PostgreSQL). Fresh aggregate Phase receipt
+`dc5aec0f04843c377ad539f04783861f:ordered-validation:472:validation`
+passed all 60 tests across seven suites for the Phase 1 -> 1.1 sequence.
+
+The first independent whole-Phase review retained the implementation/integration
+judgments and requested only canonical status synchronization (`issue-3`). This
+release-candidate document repair awaits native qualification and scoped review.
+Phase acceptance, final release and closure remain pending their native owners;
+this source snapshot does not claim those effects or supersede the Session's
+subsequent state. Earlier failures, resolved issues and evidence limits are
+retained in the [checklist](phase-1.1-checklist.md).
 
 ## Goal
 
