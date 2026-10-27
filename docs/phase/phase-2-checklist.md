@@ -7,8 +7,8 @@ execution_started=true
 phase=phase-2.md
 
 This is the execution ledger for [TKW Phase 2](phase-2.md). Native Session
-`8e7f63e6e34ec5b0aefe9aff93509af9` issued ImplementStep P2-01; its contract
-is authored, with validation and independent acceptance pending. Update an
+`8e7f63e6e34ec5b0aefe9aff93509af9` closed P2-01 at `98adb364` after selected
+checks and independent review, then issued ImplementStep P2-02. Update an
 item only from actual accepted evidence, and retain failed attempts and limits.
 The [Phase index](README.md) owns navigation; the
 [implementation considerations](../notes/material-candidate-work-design.md)
@@ -17,28 +17,28 @@ remain non-normative design input.
 ## P2-01 — Selected-Material creation contract
 
 Stage Status:
-- Current status: IN_PROGRESS
+- Current status: CLOSED
 - Owner: TKW development parent
 - Update rule: Close from the reviewed contract and dependency findings below.
 
-Authored contract: [Material-backed Candidate work v1](../spec/material-candidate-work-v1.md).
-All items below remain unchecked until accepted by the owning runtime.
+Accepted contract: [Material-backed Candidate work v1](../spec/material-candidate-work-v1.md).
+Native local Step commit: `98adb364573893ab87e3f35309b75118d35b63e9`.
 
-- [ ] P2-01-A: Bind the actual consumed MaterialWork/TKL Operations and logical result
+- [x] P2-01-A: Bind the actual consumed MaterialWork/TKL Operations and logical result
   fields, including authorization and missing revision/snapshot facts.
-- [ ] P2-01-B: Specify the minimal public command/input and proposal-key ownership,
+- [x] P2-01-B: Specify the minimal public command/input and proposal-key ownership,
   using existing registration/lookup and Candidate storage wherever sufficient.
   Define exact Material/resource correspondence and the first-proposal record.
-- [ ] P2-01-C: Specify explicit creation intent, same-intent lookup/resend, deliberate
+- [x] P2-01-C: Specify explicit creation intent, same-intent lookup/resend, deliberate
   new intent, unknown acknowledgement and preservation of later human edits.
-- [ ] P2-01-D: Fix the minimum decision outcome: real source inspection/edit/Hold must
+- [x] P2-01-D: Fix the minimum decision outcome: real source inspection/edit/Hold must
   work; Review/Approve retain their existing evidence prerequisites. An actual
   version/snapshot dependency gap is reported, never replaced by invented facts.
 
 ## P2-02 — Native Candidate creation and source lookup
 
 Stage Status:
-- Current status: OPEN
+- Current status: IN_PROGRESS
 - Owner: TKW implementation and independent review owners
 - Update rule: Close from focused executable specifications and accepted review.
 

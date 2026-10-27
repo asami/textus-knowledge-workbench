@@ -2,7 +2,7 @@
 
 Owner: TKW Phase 2 / P2-01
 Contract date: 2026-10-28
-Status: contract authored; generated bindings, implementation and acceptance pending
+Status: contract accepted in P2-01; P2-02 source and executable specifications authored; generated bindings, validation and acceptance pending
 
 ## Owning contracts
 
@@ -147,3 +147,17 @@ P2-02 supplies generated/action/native persistence specifications; P2-03
 supplies browser behavior and safe binary preview; P2-04 supplies neutral-consumer
 and separate real-source evidence. Their successful execution, independent
 review and Phase closure remain pending, not implied by authoring this contract.
+
+## P2-02 implementation mapping
+
+The CML `CreateCandidateFromMaterial` collection DTO and authored ABI bind the
+MaterialWork command to `MaterialCandidateWorkActions` through the normal service
+factory. `MaterialCandidateWork` admits local logical conditions and exact public
+metadata/resource correspondence, then preserves the first serialized proposal.
+All persistence and final identity acknowledgement stay with existing public
+Candidate operations. `MaterialCandidateWorkSpec` covers public dispatch, invalid
+input/source failures, intent preservation, ordered-selector properties, unknown
+acknowledgement and actual PostgreSQL restart/native revision/authorization.
+The test-only PostgreSQL container follows KnowledgeHub's existing fixture approach.
+These are authored specifications, not execution evidence; runtime generation,
+compile, focused validation and independent review remain pending.

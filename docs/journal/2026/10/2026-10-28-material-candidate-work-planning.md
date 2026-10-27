@@ -66,3 +66,17 @@ Candidate lookup/registration; source correspondence stays in first proposal.
 No resource version or prepared-source facts are invented. Real inspection,
 Edit/Hold and separately ready evidence retain distinct meanings. Generated
 implementation, checks, independent review and Step acceptance remain pending.
+
+## P2-01 acceptance and P2-02 handoff
+
+Native selected checks passed and independent ReviewStep P2-01 returned accept.
+The normal evidence and closure-authority preparation/StartupImport route
+registered their actual current targets under the existing Phase direction.
+Ordinary Advance created local Step commit
+`98adb364573893ab87e3f35309b75118d35b63e9` and issued ImplementStep P2-02.
+No extra Human decision, Session restart or validation replay was needed.
+
+P2-02 implements the accepted source/intent bridge and its native persistence
+specifications. Its implementation, selected checks, independent review and
+Step acceptance remain separate unfinished obligations. The held Studio line
+and no-main/no-push/no-external-publication constraints are unchanged.

@@ -10,6 +10,33 @@ and provider-neutral proposal registration with durable source-key lookup and
 sequential resend preserving current edits. Follow the [user guide](user-guide.md) for build, instance setup and
 complete CLI examples.
 
+## Explicit Material-backed work
+
+`MaterialWork.createCandidateFromMaterial` is an authenticated COMMAND returning
+the existing `RegisterProposalResult` (`candidate`, `created`). Its required logical
+inputs are `proposalId`, exact opaque `materialRef`, nonempty ordered distinct
+`resourceIds`, native `name`, and nonblank `content`; `context` is optional and
+present empty text is retained. Material search, inspection and preview do not
+create work.
+
+Retain the caller-owned intent key before submission. The fixed producer is
+`workbench-material`, source kind `tkl-material`. The command validates the whole
+input before exact intent lookup. An accessible existing intent returns current
+native work with `created=false` without TKL reads or writes to human work. For
+new intent, the same caller's public Material metadata must resolve every selected
+resource exactly before native proposal registration. The first proposal retains
+`materialSelection` with exact Material/resource selectors and public metadata.
+Different deliberate work on the same source requires a new explicit intent.
+
+The Candidate starts unprepared with unverified Material evidence. Metadata and
+preview attest no original retrieval, revision or snapshot. Inspection, Edit and
+Hold remain available; Review/Approve keep their existing ready-evidence gate.
+Missing, denied, malformed or unavailable sources create nothing. An uncertain
+write is not success and must not be automatically replayed. Reconcile through
+`Candidate.findCandidateByProposal` using producer `workbench-material` and the
+retained exact `proposalId`; failed or absent lookup does not prove that an
+unacknowledged write cannot exist.
+
 ## Runtime requirements
 
 The repository's `project.yaml` selects CNCF explicitly through

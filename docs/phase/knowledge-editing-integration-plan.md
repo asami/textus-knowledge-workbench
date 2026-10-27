@@ -9,8 +9,8 @@ spec=../spec/knowledge-editing-component-boundary.md
 The active delivery is [TKW Phase 2 — Material-backed Candidate Work](phase-2.md):
 K03 and the Workbench-owned neutral-consumer portion of K04. Editing Studio
 Phase 1.2 is on hold; Phase 2's [checklist](phase-2-checklist.md) is the execution
-ledger. Native Session `8e7f63e6e34ec5b0aefe9aff93509af9` issued P2-01 after
-the user's explicit Phase start. This coordination plan itself starts no
+ledger. Native Session `8e7f63e6e34ec5b0aefe9aff93509af9` accepted P2-01 at
+`98adb364` and issued P2-02 after the user's explicit Phase start. This coordination plan itself starts no
 execution and does not close K04's
 actual Studio integration criterion.
 

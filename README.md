@@ -26,8 +26,8 @@ persistence.
 
 The canonical authored ABI source is `src/main/car/abi-manifest.json`, in
 `cozy.car.abi-manifest.v2` format with `abi.version=1`. It declares the component
-coordinate, Candidate and MaterialWork services, thirteen operations (seven
-Candidate operations), thirty value types, seven nominal DATATYPEs, the
+coordinate, Candidate and MaterialWork services, their operations and value
+types, seven nominal DATATYPEs, the
 `ProposalPreparationState` and `CandidateDecisionKind` POWERTYPEs and the
 InformationCandidate entity with their complete fields. Its KnowledgeLake
 dependency requires ABI range `[0.1.0,0.2.0)`. Later CML surface or component-coordinate changes must update
@@ -46,6 +46,16 @@ description; `Candidate/listCandidates` searches InformationCandidate entities.
 candidate if its exact producer/proposal key is absent, and returns the current
 candidate on sequential resend without overwriting human edits.
 `Candidate/findCandidateByProposal` looks up that persisted key without writes.
+`MaterialWork/createCandidateFromMaterial` explicitly connects an exact authorized
+Material/resource selection to native Candidate registration. Retain a caller-owned
+`proposalId` before submitting; the fixed producer is `workbench-material`. A valid
+same-intent resend returns current work without source reads or overwriting human
+edits. Initial evidence stays unverified and unversioned. See the
+[Material-backed work contract](docs/spec/material-candidate-work-v1.md).
+The source and executable specifications are authored; generation, native validation
+and Step acceptance remain workflow-owned. The PostgreSQL specification uses the
+same Testcontainers PostgreSQL 17.11 fixture approach as KnowledgeHub and requires
+that image to be available locally; it never falls back to SQLite.
 All Candidate operations remain outside MCP publication. STEP-2 is accepted
 under the local acceptance binding in the [execution checklist](docs/phase/phase-1-checklist.md).
 

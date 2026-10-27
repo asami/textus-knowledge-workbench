@@ -169,7 +169,7 @@ Their minimal representation is owned by TKW; preparation execution stays with T
 | --- | --- | --- |
 | 1 | [TKW Phase 1 — Candidate Formation](../phase/phase-1.md) | Existing items 1-4: runnable component, durable registration/lookup, evidence-aware edit/ground/review/approval and both fixture views; create root build.sbt and pass bootstrap full validation |
 | 2 | [TKW Phase 1.1 — KnowledgeHub Admission](../phase/phase-1.1.md) | Former item 5: actual canonical Information Admission, confirmed outcome and Candidate/Evidence trace; final owner of the repository-complete SBT suite for both Phases |
-| 3 | [TKW Phase 2 — Material-backed Candidate Work](../phase/phase-2.md) | Existing Material -> Candidate/source correspondence -> Workbench edit/decision, neutral consumer and Phase-local full validation/review/closure; in progress at native P2-01. |
+| 3 | [TKW Phase 2 — Material-backed Candidate Work](../phase/phase-2.md) | Existing Material -> Candidate/source correspondence -> Workbench edit/decision, neutral consumer and Phase-local full validation/review/closure; P2-01 accepted, native P2-02 active. |
 
 Current handoff (2026-10-28): Phase 1.1's native Session
 `dc5aec0f04843c377ad539f04783861f` completed at local release
@@ -183,8 +183,9 @@ Actual Studio consumer integration remains separately owned. The
 [Phase index](../phase/README.md) and [Phase 2 checklist](../phase/phase-2-checklist.md)
 make numbering, execution ownership and acceptance explicit. The user's later
 sm-goal-phase 2 invocation started native Session
-`8e7f63e6e34ec5b0aefe9aff93509af9` from `0be13b99`; ImplementStep P2-01 is
-active. Its source contract is authored, with checks/review pending. Planning
+`8e7f63e6e34ec5b0aefe9aff93509af9` from `0be13b99`; P2-01 passed selected
+checks and independent review and closed at `98adb364`. ImplementStep P2-02
+is active; implementation and validation/review remain pending. Planning
 alone supplied no execution or acceptance. Main integration, push and external
 publication remain excluded.
 

@@ -14,8 +14,9 @@ and lookup. Its first proposal retains logical Material/resource correspondence
 and the observed public metadata; no new Entity/table or source-version claim
 is introduced. Explicit caller creation intent is distinct from Material identity.
 Ready evidence and approval remain governed by the existing human-work contract.
-Generated bindings, implementation, validation and independent acceptance are
-still pending. This note supplies no runtime acceptance or cloud execution proof.
+The P2-01 contract was accepted at native local commit `98adb364` after selected
+checks and independent review. Generated bindings, implementation and their
+validation/review remain P2-02 work. This note supplies no cloud execution proof.
 
 ## Confirmed starting point
 

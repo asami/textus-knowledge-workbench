@@ -10,12 +10,17 @@ import org.simplemodeling.textus.knowledgeworkbench.{KnowledgeWorkbenchComponent
 
 /*
  * @since   Oct. 21, 2026
- * @version Oct. 22, 2026
+ * @version Oct. 28, 2026
  */
 private[knowledgeworkbench] final class MaterialWorkServiceFactory
     extends KnowledgeWorkbenchComponent.MaterialWorkServiceFactory {
   import KnowledgeWorkbenchComponent.MaterialWorkService.*
   import MaterialWorkServiceFactory.*
+
+  override def createCreateCandidateFromMaterialActionCall(
+    core: ActionCall.Core,
+    action: CreateCandidateFromMaterial
+  ): CreateCandidateFromMaterialActionCall = MaterialCandidateWorkActions.create(core, action)
 
   override def createSearchMaterialsActionCall(
     core: ActionCall.Core,

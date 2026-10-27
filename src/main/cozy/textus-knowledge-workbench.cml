@@ -284,7 +284,8 @@ CNCF caller execution, security and observability context. TKL owns Material ide
 and the logical wire schema; these consumer bindings do not define another Material
 index or provider model. Reads never access Drive or private TKL implementation APIs,
 mutate Candidates, or require or start OpenClaw processing. Local preview is not a
-persisted evidence selection; later K03 owns Candidate-to-evidence associations.
+persisted evidence selection; explicit createCandidateFromMaterial retains the
+selected source through native Candidate proposal registration.
 Structured upstream failures remain unchanged without privileged fallback. Existing
 reads remain read-only; separate explicit neutral registration work requests target
 the fixed public KnowledgeLake/Material producer. TKL owns registration identity,
@@ -293,6 +294,56 @@ not establish implementation availability or expose a credential or general prox
 operation.
 
 ### OPERATION
+
+#### createCandidateFromMaterial
+
+##### TYPE
+
+COMMAND
+
+##### ACCESS
+
+###### POLICY
+
+authenticated_only
+
+##### DESCRIPTION
+
+Explicitly create Candidate work from an exact caller-authorized Material/resource
+selection under docs/spec/material-candidate-work-v1.md. Validate local input first,
+look up the exact workbench-material/proposalId intent with the same caller, and
+return current work on resend without source reads or overwriting human edits.
+For absent intent inspect public logical metadata, retain the first selection in
+originalProposal and register an unprepared proposal with unverified evidence.
+No source revision/snapshot is inferred. Native Candidate persistence and acknowledged
+identity remain authoritative; failures and unknown outcomes are never replayed.
+
+##### INPUT
+
+###### VALUE
+
+####### CreateCandidateFromMaterial
+
+######## EXTENDS
+
+CommandAction
+
+######## ATTRIBUTE
+
+| name | type | multiplicity |
+|------|------|--------------|
+| proposalId | string | 1 |
+| materialRef | string | 1 |
+| resourceIds | string | * |
+| name | name | 1 |
+| content | string | 1 |
+| context | string | ? |
+
+##### OUTPUT
+
+###### TYPE
+
+RegisterProposalResult
 
 #### searchMaterials
 

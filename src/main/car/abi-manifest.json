@@ -127,6 +127,13 @@
           "kind": "COMMAND",
           "input": "ConfirmCandidateAdmission",
           "output": "CandidateWorkResult"
+        },
+        {
+          "service": "MaterialWork",
+          "name": "createCandidateFromMaterial",
+          "kind": "COMMAND",
+          "input": "CreateCandidateFromMaterial",
+          "output": "RegisterProposalResult"
         }
       ],
       "types": [
@@ -993,6 +1000,48 @@
             {
               "name": "informationRevision",
               "type": "long",
+              "multiplicity": "?",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "CreateCandidateFromMaterial",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "proposalId",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "materialRef",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "resourceIds",
+              "type": "string",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "name",
+              "type": "name",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "context",
+              "type": "string",
               "multiplicity": "?",
               "required": false
             }

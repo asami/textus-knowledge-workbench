@@ -364,3 +364,33 @@ to changed content. The browser exposes separate Admission and outcome-check
 buttons through native Display business bindings and does not automatically resend.
 
 Owning contract: [Candidate Information Admission](../../../../docs/spec/candidate-information-admission.md).
+
+## Create Candidate work from selected Material
+
+Use the existing authenticated instance and public Material search/inspection to
+select a TKL-issued `materialRef` and its logical resource IDs. Selection alone is
+read-only. Before explicitly invoking `MaterialWork.createCandidateFromMaterial`,
+retain a caller-owned creation-intent `proposalId`. A logical request body is:
+
+```json
+{
+  "proposalId": "<retained-intent-key>",
+  "materialRef": "<exact-TKL-reference>",
+  "resourceIds": ["<exact-selected-resource-id>"],
+  "name": "Operator supplied name",
+  "content": "Operator supplied Candidate statement",
+  "context": ""
+}
+```
+
+Submit once through the normal Business Operation boundary. Continue editing only
+from the returned native `candidate.id`; `created=false` identifies existing work
+for that exact accessible intent. Read the current work revision before each edit
+or decision. This initial Material evidence is unverified and has no invented
+revision or snapshot, so inspection/Edit/Hold do not imply Review/Approve readiness.
+
+If acknowledgement is lost, keep the intent and use the read-only
+`Candidate.findCandidateByProposal` with `producerRef=workbench-material` and the
+same `proposalId`. Do not automatically resubmit a command after an uncertain
+outcome or infer nonexistence from failed/absent lookup. A deliberate new work
+intent remains distinct from continuation of the original one.

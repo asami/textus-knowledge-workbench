@@ -28,9 +28,11 @@ Native Session `8e7f63e6e34ec5b0aefe9aff93509af9` started from plan commit
 `0be13b99f4fbdb1829b7a128d418e1b7bc82b834` on dedicated branch
 `codex/tkw-phase2-material-work`. Ordinary Advance issued ImplementStep P2-01.
 The selected four-Step Plan and required focused/full/review boundary are saved
-by the runtime. [Material-backed Candidate work v1](../spec/material-candidate-work-v1.md)
-is the authored P2-01 contract; validation and independent acceptance are pending.
-No Step or Phase is closed by this status update.
+by the runtime. P2-01's [Material-backed Candidate work v1](../spec/material-candidate-work-v1.md)
+passed selected compile/focused checks and independent review, and closed at
+native local Step commit `98adb364573893ab87e3f35309b75118d35b63e9`.
+Ordinary Advance then issued ImplementStep P2-02. Implementation and its native
+validation/review remain pending; the Phase remains open.
 
 ## Inputs and preserved acceptance
 
