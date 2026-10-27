@@ -15,7 +15,7 @@ import org.simplemodeling.textus.knowledgeworkbench.logicalui.KnowledgeWorkbench
 
 /*
  * @since   Oct. 27, 2026
- * @version Oct. 27, 2026
+ * @version Oct. 28, 2026
  */
 trait CandidateDisplayRuntime extends Component with KnowledgeWorkbenchLogicalUiMetadataProvider
     with DisplayBindingProvider with DisplayServiceBindingProvider with DisplayBusinessOperationBindingProvider {
@@ -41,7 +41,11 @@ trait CandidateDisplayRuntime extends Component with KnowledgeWorkbenchLogicalUi
     DisplayBusinessOperation.Binding("candidate-detail", DisplayBusinessOperation.ActionScope.Screen,
       "edit", "Candidate", "editCandidateWork"),
     DisplayBusinessOperation.Binding("candidate-detail", DisplayBusinessOperation.ActionScope.Screen,
-      "decide", "Candidate", "decideCandidateWork"))
+      "decide", "Candidate", "decideCandidateWork"),
+    DisplayBusinessOperation.Binding("candidate-detail", DisplayBusinessOperation.ActionScope.Screen,
+      "admit", "Candidate", "admitCandidateWork"),
+    DisplayBusinessOperation.Binding("candidate-detail", DisplayBusinessOperation.ActionScope.Screen,
+      "confirm-admission", "Candidate", "confirmCandidateAdmission"))
 }
 
 private final class CandidateBrowser(component: Component) extends Browser[value.CandidateWorkResult] {

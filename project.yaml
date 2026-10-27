@@ -33,6 +33,9 @@ packaging:
         - namespace: org.simplemodeling.textus
           id: KnowledgeLake
           abiRange: "[0.1.0,0.2.0)"
+        - namespace: org.simplemodeling.textus
+          id: KnowledgeHub
+          abiRange: "[0.1.0,0.2.0)"
     manifest_metadata:
       boundedContext: "knowledge-workbench"
       domain: "knowledge"

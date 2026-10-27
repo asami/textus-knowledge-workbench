@@ -7,6 +7,9 @@ components:
   - namespace: org.simplemodeling.textus
     id: KnowledgeLake
     version: 0.1.0-SNAPSHOT
+  - namespace: org.simplemodeling.textus
+    id: KnowledgeHub
+    version: 0.1.0-SNAPSHOT
 subsystemCapabilities:
   providers:
     - name: workbench-runtime-facilities
@@ -18,6 +21,7 @@ subsystemCapabilities:
         - user-context.current@1
 config:
   textus.subsystem.user-mode: standalone
+  textus.component.org.simplemodeling.textus.knowledge-hub.datastores.application.policy: local-default
   textus.component.org.simplemodeling.textus.knowledge-workbench.datastores.application.policy: local-default
 security:
   authentication:

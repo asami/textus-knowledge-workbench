@@ -20,7 +20,7 @@ import org.scalatest.wordspec.AnyWordSpec
 
 /*
  * @since   Oct. 27, 2026
- * @version Oct. 27, 2026
+ * @version Oct. 28, 2026
  */
 final class CandidateFormationSpec extends AnyWordSpec with Matchers with GivenWhenThen {
   "Candidate formation and decisions" should {
@@ -288,9 +288,17 @@ final class CandidateFormationSpec extends AnyWordSpec with Matchers with GivenW
     val repository = Path.of(".").toAbsolutePath.normalize()
     val lake = Path.of(sys.props.getOrElse("textus.test.knowledge-lake.repository",
       repository.resolveSibling("textus-knowledge-lake").toString)).toAbsolutePath.normalize()
-    val authored = Files.readString(repository.resolve("src/main/car/assembly-descriptor.yaml"))
+    val authored = Files.readString(repository.resolve("src/main/car/assembly-descriptor.yaml")).replace(
+      "  - namespace: org.simplemodeling.textus\n    id: KnowledgeHub\n    version: 0.1.0-SNAPSHOT\n", "")
+    val isolated = authored.replace("  textus.subsystem.user-mode: standalone\n",
+      s"""  textus.subsystem.user-mode: standalone
+  textus.component.org.simplemodeling.textus.knowledge-workbench.datastores.application.kind: sqlite
+  textus.component.org.simplemodeling.textus.knowledge-workbench.datastores.application.path: ${root.resolve("workbench.db")}
+  textus.component.org.simplemodeling.textus.knowledge-hub.datastores.application.kind: sqlite
+  textus.component.org.simplemodeling.textus.knowledge-hub.datastores.application.path: ${root.resolve("hub.db")}
+""")
     val instance = root.resolve("assembly-instance.yaml")
-    Files.writeString(instance, authored.replace("    fallbackPrivilege: disabled\n",
+    Files.writeString(instance, isolated.replace("    fallbackPrivilege: disabled\n",
       "    fallbackPrivilege: disabled\n    localSubject:\n      id: workbench-assembly-spec-user\n"))
     _success(CncfBootstrap.initialize(BootstrapConfig(cwd = root,
       args = Array("--discover=classes", s"--component-dev-dir=$repository", s"--component-dev-dir=$lake",

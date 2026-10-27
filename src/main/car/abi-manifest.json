@@ -113,6 +113,20 @@
           "kind": "COMMAND",
           "input": "CandidateWorkDecision",
           "output": "CandidateWorkResult"
+        },
+        {
+          "service": "Candidate",
+          "name": "admitCandidateWork",
+          "kind": "COMMAND",
+          "input": "AdmitCandidateWork",
+          "output": "CandidateWorkResult"
+        },
+        {
+          "service": "Candidate",
+          "name": "confirmCandidateAdmission",
+          "kind": "COMMAND",
+          "input": "ConfirmCandidateAdmission",
+          "output": "CandidateWorkResult"
         }
       ],
       "types": [
@@ -899,6 +913,90 @@
           "name": "CandidateDecisionKind",
           "kind": "powertype",
           "fields": []
+        },
+        {
+          "name": "AdmitCandidateWork",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "id",
+              "type": "entityid",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "expectedRevision",
+              "type": "long",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "ConfirmCandidateAdmission",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "id",
+              "type": "entityid",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "expectedRevision",
+              "type": "long",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "CandidateAdmissionRecord",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "informationId",
+              "type": "entityid",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "candidateRevision",
+              "type": "long",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "approval",
+              "type": "CandidateReviewDecision",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "requestedBy",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "requestedAt",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "informationRevision",
+              "type": "long",
+              "multiplicity": "?",
+              "required": false
+            }
+          ]
         }
       ],
       "entities": [
@@ -1006,6 +1104,12 @@
               "type": "CandidateReviewDecision",
               "multiplicity": "*",
               "required": false
+            },
+            {
+              "name": "admissions",
+              "type": "CandidateAdmissionRecord",
+              "multiplicity": "*",
+              "required": false
             }
           ]
         }
@@ -1015,6 +1119,11 @@
       {
         "namespace": "org.simplemodeling.textus",
         "id": "KnowledgeLake",
+        "abiRange": "[0.1.0,0.2.0)"
+      },
+      {
+        "namespace": "org.simplemodeling.textus",
+        "id": "KnowledgeHub",
         "abiRange": "[0.1.0,0.2.0)"
       }
     ]

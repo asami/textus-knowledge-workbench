@@ -189,11 +189,10 @@ keeps its evidence limitations. Capture confirmation is transfer only. Use the
 [user guide](src/main/car/manual/user-guide.md#register-and-look-up-proposals)
 for registration, lookup, generated content-only edit and same-key resend examples.
 
-Phase 1 is in progress. STEP-2 proposal registration, lookup, sequential resend
-and fixed-code XShort persistence are accepted under its local Step binding.
-STEP-3/4 accept human formation/approval and List/Detail/edit/review. Comprehensive
-Phase review, successful bootstrap full SBT suite and final release remain pending. Real KnowledgeHub
-Admission belongs to [Phase 1.1](docs/phase/phase-1.1.md); TKL preparation,
+Phase 1 is closed at `f96057bd85f17b5647c520e2f00e690e14c63363`, retaining
+its proposal registration, human formation/approval and List/Detail/edit/review
+contracts and full-suite/review history. Real KnowledgeHub Admission belongs to
+[Phase 1.1](docs/phase/phase-1.1.md), currently in progress; TKL preparation,
 feedback and live provider adapters remain follow-on work.
 
 Accepted STEP-3 adds revision-aware `Candidate.getCandidateWork`,
@@ -208,4 +207,16 @@ Display List/Detail and the existing conditional human edit/decision operations.
 See the [view contract](docs/spec/candidate-workbench-views.md) and packaged
 user guide for operation and failure reconciliation. Step acceptance and Phase
 closure remain governed by the execution checklist. STEP-4's local binding is
-`tkw-step4-acceptance-20261027-01@1`; Phase closure remains pending.
+`tkw-step4-acceptance-20261027-01@1`; the Phase closure is recorded in its plan/checklist.
+
+Phase 1.1 adds explicit `Candidate.admitCandidateWork` and
+`confirmCandidateAdmission`, using KnowledgeHub's public Information Operations.
+The authored assembly now includes KnowledgeHub `0.1.0-SNAPSHOT`; install its
+matching CAR through the normal component repository. No Maven implementation
+JAR is required. A reserved native Information identity is saved before submission;
+uncertain outcomes are resolved only by lookup of that identity, without resend.
+See the [Admission contract](docs/spec/candidate-information-admission.md) and
+[user guide](src/main/car/manual/user-guide.md). Integration tests select the actual
+published CAR with JVM property `textus.test.knowledge-hub.car`; the default is its
+standard `~/.cncf/local/repository/car` coordinate. Native validation and whole-Phase
+acceptance are still pending in the [execution checklist](docs/phase/phase-1.1-checklist.md).

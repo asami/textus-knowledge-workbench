@@ -8,7 +8,9 @@
     retrievalState: "取得状態", retentionUntil: "保持期限", limitation: "制約・未確認事項", decision: "判断",
     actor: "判断者", occurredAt: "日時", reason: "理由", target: "判断対象", content: "内容", context: "文脈",
     evidenceRefs: "根拠", preparedMaterialRefs: "処理済み資料", sourceRunRef: "処理Run", sourceContextRef: "元の文脈",
-    groundingRefs: "Grounding", mappingRefs: "Mapping" };
+    groundingRefs: "Grounding", mappingRefs: "Mapping", information_id: "Information ID", candidate_revision: "承認時のCandidate版",
+    approval: "元の承認", requested_by: "採用操作の担当者", requested_at: "採用操作の日時",
+    status: "採用結果", information_revision: "確認したInformation版" };
   const groups = [["evidenceRefs", "根拠参照"], ["groundingRefs", "Grounding参照"], ["mappingRefs", "Mapping参照"]];
   const referenceKeys = ["id", "kind", "revision", "snapshotRef", "retrievalState", "retentionUntil", "limitation"];
   let busy = false, selectedId, work, revision, baseline, actions, needsRead = true, acknowledgement = "";
@@ -25,6 +27,9 @@
     byId("reload").disabled = busy || !selectedId;
     byId("edit-fields").disabled = busy || !work || needsRead;
     byId("decision-fields").disabled = busy || !work || needsRead;
+    byId("admission-fields").disabled = busy || !work || needsRead;
+    byId("admit").disabled = busy || needsRead || work?.state !== "Approved";
+    byId("confirm-admission").disabled = busy || needsRead || !work?.candidate.admissions?.length;
     byId("context").disabled = !byId("context-present").checked;
     byId("list").querySelectorAll("button").forEach(button => { button.disabled = busy; });
   }
@@ -80,7 +85,7 @@
     const values = node("dl");
     display.model.sections.flatMap(section => section.fields).forEach(field => {
       values.append(node("dt", field.label)); const dd = node("dd");
-      if (["evidence", "materials", "run", "source-context", "grounding", "mapping", "history", "target"].includes(field.id)) {
+      if (["evidence", "materials", "run", "source-context", "grounding", "mapping", "history", "target", "admissions"].includes(field.id)) {
         const data = JSON.parse(field.value.text); dd.append(structured(data.items));
       } else dd.textContent = String(displayValue(field.value));
       values.append(dd);
@@ -204,6 +209,16 @@
       const reason = byId("decision-reason").value; if (!reason.trim()) throw new Error("判断の理由を入力してください。");
       await mutate(operation("decide", "decideCandidateWork"), { id: selectedId, expectedRevision: revision,
         decision: byId("decision").value, reason }, "判断の保存が確認できました。"); });
+  });
+  [["admit", "admitCandidateWork", "KnowledgeHubへの採用を確認しました。"],
+    ["confirm-admission", "confirmCandidateAdmission", "保存済みInformationとの一致を確認しました。"]].forEach(([id, expected, success]) => {
+    byId(id).addEventListener("click", () => {
+      if (needsRead || !work || busy) return;
+      run(async () => {
+        if (dirty()) throw new Error("未保存の編集があります。保存してから採用結果を確認してください。");
+        await mutate(operation(id, expected), { id: selectedId, expectedRevision: revision }, success);
+      });
+    });
   });
   window.addEventListener("beforeunload", event => { if (dirty()) { event.preventDefault(); event.returnValue = ""; } });
   controls();

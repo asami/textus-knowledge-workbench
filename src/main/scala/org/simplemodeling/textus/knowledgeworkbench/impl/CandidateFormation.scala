@@ -8,7 +8,7 @@ import org.simplemodeling.textus.knowledgeworkbench.{entity, value}
 
 /*
  * @since   Oct. 27, 2026
- * @version Oct. 27, 2026
+ * @version Oct. 28, 2026
  */
 private[knowledgeworkbench] object CandidateFormation {
   def target(candidate: entity.InformationCandidate): Option[value.CandidateApprovalTarget] =
@@ -27,7 +27,7 @@ private[knowledgeworkbench] object CandidateFormation {
   def result(snapshot: EntityRevisionCarrier[entity.InformationCandidate]): value.CandidateWorkResult = {
     val selected = target(snapshot.entity)
     val state = _state(snapshot.entity, selected)
-    value.CandidateWorkResult(snapshot.entity, snapshot.revision.value, state,
+    value.CandidateWorkResult(snapshot.entity, snapshot.revision.value, CandidateAdmission.state(snapshot.entity, state),
       eligible(selected), state == "Approved" && eligible(selected), selected)
   }
 

@@ -195,6 +195,54 @@ CandidateWorkDecision
 ###### TYPE
 CandidateWorkResult
 
+#### admitCandidateWork
+
+##### SUMMARY
+
+Admit approved Information.
+
+##### DESCRIPTION
+
+Submits the exact current human-approved target to KnowledgeHub once, after native persistence of its Information identity. Existing uncertain submissions require lookup, never automatic resend.
+
+##### TYPE
+
+COMMAND
+
+##### INPUT
+
+###### TYPE
+AdmitCandidateWork
+
+##### OUTPUT
+
+###### TYPE
+CandidateWorkResult
+
+#### confirmCandidateAdmission
+
+##### SUMMARY
+
+Confirm Information Admission.
+
+##### DESCRIPTION
+
+Reads only the reserved Information identity from KnowledgeHub, compares the complete original approved target and trace, and retains a confirmed native outcome without resubmitting.
+
+##### TYPE
+
+COMMAND
+
+##### INPUT
+
+###### TYPE
+ConfirmCandidateAdmission
+
+##### OUTPUT
+
+###### TYPE
+CandidateWorkResult
+
 #### listCandidates
 
 ##### DESCRIPTION
@@ -567,6 +615,7 @@ MaterialRegistrationResult
 | groundingRefs | ProposalReference | * |
 | mappingRefs | ProposalReference | * |
 | decisions | CandidateReviewDecision | * |
+| admissions | CandidateAdmissionRecord | * |
 
 # VALUE
 
@@ -806,6 +855,42 @@ MaterialRegistrationResult
 | occurredAt | string | 1 |
 | reason | CandidateDecisionReason | 1 |
 | target | CandidateApprovalTarget | 1 |
+
+## AdmitCandidateWork
+
+- input-kind :: COMMAND
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| id | entityid | 1 |
+| expectedRevision | long | 1 |
+
+## ConfirmCandidateAdmission
+
+- input-kind :: COMMAND
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| id | entityid | 1 |
+| expectedRevision | long | 1 |
+
+## CandidateAdmissionRecord
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| informationId | entityid | 1 |
+| candidateRevision | long | 1 |
+| approval | CandidateReviewDecision | 1 |
+| requestedBy | string | 1 |
+| requestedAt | string | 1 |
+| status | string | 1 |
+| informationRevision | long | ? |
 
 ## CandidateWorkResult
 
@@ -1066,6 +1151,13 @@ bindingId = "read.history"
 allowedKinds = ["text"]
 
 ###### FIELD
+id = "admissions"
+label = "KnowledgeHub Information Admission and trace"
+role = "content"
+bindingId = "read.admissions"
+allowedKinds = ["text"]
+
+###### FIELD
 id = "target"
 label = "Exact approval target"
 role = "content"
@@ -1083,3 +1175,13 @@ bindingId = "candidate.edit"
 id = "decide"
 label = "Record human decision"
 bindingId = "candidate.decide"
+
+#### ACTION
+id = "admit"
+label = "Admit approved Information"
+bindingId = "candidate.admit"
+
+#### ACTION
+id = "confirm-admission"
+label = "Confirm saved Information"
+bindingId = "candidate.confirm-admission"

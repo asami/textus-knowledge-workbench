@@ -23,7 +23,7 @@ import org.scalatest.wordspec.AnyWordSpec
 /*
  * @since   Oct.  3, 2026
  *  version Oct. 18, 2026
- * @version Oct. 22, 2026
+ * @version Oct. 28, 2026
  */
 final class ComponentFactorySpec extends AnyWordSpec with Matchers with GivenWhenThen {
   private val _foundation = afterWord(
@@ -84,7 +84,7 @@ final class ComponentFactorySpec extends AnyWordSpec with Matchers with GivenWhe
     "assembly startup" when {
       "given the complete authored assembly" should {
         "admit the canonical Workbench and its Candidate operations in fixed-user command mode" in {
-          Given("the authored Workbench and Lake assembly with a test-owned local subject and two prepared native development repositories")
+          Given("the authored Workbench, Lake and published Hub assembly with a test-owned local subject")
           val descriptor = _instance_descriptor()
           val configuration = _runtime_configuration()
 
@@ -94,9 +94,10 @@ final class ComponentFactorySpec extends AnyWordSpec with Matchers with GivenWhe
             val component = subsystem.findComponent(KnowledgeWorkbenchComponent.componentId)
               .getOrElse(fail("the canonical Workbench component was not constructed"))
 
-            Then("the canonical Workbench exposes both Candidate operations, the canonical Lake is present, and the fixed-user execution profile is admitted")
+            Then("the canonical Workbench exposes both Candidate operations, the canonical Lake and Hub are present, and the fixed-user execution profile is admitted")
             component.componentId shouldBe KnowledgeWorkbenchComponent.componentId
             subsystem.findComponent(ComponentId("org.simplemodeling.textus.KnowledgeLake")).isDefined shouldBe true
+            subsystem.findComponent(ComponentId("org.simplemodeling.textus.KnowledgeHub")).isDefined shouldBe true
             component.operationDefinitions.map(_.name) should contain allOf (
               "registerCandidate",
               "listCandidates"
@@ -110,7 +111,7 @@ final class ComponentFactorySpec extends AnyWordSpec with Matchers with GivenWhe
 
       "given the same assembly without its capability providers" should {
         "reject production admission with the required-capability diagnostic" in {
-          Given("the same authored Workbench and Lake assembly, local subject, and two prepared native development repositories with an explicitly empty native subsystem capability providers override")
+          Given("the same authored Workbench, Lake and published Hub assembly with an explicitly empty native capability providers override")
           val descriptor = _without_capability_providers(_instance_descriptor())
           val configuration = _runtime_configuration()
           var constructed: Option[Subsystem] = None
@@ -153,20 +154,32 @@ final class ComponentFactorySpec extends AnyWordSpec with Matchers with GivenWhe
       .getOrElse(fail("the provider-empty assembly override did not apply"))
   }
 
-  private def _runtime_configuration(): ResolvedConfiguration =
+  private def _runtime_configuration(): ResolvedConfiguration = {
+    val root = Files.createTempDirectory(
+      Files.createDirectories(_repository_root.resolve("target/workbench-assembly-spec")), "case-")
+    val workbench = "textus.component.org.simplemodeling.textus.knowledge-workbench.datastores.application"
+    val hub = "textus.component.org.simplemodeling.textus.knowledge-hub.datastores.application"
     ResolvedConfiguration(
       Configuration(Map(
         RuntimeConfig.repositoryDirKey -> ConfigurationValue.StringValue(
           s"component-dev-dir:${_repository_root},component-dev-dir:${_lake_repository_root}"
         ),
-        "textus.local-data.root" -> ConfigurationValue.StringValue(
-          Files.createTempDirectory("workbench-assembly-spec-").toString
-        )
+        RuntimeConfig.componentFileKey -> ConfigurationValue.StringValue(_hub_car.toString),
+        "textus.local-data.root" -> ConfigurationValue.StringValue(root.toString),
+        s"$workbench.kind" -> ConfigurationValue.StringValue("sqlite"),
+        s"$workbench.path" -> ConfigurationValue.StringValue(root.resolve("workbench.db").toString),
+        s"$hub.kind" -> ConfigurationValue.StringValue("sqlite"),
+        s"$hub.path" -> ConfigurationValue.StringValue(root.resolve("hub.db").toString)
       )),
       ConfigurationTrace.empty
     )
+  }
 
   private def _repository_root: Path = Path.of(".").toAbsolutePath.normalize()
+
+  private def _hub_car: Path = Path.of(sys.props.getOrElse("textus.test.knowledge-hub.car",
+    Path.of(System.getProperty("user.home"), ".cncf/local/repository/car/org/simplemodeling/textus/" +
+      "textus-knowledge-hub/0.1.0-SNAPSHOT/textus-knowledge-hub-0.1.0-SNAPSHOT.car").toString)).toAbsolutePath.normalize()
 
   private def _lake_repository_root: Path = Path.of(
     sys.props.getOrElse(

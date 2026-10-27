@@ -7,7 +7,7 @@ TKL access/processing does not own human approval or parallel admission.
 The [Material integration plan](knowledge-editing-integration-plan.md) has
 separate reference acceptance and does not replace this Phase's obligations.
 
-status=planned
+status=in-progress
 split_full_test_policy=final-only
 split_full_validation_method=sbt-full-suite
 split_validation_bootstrap=none
@@ -15,10 +15,16 @@ validation_ownership=aggregate-final-owner
 aggregate_validation_owner=PHASE-1.1
 aggregate_validation_sequence=["PHASE-1","PHASE-1.1"]
 depends_on=phase-1.md
-Updated: 2026-10-02
+Updated: 2026-10-28
 Split from: [Phase 1](phase-1.md#applied-split--2026-10-02)
 Predecessor: [Phase 1 — Candidate Formation](phase-1.md)
 Successor: none selected; feedback/preparation remain future work
+
+Current execution: the [checklist](phase-1.1-checklist.md) tracks the native
+`P11-01` connected work item covering the unchanged items 5a/5b/5c below.
+Phase 1 is closed. The owning KnowledgeHub Admission extension is delivered under
+explicit dependency approval; TKW integration and native qualification are in
+progress. No item is accepted by startup or dependency publication.
 
 ## Goal
 

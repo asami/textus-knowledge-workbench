@@ -11,7 +11,7 @@ import org.goldenport.record.Record
 
 /*
  * @since   Oct.  3, 2026
- * @version Oct. 27, 2026
+ * @version Oct. 28, 2026
  */
 final class ComponentFactory extends Component.BundleFactory {
   def primaryFactory: Component.PrimaryComponentFactory =
@@ -72,6 +72,16 @@ object KnowledgeWorkbenchPrimaryFactory extends KnowledgeWorkbenchParticipantFac
 final class DefaultCandidateServiceFactory extends KnowledgeWorkbenchComponent.CandidateServiceFactory {
   import KnowledgeWorkbenchComponent.CandidateService.*
   import DefaultCandidateServiceFactory.*
+
+  override def createAdmitCandidateWorkActionCall(
+    core: org.goldenport.cncf.action.ActionCall.Core,
+    action: AdmitCandidateWork
+  ): AdmitCandidateWorkActionCall = CandidateAdmissionActions.admit(core, action)
+
+  override def createConfirmCandidateAdmissionActionCall(
+    core: org.goldenport.cncf.action.ActionCall.Core,
+    action: ConfirmCandidateAdmission
+  ): ConfirmCandidateAdmissionActionCall = CandidateAdmissionActions.confirm(core, action)
 
   override def createGetCandidateWorkActionCall(
     core: org.goldenport.cncf.action.ActionCall.Core,

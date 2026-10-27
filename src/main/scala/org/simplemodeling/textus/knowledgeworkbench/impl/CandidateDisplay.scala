@@ -8,7 +8,7 @@ import org.simplemodeling.textus.knowledgeworkbench.value.CandidateWorkResult
 
 /*
  * @since   Oct. 27, 2026
- * @version Oct. 27, 2026
+ * @version Oct. 28, 2026
  */
 private[knowledgeworkbench] object CandidateDisplay {
   import DisplayProjection.{ActionBinding, RowBinding, ValueBinding}
@@ -29,9 +29,16 @@ private[knowledgeworkbench] object CandidateDisplay {
       _records("grounding", _.candidate.groundingRefs.map(_.toRecord())),
       _records("mapping", _.candidate.mappingRefs.map(_.toRecord())),
       _records("history", _.candidate.decisions.map(_.toRecord())),
+      _records("admissions", _.candidate.admissions.map(_.toRecord())),
       _records("target", _.target.toVector.map(_.toRecord()))),
-    Vector("edit", "decide").map(id => ActionBinding(s"candidate.$id",
-      _ => Consequence.success(DisplayModel.ActionAvailability.Enabled))))
+    Vector("edit", "decide").map(id => ActionBinding[CandidateWorkResult](s"candidate.$id",
+      _ => Consequence.success(DisplayModel.ActionAvailability.Enabled))) ++ Vector(
+      ActionBinding[CandidateWorkResult]("candidate.admit", (work: CandidateWorkResult) => Consequence.success(
+        if (work.approvalValid && CandidateAdmission.current(work.candidate).isEmpty) DisplayModel.ActionAvailability.Enabled
+        else DisplayModel.ActionAvailability.Disabled)),
+      ActionBinding[CandidateWorkResult]("candidate.confirm-admission", (work: CandidateWorkResult) => Consequence.success(
+        if (work.candidate.admissions.nonEmpty) DisplayModel.ActionAvailability.Enabled
+        else DisplayModel.ActionAvailability.Disabled))))
 
   private def _resource(work: CandidateWorkResult): Consequence[DisplayModel.Resource] =
     EntityRevision.createC(work.revision).map(DisplayModel.Resource(work.candidate.id, _))

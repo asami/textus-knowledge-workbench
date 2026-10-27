@@ -37,9 +37,14 @@
           <label>判断の理由<input id="decision-reason" required></label>
           <button type="submit">判断を記録</button>
         </fieldset></form>
+        <fieldset id="admission-fields" disabled><legend>Informationへの採用</legend>
+          <p>承認済みの対象をKnowledgeHubへ採用します。結果が不明なときは再送せず、保存済みの採用結果を確認してください。</p>
+          <button id="admit" type="button" disabled>承認した内容を採用</button>
+          <button id="confirm-admission" type="button" disabled>採用結果を確認</button>
+        </fieldset>
       </section>
     </div>
-    <footer>根拠の取得状態は提供された情報を表示しています。原本への接続確認やInformationへの正式採用は、この画面の判断とは別の処理です。</footer>
+    <footer>根拠の取得状態は提供された情報を表示しています。Informationへの正式採用は、人の承認後に採用操作を実行し、確認できた結果を表示します。</footer>
   </main>
 </body>
 </html>

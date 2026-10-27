@@ -297,3 +297,26 @@ The editor preserves missing versus present-empty context explicitly. Its narrow
 native Candidate Record adapter does not alter the separate Display wire format.
 See the user guide's Candidate Workbench screen procedure for the first-success
 workflow and reconciliation after a failed or unknown response.
+
+
+## Canonical Information Admission
+
+After editing and explicitly reviewing/approving the current Candidate target,
+use `Candidate.admitCandidateWork` with its native `id` and observed
+`expectedRevision`. The Workbench retains the original approval and reserved
+Information identity before calling KnowledgeHub. The same route handles prepared
+TKL and unprepared Studio input; optional preparation/Run provenance is not added
+when absent. `Admitted` means the persisted owning Information and native revision
+were confirmed with exact original target and trace correspondence.
+
+If the response is missing or unsuccessful, reload the Candidate and use
+`Candidate.confirmCandidateAdmission` with its saved native identity/revision.
+This performs lookup only; never resubmit an uncertain write or choose another ID
+to bypass it. Missing lookup alone does not prove the owning write never occurred.
+The existing Detail shows Admission history, saved Information ID, the original
+approval, requester/time and confirmed Information revision. A changed target
+requires renewed human Review/Approve; historical confirmation grants no approval
+to changed content. The browser exposes separate Admission and outcome-check
+buttons through native Display business bindings and does not automatically resend.
+
+Owning contract: [Candidate Information Admission](../../../../docs/spec/candidate-information-admission.md).
