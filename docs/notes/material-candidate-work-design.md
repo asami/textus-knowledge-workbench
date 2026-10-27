@@ -15,8 +15,10 @@ and the observed public metadata; no new Entity/table or source-version claim
 is introduced. Explicit caller creation intent is distinct from Material identity.
 Ready evidence and approval remain governed by the existing human-work contract.
 The P2-01 contract was accepted at native local commit `98adb364` after selected
-checks and independent review. Generated bindings, implementation and their
-validation/review remain P2-02 work. This note supplies no cloud execution proof.
+checks and independent review. P2-02 generated bindings and implementation
+closed at `b40de62c` after compile, 48 tests across five suites including real
+PostgreSQL, and independent review. P2-03 owns browser interaction; P2-04 still
+owns current real-source evidence. This note supplies no new cloud execution proof.
 
 ## Confirmed starting point
 

@@ -1,7 +1,7 @@
 package org.simplemodeling.textus.knowledgeworkbench
 
 import java.nio.file.{Files, Path}
-import cats.effect.{Deferred, IO}
+import cats.effect.{Deferred, IO, Ref}
 import cats.effect.unsafe.implicits.global
 import cats.syntax.all.*
 import com.comcast.ip4s.{Host, Port}
@@ -160,6 +160,48 @@ final class CandidateViewsSpec extends AnyWordSpec with Matchers with GivenWhenT
     }
 
     "ordinary native HTTP transport" which {
+      "create only explicit public Material work and preserve exact lookup and failure outcomes" in {
+        Given("the native HTTP router and a controlled public logical Material producer")
+        val handle = _handle(_root(), controlledmaterial = true)
+        try {
+          val subsystem = handle.subsystem
+          val producer = WorkbenchHttpFixture.installMaterial(subsystem)
+          val app = WorkbenchHttpFixture.app(subsystem)
+          val prefix = "/rest/v1/knowledge-workbench/MaterialWork/"
+          val selection = "materialRef=" + java.net.URLEncoder.encode(WorkbenchHttpFixture.materialRef, "UTF-8")
+          When("search inspection and original reads precede an explicit command")
+          _http(app, prefix + "searchMaterials.json")._1 shouldBe 200
+          _http(app, prefix + "inspectMaterial.json?" + selection)._1 shouldBe 200
+          val original = app.run(WebRequest[IO](Method.GET, Uri.unsafeFromString(prefix + "readOriginal?" + selection +
+            "&resourceId=" + java.net.URLEncoder.encode(WorkbenchHttpFixture.resourceId, "UTF-8")))).unsafeRunSync()
+          original.status.code shouldBe 200
+          original.headers.headers.find(_.name.toString.equalsIgnoreCase("Cache-Control")).map(_.value) shouldBe Some("private, no-store")
+          _display(subsystem).hcursor.downField("model").get[Vector[Json]]("items").toOption.get shouldBe empty
+          val body = _material_command("http:creation")
+          val created = _http(app, prefix + "createCandidateFromMaterial.json", Some(body))
+          withClue(created._2) { created._1 shouldBe 200 }
+          val candidateid = io.circe.parser.parse(created._2).toOption.get.hcursor.downField("candidate").get[String]("id")
+            .orElse(io.circe.parser.parse(created._2).toOption.get.hcursor.downField("data").downField("candidate").get[String]("id")).toOption.get
+          val initial = _get(subsystem, candidateid)
+          initial.reviewEligible shouldBe false
+          _http(app, prefix + "createCandidateFromMaterial.json", Some(_material_command("http:mismatched", materialref = "unknown:material")))._1 should be >= 400
+          val edited = _edit(subsystem, initial, "HTTP preserved human work", initial.candidate.evidenceRefs)
+          val lookup = _http(app, "/rest/v1/knowledge-workbench/candidate/findCandidateByProposal.json?producerRef=workbench-material&proposalId=http%3Acreation")
+          lookup._1 shouldBe 200
+          lookup._2 should include (candidateid)
+          lookup._2 should include ("HTTP preserved human work")
+          producer.denied = true
+          Then("same-intent explicit resubmission retains edits while denied and invalid new work creates nothing")
+          _http(app, prefix + "createCandidateFromMaterial.json", Some(body))._1 shouldBe 200
+          _http(app, prefix + "createCandidateFromMaterial.json", Some(_material_command("http:denied")))._1 should be >= 400
+          _http(app, prefix + "createCandidateFromMaterial.json", Some(_material_command("http:invalid", "")))._1 should be >= 400
+          _http(app, prefix + "inspectMaterial.json?" + selection)._1 should be >= 400
+          _http(app, prefix + "readOriginal?" + selection + "&resourceId=missing")._1 should be >= 400
+          _get(subsystem, candidateid).toRecord() shouldBe edited.toRecord()
+          _display(subsystem).hcursor.downField("model").get[Vector[Json]]("items").toOption.get should have size 1
+        } finally handle.close()
+      }
+
       "serve the application assets Display reads and existing conditional business edits through the native router" in {
         Given("the real native HTTP router over a normal Workbench runtime")
         _with_runtime { subsystem =>
@@ -197,7 +239,7 @@ final class CandidateViewsSpec extends AnyWordSpec with Matchers with GivenWhenT
     }
 
     // Explicitly selected human-browser acceptance; normal full suite has no external browser prerequisite.
-    if (sys.props.get("textus.test.browser-probe").contains("true")) {
+    if (sys.props.get("textus.test.legacy-browser-probe").contains("true")) {
       "owned live browser workflow" in {
         Given("both source fixtures behind a loopback-only real native HTTP application")
         _with_runtime { subsystem =>
@@ -227,6 +269,73 @@ final class CandidateViewsSpec extends AnyWordSpec with Matchers with GivenWhenT
           result.candidate.decisions.map(_.decision.value) shouldBe Vector("edit", "review", "approve")
           _get(subsystem, other.id.print).approvalValid shouldBe false
         }
+      }
+    }
+    if (sys.props.get("textus.test.browser-probe").contains("true")) {
+      "owned Material creation browser workflow" in {
+        Given("a loopback native persistent runtime and a controlled logical public Material producer")
+        val root = _root()
+        val handle = _handle(root, controlledmaterial = true)
+        try {
+          val subsystem = handle.subsystem
+          val producer = WorkbenchHttpFixture.installMaterial(subsystem)
+          val app = WorkbenchHttpFixture.app(subsystem)
+          val ready = Path.of("target/candidate-material-browser-ready.json").toAbsolutePath
+          Files.deleteIfExists(ready)
+          When("the coordinated browser searches inspects previews explicitly creates edits holds and tests controlled ready evidence")
+          val program = for {
+            done <- Deferred[IO, Unit]
+            attempts <- Ref.of[IO, Int](0)
+            combined = HttpApp[IO](request => request.uri.path.renderString match {
+              case "/__fixture_complete" => done.complete(()).as(org.http4s.Response[IO](org.http4s.Status.NoContent))
+              case "/__fixture_deny" => IO { producer.denied = true }.as(org.http4s.Response[IO](org.http4s.Status.NoContent))
+              case "/__fixture_allow" => IO { producer.denied = false }.as(org.http4s.Response[IO](org.http4s.Status.NoContent))
+              case path if path.endsWith("/createCandidateFromMaterial.json") =>
+                attempts.getAndUpdate(_ + 1).flatMap { count =>
+                  app(request).flatMap { response =>
+                    if (count == 0 && response.status.isSuccess)
+                      response.body.compile.drain.as(org.http4s.Response[IO](org.http4s.Status.ServiceUnavailable))
+                    else IO.pure(response)
+                  }
+                }
+              case _ => app(request)
+            })
+            _ <- EmberServerBuilder.default[IO].withHost(Host.fromString("127.0.0.1").get)
+              .withPort(Port.fromInt(0).get).withHttpApp(combined).build.use { server =>
+                IO.blocking(Files.writeString(ready, Json.obj(
+                  "baseUrl" -> Json.fromString(s"http://127.0.0.1:${server.address.getPort}"),
+                  "applicationPath" -> Json.fromString("/web/knowledge-workbench/textus-knowledge-workbench"),
+                  "completePath" -> Json.fromString("/__fixture_complete"),
+                  "denyPath" -> Json.fromString("/__fixture_deny"),
+                  "allowPath" -> Json.fromString("/__fixture_allow"),
+                  "creationResponse" -> Json.fromString("Only a successful first native create response is replaced with HTTP 503. Actual failure statuses are preserved. Reconcile exact retained intent; never resubmit."),
+                  "materialRef" -> Json.fromString(WorkbenchHttpFixture.materialRef),
+                  "resourceId" -> Json.fromString(WorkbenchHttpFixture.resourceId),
+                  "finalContent" -> Json.fromString("Browser invalidated content"),
+                  "root" -> Json.fromString(root.toString),
+                  "procedure" -> Json.fromString("Search; select Controlled public Material; select resource and preview; new intent; create name Browser Material with content Browser initial content and present-empty context. Observe unknown HTTP503 and preserved creation draft; reload and reconcile retained intent without resubmit. Review/Approve must be disabled. Edit content Browser held content with present-empty context; Hold. Open original source. Visit denyPath then open source: old preview/selection must clear; visit allowPath and reopen. Replace evidence with id evidence:reviewed, kind evidence, revision version-1, snapshot snapshot:version-1, retrieval available (controlled readiness only); save content Browser reviewed content. Review then Approve without target change. Save unchanged target to retain approval. Edit content Browser invalidated content to invalidate approval. Open original source again. Signal complete."),
+                  "selectors" -> Json.fromString("#material-search #material-list #material-detail #original-preview #new-intent #creation-name #creation-content #creation-context-present #create-candidate #candidate-source #content #edit-reason #decision #decision-reason")
+                ).noSpaces)) *> done.get.timeout(12.minutes)
+              }
+            count <- attempts.get
+          } yield count
+          program.unsafeRunSync() shouldBe 1
+          Then("the same native Candidate retains first source and actual human history with invalidated approval")
+          val items = _display(subsystem).hcursor.downField("model").get[Vector[Json]]("items").toOption.get
+          items should have size 1
+          val id = items.head.hcursor.downField("resource").get[String]("entityId").toOption.get
+          val result = _get(subsystem, id)
+          result.state shouldBe "Draft"
+          result.approvalValid shouldBe false
+          result.candidate.content.map(_.value) shouldBe Some("Browser invalidated content")
+          result.candidate.context.map(_.value) shouldBe Some("")
+          result.candidate.decisions.map(_.decision.value) shouldBe Vector("edit", "hold", "edit", "review", "approve", "edit")
+          val original = io.circe.parser.parse(result.candidate.originalProposal.get.value).toOption.get
+          original.hcursor.downField("materialSelection").get[String]("materialRef") shouldBe Right(WorkbenchHttpFixture.materialRef)
+          original.hcursor.downField("materialSelection").get[Vector[String]]("resourceIds") shouldBe Right(Vector(WorkbenchHttpFixture.resourceId))
+          producer.calls should contain allOf ("searchMaterials", "getMaterial", "readOriginal")
+          result.candidate.decisions.map(_.actor).distinct shouldBe Vector("workbench-assembly-spec-user")
+        } finally handle.close()
       }
     }
   }
@@ -310,18 +419,25 @@ final class CandidateViewsSpec extends AnyWordSpec with Matchers with GivenWhenT
     Files.createTempDirectory(parent, "case-")
   }
 
+  private def _material_command(intent: String, content: String = "HTTP Material statement", materialref: String = WorkbenchHttpFixture.materialRef): String =
+    Record.data("proposalId" -> intent, "materialRef" -> materialref,
+      "resourceIds" -> Vector(WorkbenchHttpFixture.resourceId), "name" -> "HTTP Material",
+      "content" -> content, "context" -> "").toJsonString
+
   private def _with_runtime[A](body: Subsystem => A): A = {
     val handle = _handle(_root())
     try body(handle.subsystem) finally handle.close()
   }
 
-  private def _handle(root: Path): CncfHandle = {
+  private def _handle(root: Path, controlledmaterial: Boolean = false): CncfHandle = {
     val repository = Path.of(".").toAbsolutePath.normalize()
     val lake = Path.of(sys.props.getOrElse("textus.test.knowledge-lake.repository",
       repository.resolveSibling("textus-knowledge-lake").toString)).toAbsolutePath.normalize()
     val authored = Files.readString(repository.resolve("src/main/car/assembly-descriptor.yaml")).replace(
       "  - namespace: org.simplemodeling.textus\n    id: KnowledgeHub\n    version: 0.1.0-SNAPSHOT\n", "")
-    val isolated = authored.replace("  textus.subsystem.user-mode: standalone\n",
+    val selected = if (controlledmaterial) authored.replace(
+      "  - namespace: org.simplemodeling.textus\n    id: KnowledgeLake\n    version: 0.1.0-SNAPSHOT\n", "") else authored
+    val isolated = selected.replace("  textus.subsystem.user-mode: standalone\n",
       s"""  textus.subsystem.user-mode: standalone
   textus.component.org.simplemodeling.textus.knowledge-workbench.datastores.application.kind: sqlite
   textus.component.org.simplemodeling.textus.knowledge-workbench.datastores.application.path: ${root.resolve("workbench.db")}
@@ -331,9 +447,10 @@ final class CandidateViewsSpec extends AnyWordSpec with Matchers with GivenWhenT
     val instance = root.resolve("assembly-instance.yaml")
     Files.writeString(instance, isolated.replace("    fallbackPrivilege: disabled\n",
       "    fallbackPrivilege: disabled\n    localSubject:\n      id: workbench-assembly-spec-user\n"))
+    val discovery = Vector("--discover=classes", s"--component-dev-dir=$repository") ++
+      (if (controlledmaterial) Vector.empty else Vector(s"--component-dev-dir=$lake"))
     _success(CncfBootstrap.initialize(BootstrapConfig(cwd = root,
-      args = Array("--discover=classes", s"--component-dev-dir=$repository", s"--component-dev-dir=$lake",
-        s"--textus.assembly.descriptor=$instance", s"--textus.local-data.root=$root", "command"),
+      args = (discovery ++ Vector(s"--textus.assembly.descriptor=$instance", s"--textus.local-data.root=$root", "command")).toArray,
       modeHint = Some(RunMode.Command))))
   }
 }

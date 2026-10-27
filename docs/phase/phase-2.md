@@ -31,8 +31,11 @@ The selected four-Step Plan and required focused/full/review boundary are saved
 by the runtime. P2-01's [Material-backed Candidate work v1](../spec/material-candidate-work-v1.md)
 passed selected compile/focused checks and independent review, and closed at
 native local Step commit `98adb364573893ab87e3f35309b75118d35b63e9`.
-Ordinary Advance then issued ImplementStep P2-02. Implementation and its native
-validation/review remain pending; the Phase remains open.
+P2-02 then passed compile and 48 tests across five selected suites, including
+actual PostgreSQL restart, revision and authorization cases. Independent review
+accepted its corrected candidate; native local Step commit
+`b40de62c19a34d50a45276445e57f42576355e40` closed P2-02. Ordinary Advance
+issued ImplementStep P2-03 for browser interaction. The Phase remains open.
 
 ## Inputs and preserved acceptance
 

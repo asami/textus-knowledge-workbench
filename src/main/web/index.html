@@ -16,11 +16,27 @@
       <button id="load-list" type="button">一覧を読み込む</button>
     </section>
     <p id="status" role="status" aria-live="polite">一覧を読み込んでCandidateを選択してください。</p>
+    <section aria-labelledby="material-title"><h2 id="material-title">元資料から作業を作成</h2>
+      <form id="material-search"><label>資料を検索<input id="material-query"></label><button>検索</button></form>
+      <div id="material-list"></div><div id="material-detail"></div><div id="original-preview"></div>
+      <p id="creation-status" role="status"></p>
+      <label>保持した作成意図（結果・呼出者は各意図を照合して確認）<select id="retained-intents"></select></label>
+      <button id="new-intent" type="button">明示的に新しい作成を開始</button>
+      <button id="reconcile-intent" type="button">保持した作成意図を照合</button>
+      <form id="create-form"><fieldset id="creation-fields"><legend>選択した資料でCandidateを作成</legend>
+        <label>名前<input id="creation-name" required maxlength="256"></label>
+        <label>内容<textarea id="creation-content" required></textarea></label>
+        <label><input id="creation-context-present" type="checkbox">文脈を設定する</label>
+        <label>文脈<textarea id="creation-context"></textarea></label>
+        <button id="create-candidate" type="submit" disabled>Candidateを作成して開く</button>
+      </fieldset></form>
+    </section>
     <div class="workspace">
       <section aria-labelledby="list-title"><h2 id="list-title">Candidate一覧</h2><div id="list"></div></section>
       <section aria-labelledby="detail-title"><div class="section-heading"><h2 id="detail-title">詳細と判断</h2>
         <button id="reload" type="button" disabled>選択中を再読み込み</button></div>
         <div id="detail"><p>Candidateを選択すると、根拠と編集内容を表示します。</p></div>
+        <button id="candidate-source" type="button" disabled>最初に選択した元資料を確認</button>
         <form id="edit-form"><fieldset id="edit-fields" disabled><legend>内容と根拠の編集</legend>
           <label>内容<textarea id="content" rows="5" required></textarea></label>
           <label><input id="context-present" type="checkbox">文脈を設定する（空文字も保持）</label>

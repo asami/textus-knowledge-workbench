@@ -14,6 +14,15 @@
   const groups = [["evidenceRefs", "根拠参照"], ["groundingRefs", "Grounding参照"], ["mappingRefs", "Mapping参照"]];
   const referenceKeys = ["id", "kind", "revision", "snapshotRef", "retrievalState", "retentionUntil", "limitation"];
   let busy = false, selectedId, work, revision, baseline, actions, needsRead = true, acknowledgement = "";
+  const producer = "workbench-material", intentStorage = "workbench-material-intent";
+  let intent, retainedIntents = [], intentReady = false, intentCaller, material, selectedResources = [], previewUrl;
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(intentStorage));
+    retainedIntents = (Array.isArray(saved) ? saved : [saved]).filter(value =>
+      value?.producerRef === producer && typeof value.proposalId === "string" && value.proposalId)
+      .map(value => ({ producerRef: producer, proposalId: value.proposalId }));
+    intent = retainedIntents.at(-1);
+  } catch { /* Storage failure never authorizes a replacement command. */ }
 
   function node(tag, text, className) {
     const element = document.createElement(tag);
@@ -32,6 +41,21 @@
     byId("confirm-admission").disabled = busy || needsRead || !work?.candidate.admissions?.length;
     byId("context").disabled = !byId("context-present").checked;
     byId("list").querySelectorAll("button").forEach(button => { button.disabled = busy; });
+    ["material-search", "creation-fields"].forEach(id => {
+      byId(id).querySelectorAll("input,textarea,button").forEach(element => { element.disabled = busy; });
+    });
+    byId("material-list").querySelectorAll("button").forEach(button => { button.disabled = busy; });
+    byId("material-detail").querySelectorAll("button,input").forEach(element => { element.disabled = busy; });
+    byId("new-intent").disabled = busy;
+    byId("reconcile-intent").disabled = busy || !intent;
+    byId("retained-intents").disabled = busy;
+    byId("create-candidate").disabled = busy || !intentReady || !material || !selectedResources.length;
+    byId("candidate-source").disabled = busy || needsRead || !sourceSelection();
+    [...byId("decision").options].forEach(option => {
+      option.disabled = ["review", "approve"].includes(option.value) &&
+        (!work?.review_eligible || (option.value === "approve" ? work.state !== "Reviewing" : !["Draft", "Held"].includes(work.state)));
+    });
+    if (byId("decision").selectedOptions[0]?.disabled) byId("decision").value = "hold";
   }
   function status(text) { byId("status").textContent = text; }
   async function run(action) {
@@ -150,7 +174,7 @@
   function dirty() { return work && JSON.stringify(draft()) !== baseline; }
   function discardAllowed() { return !dirty() || confirm("未保存の編集を破棄して読み込みますか？"); }
   async function loadSelected(id) {
-    needsRead = true; work = undefined; controls(); byId("detail").replaceChildren(node("p", "読込み中…"));
+    needsRead = true; controls(); byId("detail").replaceChildren(node("p", "読込み中…"));
     const display = await request("display/read", { query: { resourceType, screenId: "candidate-detail", resourceId: id } });
     const current = workResponse(await request("candidate/getCandidateWork", { query: { id } }));
     const metadata = await request("display/describeBusiness", { query: { resourceType, screenId: "candidate-detail" } });
@@ -195,6 +219,151 @@
     status(`${success}\n最新の表示を読み込みます。`);
     await reconcileSelected();
   }
+  function clearPreview() {
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    previewUrl = undefined; byId("original-preview").replaceChildren();
+  }
+  function clearMaterial() {
+    clearPreview(); material = undefined; selectedResources = [];
+    byId("material-detail").replaceChildren(); controls();
+  }
+  function sourceSelection() {
+    try {
+      const source = JSON.parse(work?.candidate.original_proposal).materialSelection;
+      return typeof source?.materialRef === "string" && Array.isArray(source.resourceIds) &&
+        source.resourceIds.every(id => typeof id === "string") ? source : undefined;
+    } catch { return undefined; }
+  }
+  async function inspectMaterial(ref, retained = []) {
+    clearMaterial();
+    const received = await request("MaterialWork/inspectMaterial", { query: { materialRef: ref } });
+    if (received.material_ref !== ref || !Array.isArray(received.resources) ||
+        received.resources.some(entry => typeof entry.resource_id !== "string") ||
+        new Set(received.resources.map(entry => entry.resource_id)).size !== received.resources.length)
+      throw new Error("資料の対応を確認できません。選択をやり直してください。");
+    material = received;
+    const container = byId("material-detail");
+    container.append(node("h3", received.title ?? "資料"), node("p", ref),
+      node("p", "現在の資料を確認しています。原本表示は版・スナップショットを証明しません。"));
+    selectedResources = retained.filter(id => received.resources.some(entry => entry.resource_id === id));
+    received.resources.forEach(entry => {
+      const label = node("label", `${entry.role ?? "resource"}: ${entry.resource_id}`);
+      const checkbox = node("input"); checkbox.type = "checkbox"; checkbox.checked = selectedResources.includes(entry.resource_id);
+      checkbox.addEventListener("change", () => {
+        selectedResources = checkbox.checked ? [...selectedResources, entry.resource_id] : selectedResources.filter(id => id !== entry.resource_id);
+        clearPreview(); controls();
+      });
+      const preview = node("button", "原本を確認"); preview.type = "button";
+      preview.addEventListener("click", () => run(() => previewOriginal(ref, entry.resource_id)));
+      label.prepend(checkbox); container.append(label, preview);
+    });
+    if (retained.length !== selectedResources.length) container.append(node("p", "最初の選択の一部は現在取得できません。"));
+  }
+  async function previewOriginal(materialRef, resourceId) {
+    clearPreview();
+    const url = new URL(root + "MaterialWork/readOriginal", location.origin);
+    url.search = new URLSearchParams({ materialRef, resourceId }).toString();
+    const headers = {};
+    if (byId("token").value) headers.Authorization = `Bearer ${byId("token").value}`;
+    const response = await fetch(url, { headers, credentials: "omit", cache: "no-store", redirect: "error" });
+    const media = response.headers.get("Content-Type")?.split(";")[0].trim().toLowerCase();
+    const safeMedia = ["image/png", "image/jpeg", "image/gif", "image/webp", "audio/mpeg", "audio/wav", "audio/ogg"];
+    if (!response.ok || !safeMedia.includes(media) ||
+        !/\bprivate\b/i.test(response.headers.get("Cache-Control") ?? "") ||
+        !/\bno-store\b/i.test(response.headers.get("Cache-Control") ?? "") ||
+        response.headers.get("X-Content-Type-Options")?.toLowerCase() !== "nosniff" ||
+        !/default-src\s+'none'/i.test(response.headers.get("Content-Security-Policy") ?? "") ||
+        !/(?:^|;)\s*sandbox(?:\s*;|\s*$)/i.test(response.headers.get("Content-Security-Policy") ?? "") ||
+        !/^attachment(?:;|$)/i.test(response.headers.get("Content-Disposition") ?? ""))
+      throw new Error(`原本を安全に表示できません (HTTP ${response.status})。以前の表示は破棄しました。`);
+    previewUrl = URL.createObjectURL(await response.blob());
+    const element = node(media.startsWith("image/") ? "img" : "audio");
+    if (element.tagName === "AUDIO") element.controls = true;
+    else element.alt = "選択した原本";
+    element.addEventListener("error", () => { clearPreview(); status("原本の画像・音声を解釈できませんでした。表示を破棄しました。"); }, { once: true });
+    element.src = previewUrl;
+    const download = node("a", "原本をダウンロード"); download.href = previewUrl; download.download = "original";
+    byId("original-preview").append(element, download);
+  }
+  function creationStatus(text) { byId("creation-status").textContent = text; }
+  function renderIntents() {
+    byId("retained-intents").replaceChildren();
+    retainedIntents.forEach(value => {
+      const option = node("option", value.proposalId); option.value = value.proposalId;
+      option.selected = value === intent; byId("retained-intents").append(option);
+    });
+  }
+  async function reconcileIntent() {
+    intentReady = false;
+    const found = await request("candidate/findCandidateByProposal", { query: intent });
+    if (!found.candidate?.id) {
+      creationStatus("一致するCandidateは確認できません。以前の送信が不存在とは断定できません。新規作成は明示的に開始してください。");
+      return;
+    }
+    if (found.candidate.producer_ref !== intent.producerRef || found.candidate.proposal_id !== intent.proposalId)
+      throw new Error("作成意図と返されたCandidateの対応を確認できません。");
+    if (!discardAllowed()) return;
+    selectedId = found.candidate.id; acknowledgement = "作成意図に対応するCandidate IDを確認しました。";
+    await reconcileSelected(); creationStatus(acknowledgement);
+  }
+  byId("material-search").addEventListener("submit", event => {
+    event.preventDefault(); run(async () => {
+      clearMaterial(); byId("material-list").replaceChildren();
+      const result = await request("MaterialWork/searchMaterials", { query: { text: byId("material-query").value } });
+      if (!Array.isArray(result.items)) throw new Error("検索結果の形式を確認できません。");
+      if (!result.items.length) byId("material-list").append(node("p", "資料は見つかりませんでした。"));
+      result.items.forEach(item => {
+        if (typeof item.material_ref !== "string") throw new Error("資料参照を確認できません。");
+        const button = node("button", item.title ?? item.material_ref); button.type = "button";
+        button.addEventListener("click", () => run(() => inspectMaterial(item.material_ref)));
+        byId("material-list").append(button);
+      });
+    });
+  });
+  byId("candidate-source").addEventListener("click", () => {
+    const source = sourceSelection(); if (source) run(() => inspectMaterial(source.materialRef, source.resourceIds));
+  });
+  byId("new-intent").addEventListener("click", () => {
+    if (intent && !confirm("保持した以前の意図に結果不明の送信がある場合は照合してください。別のCandidate作成を開始しますか？")) return;
+    try {
+      const next = { producerRef: producer, proposalId: crypto.randomUUID() };
+      sessionStorage.setItem(intentStorage, JSON.stringify([...retainedIntents, next]));
+      retainedIntents.push(next); intent = next; intentCaller = byId("token").value; intentReady = true; renderIntents();
+      creationStatus("新しい作成意図を保持しました。資料と内容を確認して明示的に送信してください。");
+    } catch { intentReady = false; creationStatus("作成意図を保持できないため送信できません。"); }
+    controls();
+  });
+  byId("reconcile-intent").addEventListener("click", () => run(reconcileIntent));
+  byId("retained-intents").addEventListener("change", () => {
+    intent = retainedIntents.find(value => value.proposalId === byId("retained-intents").value);
+    intentReady = false; creationStatus("保持した意図の結果は未確認です。作成時の呼出者で照合してください。"); controls();
+  });
+  byId("create-form").addEventListener("submit", event => {
+    event.preventDefault(); if (!intentReady || !material || !selectedResources.length || busy) return;
+    run(async () => {
+      if (intentCaller !== byId("token").value) throw new Error("呼出者が変わりました。保持した意図を照合してください。");
+      if (!discardAllowed()) return;
+      const body = { proposalId: intent.proposalId, materialRef: material.material_ref,
+        resourceIds: [...selectedResources], name: byId("creation-name").value, content: byId("creation-content").value };
+      if (!body.name.trim() || !body.content.trim()) throw new Error("名前と内容を入力してください。");
+      if (byId("creation-context-present").checked) body.context = byId("creation-context").value;
+      intentReady = false;
+      creationStatus("送信結果は未確認です。失敗・再読込み後は保持した意図を照合してください。自動再送しません。");
+      const result = await request("MaterialWork/createCandidateFromMaterial", { body });
+      if (typeof result.candidate?.id !== "string" || !result.candidate.id || typeof result.created !== "boolean" ||
+          result.candidate.producer_ref !== producer || result.candidate.proposal_id !== intent.proposalId)
+        throw new Error("Candidate IDを確認できません。保持した意図を照合してください。");
+      selectedId = result.candidate.id; acknowledgement = `Candidate IDを確認しました: ${selectedId}`;
+      creationStatus(acknowledgement); await reconcileSelected();
+    });
+  });
+  byId("token").addEventListener("input", () => {
+    intentReady = false; needsRead = true; clearMaterial(); byId("material-list").replaceChildren();
+    byId("detail").replaceChildren(node("p", "呼出者が変わりました。明示的に再読み込みしてください。"));
+    creationStatus("呼出者が変わりました。以前の作成意図は元の呼出者で照合してください。新規作成は明示的に開始してください。");
+  });
+  if (intent) creationStatus("保持した作成意図があります。結果は未確認です。送信せず照合してください。");
+  renderIntents();
   byId("load-list").addEventListener("click", () => run(loadList));
   byId("context-present").addEventListener("change", controls);
   byId("reload").addEventListener("click", () => { if (discardAllowed()) run(reconcileSelected); });
@@ -220,6 +389,7 @@
       });
     });
   });
-  window.addEventListener("beforeunload", event => { if (dirty()) { event.preventDefault(); event.returnValue = ""; } });
+  window.addEventListener("beforeunload", event => { if (dirty() || byId("creation-content").value || byId("creation-name").value) { event.preventDefault(); event.returnValue = ""; } });
+  window.addEventListener("pagehide", clearPreview);
   controls();
 })();

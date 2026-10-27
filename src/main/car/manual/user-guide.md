@@ -394,3 +394,42 @@ If acknowledgement is lost, keep the intent and use the read-only
 same `proposalId`. Do not automatically resubmit a command after an uncertain
 outcome or infer nonexistence from failed/absent lookup. A deliberate new work
 intent remains distinct from continuation of the original one.
+
+## Use the served Material workbench
+
+Open `/web/knowledge-workbench/textus-knowledge-workbench` on the ordinary
+Workbench host. Enter the admitted bearer token only if required by that host;
+it stays in memory. Search, choose a Material, inspect its logical resources,
+select resources explicitly and use the original preview controls. Missing,
+denied or unsupported originals clear the previous preview. Only safe raster
+images and audio with the private binary headers are displayed/downloaded.
+No source version is inferred from a successful preview.
+
+Choose **明示的に新しい作成を開始**, enter name and content, optionally select
+context presence (including empty context), and submit **Candidateを作成して開く**.
+The browser retains the opaque intent before dispatch; only confirmed matching
+native identity opens Candidate work. Failed or unknown operations keep the
+in-memory draft and block a second submission. Use **保持した作成意図を照合**
+after uncertainty or reload. An absent lookup is still uncertain. Earlier keys
+remain in the retained-intent selector even after deliberately starting new work.
+Changing the token requires reconciliation with the actual original caller;
+the browser does not store or infer intent ownership from a saved credential.
+Reload preserves intent keys, not content or source payloads; heed the unsaved
+draft warning before leaving the page.
+
+Edit and decide using the existing Candidate forms and actual observed revision.
+**最初に選択した元資料を確認** follows the original association even after edits
+or reopen. Initial Material evidence has no revision/snapshot, so Review and
+Approve remain unavailable; inspection, Edit and Hold remain available. Only
+actual separately supplied ready evidence enables the existing Review/Approve
+workflow, and a later effective target edit invalidates its approval.
+
+P2-03's opt-in browser specification is coordinated by the runtime owner with
+`textus.test.browser-probe=true`. It writes
+`target/candidate-material-browser-ready.json`, serves loopback only, and waits
+up to twelve minutes for explicit `/__fixture_complete`. It uses a controlled
+public logical producer and valid PNG, deliberately loses the first committed
+creation acknowledgement, then checks native history after browser reconciliation,
+Edit/Hold, controlled readiness, Review/Approve and invalidation. Normal test
+execution needs no external browser. These are authored scenarios; runtime
+execution/review remains pending, and P2-04 owns real-source acceptance.

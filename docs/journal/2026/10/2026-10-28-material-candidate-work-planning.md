@@ -80,3 +80,63 @@ P2-02 implements the accepted source/intent bridge and its native persistence
 specifications. Its implementation, selected checks, independent review and
 Step acceptance remain separate unfinished obligations. The held Studio line
 and no-main/no-push/no-external-publication constraints are unchanged.
+
+## P2-02 acceptance and P2-03 handoff
+
+Native generation/compile and the five selected suites passed (48 tests),
+including PostgreSQL restart, authorization and conditional revision behavior.
+Earlier failed attempts remain in the same Session. Test setup corrections
+retained the public contract and assertions; independent review additionally
+required the local helper name and target/ work-directory corrections. Fresh
+checks passed and the independent affected re-review accepted the candidate.
+
+Ordinary native closure created local Step commit
+`b40de62c19a34d50a45276445e57f42576355e40` and issued ImplementStep P2-03.
+P2-03 owns the served Material-to-Candidate browser flow. Real-source and
+neutral-consumer acceptance, final full validation and whole-Phase review remain
+open. Studio Phase 1.2 remains held; no main integration, push or publication
+was performed. Detailed runtime outputs remain in private target/ evidence.
+
+## P2-03 HTTP collection failure and owning dependency decision
+
+The served browser searched and inspected the controlled Material, displayed its
+original, retained creation intent and draft after one create response, and
+performed an explicit lookup after reload without resubmission. Lookup returned
+no Candidate. Native focused-browser evidence retained two failures in 18 tests:
+the actual HTTP create returned 500, and the browser collection remained empty.
+The fixture had replaced any first response with 503; its authored correction
+now masks only successful native responses and preserves actual failures. It
+remains unvalidated. The failed run remains failed.
+
+Source tracing found that common Ingress.recordToParameters expands the array
+into individual Properties, while Request.toRecord preserves one Property as a
+scalar. Workbench retains strict collection admission rather than coercing a
+scalar or reading the raw HTTP body as a workaround. Additional public diagnostic
+delivery returned unavailable because Common Evidence was disabled; it supplies
+no new diagnostic Evidence or successful validation.
+
+The same Goal/Session accepted a dependency-scope proposal for simplemodeling-lib
+and issued a genuine Human decision (ApproveDependencyScope, RejectDependencyScope,
+Defer or Cancel). No library source or dependency artifact was changed. P2-01/02
+commits and all prior checks/reviews/counters remain retained; P2-03, P2-04 and
+Phase full/review/release stay open. The bounded test server finished under the
+native test; its browser tab was closed. Detailed outputs stay in private target/.
+
+## Approved common-protocol dependency repair
+
+The user explicitly selected ApproveDependencyScope. Normal public Human
+preparation and Submit/Advance admitted that answer without replacing the
+Session. A same-purpose inventory update added the existing semantic resolver
+and specification. Its first Advance failed before inventory registration
+because the caller had not configured the concrete dependency Binding; adding
+the dedicated root/branch/base/check binding allowed ordinary Advance to admit
+receipt `8e7f63e6e34ec5b0aefe9aff93509af9:ordered-dependency-inventory:315@1`.
+No accepted Submit was replayed and the repair count remains 1/10.
+
+The dedicated simplemodeling-lib branch `codex/tkw-phase2-http-collections` starts
+at `bd552c6f725dfb7dd5da1059b7797b1e671b6e30`. Six source/spec/journal files
+are authored to preserve declared collection carriers and normal element
+validation. Native dependency capture, prerequisite local publication, fresh
+Workbench/browser and dependency focused checks, and independent review remain
+pending. The existing input constraints, original-byte policy and final Phase
+full/review/release obligations are unchanged.

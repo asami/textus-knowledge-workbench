@@ -2,7 +2,7 @@
 
 Owner: TKW Phase 2 / P2-01
 Contract date: 2026-10-28
-Status: contract accepted in P2-01; P2-02 source and executable specifications authored; generated bindings, validation and acceptance pending
+Status: contract accepted in P2-01; P2-02 accepted at `b40de62c19a34d50a45276445e57f42576355e40` after native compile, 48 tests in five suites including PostgreSQL, and independent review; P2-03 browser implementation authored, validation and acceptance pending
 
 ## Owning contracts
 
@@ -143,10 +143,10 @@ remain TKL-owned and unchanged.
 | Native create/load or acknowledgement failure | Actual failure/uncertainty; no fabricated successful Candidate or replay. |
 | Source later becomes inaccessible | Retained association/history remains; preview reports current failure without replacing displayed selection with stale success. |
 
-P2-02 supplies generated/action/native persistence specifications; P2-03
-supplies browser behavior and safe binary preview; P2-04 supplies neutral-consumer
-and separate real-source evidence. Their successful execution, independent
-review and Phase closure remain pending, not implied by authoring this contract.
+P2-02's accepted generated/action/native persistence work is recorded below;
+P2-03 supplies browser behavior and safe binary preview, and P2-04 supplies
+neutral-consumer and separate real-source evidence. P2-03/P2-04 execution,
+independent review and Phase closure remain pending.
 
 ## P2-02 implementation mapping
 
@@ -159,5 +159,31 @@ Candidate operations. `MaterialCandidateWorkSpec` covers public dispatch, invali
 input/source failures, intent preservation, ordered-selector properties, unknown
 acknowledgement and actual PostgreSQL restart/native revision/authorization.
 The test-only PostgreSQL container follows KnowledgeHub's existing fixture approach.
-These are authored specifications, not execution evidence; runtime generation,
-compile, focused validation and independent review remain pending.
+P2-02 was accepted at `b40de62c19a34d50a45276445e57f42576355e40` after
+native generation/compile, 48 tests in five suites including actual PostgreSQL,
+and independent review. Those results cover P2-02; they do not establish P2-03
+browser acceptance or the P2-04 real-source integration.
+
+## Browser continuation
+
+The served application retains only arrays of exact `producerRef`/`proposalId`
+pairs in sessionStorage. Earlier keys remain available when the operator
+deliberately starts another creation. No caller token, source selection, content,
+original bytes or Candidate payload is persisted in browser storage. Every
+restored or reselected intent starts uncertain and permits only explicit lookup.
+A caller change disables submission and clears current source/preview; retained
+keys remain attributable only through a successful lookup by the actual caller.
+An absent or denied lookup does not clear uncertainty or enable replay.
+
+Creation requires current explicit source selection, operator name/content and
+a deliberately started intent. The intent is retained before the command and
+disabled before its single dispatch. Failures preserve the in-memory creation
+draft. A confirmed matching native Candidate ID opens ordinary Display/edit/
+decision work. Reopen source navigation reads `original_proposal` and its exact
+first `materialSelection`, independently of current editable evidence. The
+current metadata may be unavailable; old previews are cleared before each read.
+
+P2-03 HTTP and opt-in served-browser specifications are authored in
+`CandidateViewsSpec`; parent-owned execution and independent review remain
+pending. The controlled producer is logical fixture evidence, not a real Drive
+or source-version claim.

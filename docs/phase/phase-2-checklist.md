@@ -8,7 +8,9 @@ phase=phase-2.md
 
 This is the execution ledger for [TKW Phase 2](phase-2.md). Native Session
 `8e7f63e6e34ec5b0aefe9aff93509af9` closed P2-01 at `98adb364` after selected
-checks and independent review, then issued ImplementStep P2-02. Update an
+checks and independent review, then closed P2-02 at `b40de62c` after compile,
+48 tests across five suites including PostgreSQL, and independent review.
+ImplementStep P2-03 is active. Update an
 item only from actual accepted evidence, and retain failed attempts and limits.
 The [Phase index](README.md) owns navigation; the
 [implementation considerations](../notes/material-candidate-work-design.md)
@@ -38,29 +40,41 @@ Native local Step commit: `98adb364573893ab87e3f35309b75118d35b63e9`.
 ## P2-02 — Native Candidate creation and source lookup
 
 Stage Status:
-- Current status: IN_PROGRESS
+- Current status: CLOSED
 - Owner: TKW implementation and independent review owners
 - Update rule: Close from focused executable specifications and accepted review.
 
-- [ ] P2-02-A: Selected caller-authorized Material/resources produce one confirmed
+- [x] P2-02-A: Selected caller-authorized Material/resources produce one confirmed
   native Candidate through the bound contract, with logical correspondence
   retained across native store restart and same-intent lookup.
-- [ ] P2-02-B: Reading/searching/selecting alone creates no Candidate. Invalid,
+- [x] P2-02-B: Reading/searching/selecting alone creates no Candidate. Invalid,
   unauthorized or unresolved selections create no Candidate; an uncertain
   mutation outcome is reconciled by the existing exact source-key lookup.
-- [ ] P2-02-C: Sequential same-intent registration preserves the existing Candidate,
+- [x] P2-02-C: Sequential same-intent registration preserves the existing Candidate,
   original proposal and human edits; native conditional revisions continue to
   protect edits/decisions. No concurrent-registration guarantee is added.
-- [ ] P2-02-D: Run affected proposal/formation/MaterialWork/factory specifications,
+- [x] P2-02-D: Run affected proposal/formation/MaterialWork/factory specifications,
   including native PostgreSQL persistence for new stored correspondence;
   complete independent focused review of the connected change.
+
+Native local Step commit: `b40de62c19a34d50a45276445e57f42576355e40`.
 
 ## P2-03 — Workbench browser interaction
 
 Stage Status:
-- Current status: OPEN
+- Current status: IN_PROGRESS
 - Owner: TKW browser and independent review owners
 - Update rule: Close from actual served-browser observations and focused checks.
+
+Current boundary: compile passed; focused-browser ran 18 tests across two suites
+with two failures. Actual HTTP create returned 500 and browser lookup found no
+Candidate after one create attempt; no resend occurred. The same native Session
+issued a dependency-scope Human decision for common ingress collection handling
+in simplemodeling-lib. The user approved it; runtime retained that approval and
+admitted a six-file same-purpose inventory. Dependency source repair is authored
+on its dedicated branch; fresh checks and review remain pending. No P2-03 item
+is accepted. The test now preserves actual
+create failures before simulating response loss; this correction is unvalidated.
 
 - [ ] P2-03-A: Search -> select -> inspect -> safe original preview works through
   MaterialWork/TKL using the admitted caller and private binary-response policy.

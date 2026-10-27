@@ -1,5 +1,14 @@
 # Textus Knowledge Workbench
 
+Phase 2 Material-to-Candidate contract and native creation are accepted through
+P2-02 commit `b40de62c19a34d50a45276445e57f42576355e40` (native compile,
+48 tests in five suites including PostgreSQL, and independent review).
+P2-03 authors served Material search/inspection/private preview, explicit
+creation and exact-intent reconciliation into existing Candidate edit/decision
+work. Its runtime/browser validation and independent review remain pending.
+See the [view contract](docs/spec/candidate-workbench-views.md) and
+[Material-backed work contract](docs/spec/material-candidate-work-v1.md).
+
 Shared editing direction (2026-10-21): Workbench supplies common knowledge-work
 and Candidate operations to Editing Studio and other domain editors. It composes
 TKL's public Material APIs; TKL shares its ordinary access model with OpenClaw
