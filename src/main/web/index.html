@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Candidate Workbench</title>
+  <link rel="stylesheet" href="/web/knowledge-workbench/textus-knowledge-workbench/assets/candidate-workbench.css">
+  <script defer src="/web/knowledge-workbench/textus-knowledge-workbench/assets/candidate-workbench.js"></script>
+</head>
+<body>
+  <header><p class="eyebrow">TEXTUS KNOWLEDGE WORKBENCH</p><h1>Candidate Workbench</h1>
+    <p>資料の根拠を確認し、内容を整え、人の判断を記録します。</p></header>
+  <main>
+    <section class="connection" aria-label="接続">
+      <label>認証トークン（サーバーが要求する場合）<input id="token" type="password" autocomplete="off"></label>
+      <button id="load-list" type="button">一覧を読み込む</button>
+    </section>
+    <p id="status" role="status" aria-live="polite">一覧を読み込んでCandidateを選択してください。</p>
+    <div class="workspace">
+      <section aria-labelledby="list-title"><h2 id="list-title">Candidate一覧</h2><div id="list"></div></section>
+      <section aria-labelledby="detail-title"><div class="section-heading"><h2 id="detail-title">詳細と判断</h2>
+        <button id="reload" type="button" disabled>選択中を再読み込み</button></div>
+        <div id="detail"><p>Candidateを選択すると、根拠と編集内容を表示します。</p></div>
+        <form id="edit-form"><fieldset id="edit-fields" disabled><legend>内容と根拠の編集</legend>
+          <label>内容<textarea id="content" rows="5" required></textarea></label>
+          <label><input id="context-present" type="checkbox">文脈を設定する（空文字も保持）</label>
+          <label>文脈<textarea id="context" rows="3"></textarea></label>
+          <div id="references"></div>
+          <label>編集の理由<input id="edit-reason" required></label>
+          <button type="submit">編集内容を保存</button>
+        </fieldset></form>
+        <form id="decision-form"><fieldset id="decision-fields" disabled><legend>人の判断</legend>
+          <p>保存済みの内容と根拠を確認してから判断してください。未保存の編集は判断に含まれません。</p>
+          <label>判断<select id="decision"><option value="review">Review — レビューを開始</option>
+            <option value="approve">Approve — 確認した対象を承認</option><option value="hold">Hold — 保留</option>
+            <option value="reject">Reject — 却下</option></select></label>
+          <label>判断の理由<input id="decision-reason" required></label>
+          <button type="submit">判断を記録</button>
+        </fieldset></form>
+      </section>
+    </div>
+    <footer>根拠の取得状態は提供された情報を表示しています。原本への接続確認やInformationへの正式採用は、この画面の判断とは別の処理です。</footer>
+  </main>
+</body>
+</html>

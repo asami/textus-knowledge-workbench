@@ -17,7 +17,8 @@ and provider-neutral proposal registration with durable source-key lookup. Seque
 resend returns the current candidate without overwriting edits or original proposal
 metadata. Uses a stable standalone identity and the CNCF native persistent datastore.
 Human formation and explicit review decisions retain the exact evidence target.
-KnowledgeHub Admission and human-facing views remain separate Phase/Step work.
+Human-facing Workbench views expose available evidence and its limitations.
+KnowledgeHub Admission remains separate Phase 1.1 work.
 
 ### COMPONENTLET
 
@@ -895,3 +896,190 @@ MaterialRegistrationResult
 | hold | 3 | Hold |
 | reject | 4 | Reject |
 | edit | 5 | Edit |
+
+# LOGICAL-UI
+component = "KnowledgeWorkbench"
+producerId = "textus-knowledge-workbench"
+sourceId = "tkw.candidate-work.v1"
+sourceRevision = "phase-1-step4"
+
+## LIST
+screenId = "candidate-list"
+definitionRevision = "tkw-candidate-work-1"
+viewBindingId = "candidate.work"
+title = "Candidate Workbench"
+detailTarget = "candidate-detail"
+
+### ITEM-FIELDS
+
+#### FIELD
+id = "title"
+label = "Candidate"
+role = "title"
+bindingId = "read.title"
+allowedKinds = ["text"]
+
+#### FIELD
+id = "state"
+label = "Human state"
+role = "status"
+bindingId = "read.state"
+allowedKinds = ["text"]
+
+#### FIELD
+id = "source"
+label = "Proposal source"
+role = "content"
+bindingId = "read.source"
+allowedKinds = ["text", "missing"]
+
+#### FIELD
+id = "preparation"
+label = "Preparation"
+role = "content"
+bindingId = "read.preparation"
+allowedKinds = ["text", "missing"]
+
+#### FIELD
+id = "eligible"
+label = "Evidence ready for Review"
+role = "content"
+bindingId = "read.eligible"
+allowedKinds = ["boolean"]
+
+## DETAIL
+screenId = "candidate-detail"
+definitionRevision = "tkw-candidate-work-1"
+viewBindingId = "candidate.work"
+title = "Candidate work and review"
+
+### SECTIONS
+
+#### SECTION
+id = "work"
+
+##### FIELDS
+
+###### FIELD
+id = "title"
+label = "Candidate"
+role = "title"
+bindingId = "read.title"
+allowedKinds = ["text"]
+
+###### FIELD
+id = "state"
+label = "Human state"
+role = "status"
+bindingId = "read.state"
+allowedKinds = ["text"]
+
+###### FIELD
+id = "source"
+label = "Proposal source"
+role = "content"
+bindingId = "read.source"
+allowedKinds = ["text", "missing"]
+
+###### FIELD
+id = "preparation"
+label = "Preparation"
+role = "content"
+bindingId = "read.preparation"
+allowedKinds = ["text", "missing"]
+
+###### FIELD
+id = "eligible"
+label = "Evidence ready for Review"
+role = "content"
+bindingId = "read.eligible"
+allowedKinds = ["boolean"]
+
+###### FIELD
+id = "content"
+label = "Content"
+role = "content"
+bindingId = "read.content"
+allowedKinds = ["text", "missing"]
+
+###### FIELD
+id = "context"
+label = "Context"
+role = "content"
+bindingId = "read.context"
+allowedKinds = ["text", "missing"]
+
+###### FIELD
+id = "approved"
+label = "Current target approved"
+role = "content"
+bindingId = "read.approved"
+allowedKinds = ["boolean"]
+
+###### FIELD
+id = "evidence"
+label = "Evidence: version, availability and limitations"
+role = "content"
+bindingId = "read.evidence"
+allowedKinds = ["text"]
+
+###### FIELD
+id = "materials"
+label = "Prepared Material references"
+role = "content"
+bindingId = "read.materials"
+allowedKinds = ["text"]
+
+###### FIELD
+id = "run"
+label = "Source Run references"
+role = "content"
+bindingId = "read.run"
+allowedKinds = ["text"]
+
+###### FIELD
+id = "source-context"
+label = "Source context references"
+role = "content"
+bindingId = "read.source-context"
+allowedKinds = ["text"]
+
+###### FIELD
+id = "grounding"
+label = "Grounding references"
+role = "content"
+bindingId = "read.grounding"
+allowedKinds = ["text"]
+
+###### FIELD
+id = "mapping"
+label = "Mapping references"
+role = "content"
+bindingId = "read.mapping"
+allowedKinds = ["text"]
+
+###### FIELD
+id = "history"
+label = "Attributed decision history"
+role = "content"
+bindingId = "read.history"
+allowedKinds = ["text"]
+
+###### FIELD
+id = "target"
+label = "Exact approval target"
+role = "content"
+bindingId = "read.target"
+allowedKinds = ["text"]
+
+### ACTIONS
+
+#### ACTION
+id = "edit"
+label = "Save human edit"
+bindingId = "candidate.edit"
+
+#### ACTION
+id = "decide"
+label = "Record human decision"
+bindingId = "candidate.decide"

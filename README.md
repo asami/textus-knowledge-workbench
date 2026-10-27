@@ -190,14 +190,22 @@ keeps its evidence limitations. Capture confirmation is transfer only. Use the
 for registration, lookup, generated content-only edit and same-key resend examples.
 
 Phase 1 is in progress. STEP-2 proposal registration, lookup, sequential resend
-and fixed-code XShort persistence are accepted under its local Step binding. Human
-formation/approval, List/Detail/edit/review, comprehensive Phase review, successful
-bootstrap full SBT suite and final release remain pending. Real KnowledgeHub
+and fixed-code XShort persistence are accepted under its local Step binding.
+STEP-3/4 accept human formation/approval and List/Detail/edit/review. Comprehensive
+Phase review, successful bootstrap full SBT suite and final release remain pending. Real KnowledgeHub
 Admission belongs to [Phase 1.1](docs/phase/phase-1.1.md); TKL preparation,
 feedback and live provider adapters remain follow-on work.
 
-Candidate formation adds revision-aware `Candidate.getCandidateWork`,
+Accepted STEP-3 adds revision-aware `Candidate.getCandidateWork`,
 `editCandidateWork` and `decideCandidateWork` operations. Explicit human decisions
 retain their exact evidence target and native actor/time; target changes require
 renewed review. See the [formation contract](docs/spec/candidate-formation-and-review.md).
-This source addition does not itself close STEP-3 or Phase 1.
+Its local acceptance binding is `tkw-step3-acceptance-20261027-01@1`.
+
+Accepted STEP-4 adds the same-origin Candidate Workbench entry at
+`/web/knowledge-workbench/textus-knowledge-workbench`, backed by generated native
+Display List/Detail and the existing conditional human edit/decision operations.
+See the [view contract](docs/spec/candidate-workbench-views.md) and packaged
+user guide for operation and failure reconciliation. Step acceptance and Phase
+closure remain governed by the execution checklist. STEP-4's local binding is
+`tkw-step4-acceptance-20261027-01@1`; Phase closure remains pending.

@@ -44,7 +44,7 @@ abstract class KnowledgeWorkbenchParticipantFactoryBase extends KnowledgeWorkben
   override val entity: KnowledgeWorkbenchComponent.EntityServiceFactory = DefaultEntityServiceFactory()
 }
 
-final class KnowledgeWorkbenchPrimaryComponent extends KnowledgeWorkbenchComponent {
+final class KnowledgeWorkbenchPrimaryComponent extends KnowledgeWorkbenchComponent with CandidateDisplayRuntime {
   override def componentDescriptors: Vector[org.goldenport.cncf.component.ComponentDescriptor] =
     super.componentDescriptors.map { descriptor =>
       descriptor.copy(entityRuntimeDescriptors = descriptor.entityRuntimeDescriptors.map { declaration =>

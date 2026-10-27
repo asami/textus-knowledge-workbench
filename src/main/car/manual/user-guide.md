@@ -277,7 +277,8 @@ local commit `70620d1aeaae4a3859df93d6ff6948bdcff5742c`. Parent record
 registration/lookup, sequential resend and fixed-code XShort persistence are
 accepted under local binding `tkw-step2-connected-acceptance-commit-20261019-01@1`.
 STEP-3 human Candidate work is accepted under local binding
-`tkw-step3-acceptance-20261027-01@1`. Phase 1 retains views, comprehensive
+`tkw-step3-acceptance-20261027-01@1`. STEP-4 views are accepted under
+`tkw-step4-acceptance-20261027-01@1`. Phase 1 retains comprehensive
 Phase review and its final successful bootstrap full SBT suite/closure/release.
 Actual KnowledgeHub Admission belongs to Phase 1.1.
 
@@ -296,5 +297,47 @@ call the same operation with `decision=approve` only for that reviewed target.
 `hold` records a reason without fabricating missing evidence. `reject` requires
 an explicit subsequent edit to reopen. Every target-changing edit requires
 renewed Review; uncertain responses should be reconciled by reading current
-work rather than blindly resending a decision. STEP-4 supplies human-facing
-views; Phase 1.1 owns actual canonical Information Admission.
+work rather than blindly resending a decision. STEP-4 supplies the human-facing
+views described below; Phase 1.1 owns actual canonical Information Admission.
+
+## Candidate Workbench screen
+
+Use a prepared Workbench runtime and its existing assembly/instance settings,
+including a stable current-user identity and the intended persistent datastore.
+Start it with the documented `scripts/run-server.sh` procedure, then open
+`/web/knowledge-workbench/textus-knowledge-workbench` on that same server.
+No Candidate is created automatically: register the selected proposal through
+the documented registration operation first. Both prepared TKL and unprepared
+Studio submissions use this screen; no Drive connection is required to inspect
+their supplied evidence references.
+
+If the server requires bearer authentication, enter an operator-provided token
+in the connection field. It stays in page memory; there is no browser credential
+storage. The assembly's authentication/authorization policy is not bypassed by
+this field. Use the configured server identity in local fixed-user operation.
+
+1. Choose **一覧を読み込む**, then **選択** on a Candidate.
+2. Inspect content, preparation, evidence version/snapshot, retrieval state and
+   limitations. Unprepared or unknown facts stay explicit; no availability is
+   invented and selecting a row never approves it.
+3. Edit content and reference entries and provide an edit reason. The context
+   presence checkbox preserves the difference between an absent value and an
+   intentionally present empty string. **編集内容を保存** sends one conditional
+   edit using the observed native revision.
+4. After the confirmed edit and explicit reload, inspect the stored target.
+   Select Review and provide a reason, then choose **判断を記録**. Inspect the
+   reloaded target before a separate explicit Approve. Hold and Reject are
+   also explicit decisions; evidence must be ready before Review/Approve.
+5. A target-changing edit invalidates approval. Rejected work needs an explicit
+   edit to reopen. Switching or reloading an edited draft asks before discarding
+   it; a decision never silently incorporates unsaved edits.
+
+On a conflict, denied request or unknown response, do not repeat the command.
+Choose **選択中を再読み込み** and reconcile the current stored state. If the
+mutation was acknowledged but its subsequent reload failed, the success remains
+acknowledged and no retry is performed. Further writes remain disabled until
+a successful explicit reconciliation read.
+
+Phase 1.1 owns formal Information Admission; this human Candidate decision does
+not perform that operation. Historical unmanaged databases still require their
+own migration decision. Full Phase validation and closure remain separate gates.

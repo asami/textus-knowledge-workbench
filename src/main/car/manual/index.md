@@ -249,10 +249,10 @@ DESCRIPTION prose projects into Cozy metadata. Web/manual/OpenAPI/MCP routes
 have not been verified by these CLI checks. Starter operations remain outside
 MCP publication; the factory creates only the primary participant.
 
-Phase 1 remains in progress. The STEP-2 contract covers proposal
-registration/lookup/resend and its executable specifications. Evidence-aware editing/grounding/review,
-approve/hold/reject, approval-target invalidation and List/Detail/edit/review
-views remain later Phase 1 work. Real KnowledgeHub Admission belongs to Phase
+Phase 1 remains in progress. STEP-2 owns proposal registration/lookup/resend;
+STEP-3 owns evidence-aware formation and explicit human decisions. STEP-4 adds
+the Workbench List/Detail/edit/review application described below. Acceptance
+and final Phase validation remain recorded by the execution checklist. Real KnowledgeHub Admission belongs to Phase
 1.1. TKL preparation, feedback and live provider adapters are follow-on work.
 
 ## Candidate formation and human decisions
@@ -280,3 +280,20 @@ Admission or claim actual provider availability from supplied reference metadata
 
 See the repository specification `docs/spec/candidate-formation-and-review.md`
 for the complete transition table and representation boundaries.
+
+## Candidate Workbench application
+
+The same-origin entry is `/web/knowledge-workbench/textus-knowledge-workbench`.
+Its generated `candidate-list` and `candidate-detail` displays share
+`resourceType=information-candidate` through ordinary `display.query` and
+`display.read`. `display.describeBusiness` maps the two human actions to
+`Candidate.editCandidateWork` and `Candidate.decideCandidateWork`. Native
+authorization and conditional revision updates remain authoritative.
+
+Detail retains supplied evidence availability/version/snapshot/retention and
+limitations, Material/Run/context references, grounding/mapping and attributed
+decision targets. These are declared facts, not a provider access guarantee.
+The editor preserves missing versus present-empty context explicitly. Its narrow
+native Candidate Record adapter does not alter the separate Display wire format.
+See the user guide's Candidate Workbench screen procedure for the first-success
+workflow and reconciliation after a failed or unknown response.
