@@ -276,6 +276,25 @@ local commit `70620d1aeaae4a3859df93d6ff6948bdcff5742c`. Parent record
 `tkw-phase1-review-ledger-20261002@4` close STEP-1/S1-A only. STEP-2 proposal
 registration/lookup, sequential resend and fixed-code XShort persistence are
 accepted under local binding `tkw-step2-connected-acceptance-commit-20261019-01@1`.
-Phase 1 retains human lifecycle work, views, comprehensive
+STEP-3 human Candidate work is accepted under local binding
+`tkw-step3-acceptance-20261027-01@1`. Phase 1 retains views, comprehensive
 Phase review and its final successful bootstrap full SBT suite/closure/release.
 Actual KnowledgeHub Admission belongs to Phase 1.1.
+
+## Human Candidate work
+
+After proposal registration, call `KnowledgeWorkbench.Candidate.getCandidateWork`
+with the returned Candidate `id`. Keep the result's native `revision`.
+Use `editCandidateWork` to submit the complete corrected content/context and
+evidence/grounding/mapping arrays with that `expectedRevision` and a reason.
+No source proposal or capture confirmation is interpreted as human approval.
+
+When required references actually have known available versions or snapshots,
+record those explicit associations, then call `decideCandidateWork` with
+`decision=review`. Inspect the returned target and revision, and explicitly
+call the same operation with `decision=approve` only for that reviewed target.
+`hold` records a reason without fabricating missing evidence. `reject` requires
+an explicit subsequent edit to reopen. Every target-changing edit requires
+renewed Review; uncertain responses should be reconciled by reading current
+work rather than blindly resending a decision. STEP-4 supplies human-facing
+views; Phase 1.1 owns actual canonical Information Admission.

@@ -11,7 +11,7 @@ import org.goldenport.record.Record
 
 /*
  * @since   Oct.  3, 2026
- * @version Oct. 21, 2026
+ * @version Oct. 27, 2026
  */
 final class ComponentFactory extends Component.BundleFactory {
   def primaryFactory: Component.PrimaryComponentFactory =
@@ -45,6 +45,15 @@ abstract class KnowledgeWorkbenchParticipantFactoryBase extends KnowledgeWorkben
 }
 
 final class KnowledgeWorkbenchPrimaryComponent extends KnowledgeWorkbenchComponent {
+  override def componentDescriptors: Vector[org.goldenport.cncf.component.ComponentDescriptor] =
+    super.componentDescriptors.map { descriptor =>
+      descriptor.copy(entityRuntimeDescriptors = descriptor.entityRuntimeDescriptors.map { declaration =>
+        if (declaration.collectionId == org.simplemodeling.textus.knowledgeworkbench.entity.InformationCandidate.collectionId)
+          declaration.copy(revisionRepresentation = Some(org.goldenport.cncf.entity.EntityRevisionRepresentation.Detached))
+        else declaration
+      })
+    }
+
   override def mcpReadyServices: Set[String] =
     Set.empty
 }
@@ -63,6 +72,21 @@ object KnowledgeWorkbenchPrimaryFactory extends KnowledgeWorkbenchParticipantFac
 final class DefaultCandidateServiceFactory extends KnowledgeWorkbenchComponent.CandidateServiceFactory {
   import KnowledgeWorkbenchComponent.CandidateService.*
   import DefaultCandidateServiceFactory.*
+
+  override def createGetCandidateWorkActionCall(
+    core: org.goldenport.cncf.action.ActionCall.Core,
+    action: CandidateWorkSelection
+  ): GetCandidateWorkActionCall = CandidateWorkActions.get(core, action)
+
+  override def createEditCandidateWorkActionCall(
+    core: org.goldenport.cncf.action.ActionCall.Core,
+    action: CandidateWorkEdit
+  ): EditCandidateWorkActionCall = CandidateWorkActions.edit(core, action)
+
+  override def createDecideCandidateWorkActionCall(
+    core: org.goldenport.cncf.action.ActionCall.Core,
+    action: CandidateWorkDecision
+  ): DecideCandidateWorkActionCall = CandidateWorkActions.decide(core, action)
 
   override def createRegisterCandidateActionCall(
     core: org.goldenport.cncf.action.ActionCall.Core,

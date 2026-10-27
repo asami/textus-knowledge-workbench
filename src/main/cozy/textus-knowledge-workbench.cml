@@ -16,7 +16,8 @@ Forms Information Candidates for human work. Supports starter registration/searc
 and provider-neutral proposal registration with durable source-key lookup. Sequential
 resend returns the current candidate without overwriting edits or original proposal
 metadata. Uses a stable standalone identity and the CNCF native persistent datastore.
-Human formation, review and approval belong to subsequent Phase 1 Steps.
+Human formation and explicit review decisions retain the exact evidence target.
+KnowledgeHub Admission and human-facing views remain separate Phase/Step work.
 
 ### COMPONENTLET
 
@@ -132,6 +133,66 @@ FindCandidateByProposal
 
 ###### TYPE
 FindCandidateByProposalResult
+
+#### getCandidateWork
+
+##### DESCRIPTION
+
+Reads the accessible native Candidate, revision, target, history and effective review state.
+
+##### TYPE
+
+QUERY
+
+##### INPUT
+
+###### TYPE
+CandidateWorkSelection
+
+##### OUTPUT
+
+###### TYPE
+CandidateWorkResult
+
+#### editCandidateWork
+
+##### DESCRIPTION
+
+Applies an explicit human work command using the observed native Entity revision; retains exact source and attributed decision history.
+
+##### TYPE
+
+COMMAND
+
+##### INPUT
+
+###### TYPE
+CandidateWorkEdit
+
+##### OUTPUT
+
+###### TYPE
+CandidateWorkResult
+
+#### decideCandidateWork
+
+##### DESCRIPTION
+
+Applies an explicit human work command using the observed native Entity revision; retains exact source and attributed decision history.
+
+##### TYPE
+
+COMMAND
+
+##### INPUT
+
+###### TYPE
+CandidateWorkDecision
+
+##### OUTPUT
+
+###### TYPE
+CandidateWorkResult
 
 #### listCandidates
 
@@ -502,6 +563,9 @@ MaterialRegistrationResult
 | preparedMaterialRefs | ProposalReference | * |
 | sourceRunRef | ProposalReference | ? |
 | sourceContextRef | ProposalReference | ? |
+| groundingRefs | ProposalReference | * |
+| mappingRefs | ProposalReference | * |
+| decisions | CandidateReviewDecision | * |
 
 # VALUE
 
@@ -675,6 +739,86 @@ MaterialRegistrationResult
 | state          | string | 1            |
 | materialRef    | string | 1            |
 
+## CandidateWorkSelection
+
+- input-kind :: QUERY
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| id | entityid | 1 |
+
+## CandidateWorkEdit
+
+- input-kind :: COMMAND
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| id | entityid | 1 |
+| expectedRevision | long | 1 |
+| content | CandidateContent | 1 |
+| context | CandidateContext | ? |
+| evidenceRefs | ProposalReference | * |
+| groundingRefs | ProposalReference | * |
+| mappingRefs | ProposalReference | * |
+| reason | CandidateDecisionReason | 1 |
+
+## CandidateWorkDecision
+
+- input-kind :: COMMAND
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| id | entityid | 1 |
+| expectedRevision | long | 1 |
+| decision | CandidateDecisionKind | 1 |
+| reason | CandidateDecisionReason | 1 |
+
+## CandidateApprovalTarget
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| content | CandidateContent | 1 |
+| context | CandidateContext | ? |
+| evidenceRefs | ProposalReference | * |
+| preparedMaterialRefs | ProposalReference | * |
+| sourceRunRef | ProposalReference | ? |
+| sourceContextRef | ProposalReference | ? |
+| groundingRefs | ProposalReference | * |
+| mappingRefs | ProposalReference | * |
+
+## CandidateReviewDecision
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| decision | CandidateDecisionKind | 1 |
+| actor | string | 1 |
+| occurredAt | string | 1 |
+| reason | CandidateDecisionReason | 1 |
+| target | CandidateApprovalTarget | 1 |
+
+## CandidateWorkResult
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| candidate | InformationCandidate | 1 |
+| revision | long | 1 |
+| state | string | 1 |
+| reviewEligible | boolean | 1 |
+| approvalValid | boolean | 1 |
+| target | CandidateApprovalTarget | ? |
+
 # DATATYPE
 
 ## ProposalProducerRef
@@ -725,6 +869,14 @@ MaterialRegistrationResult
 |------+------|--------------|------------|---------|
 | value | string | 1 | 0 |  |
 
+## CandidateDecisionReason
+
+### Attribute
+
+| name | type | multiplicity | min-length | pattern |
+|---|---|---|---|---|
+| value | string | 1 | 1 | (?s).*(?!(?!\x7f)\p{Cntrl})(?!\x20)..* |
+
 # POWERTYPE
 
 ## ProposalPreparationState
@@ -733,3 +885,13 @@ MaterialRegistrationResult
 |------|-------|-------|
 | prepared | 1 | Prepared |
 | unprepared | 2 | Unprepared |
+
+## CandidateDecisionKind
+
+| name | value | label |
+|---|---|---|
+| review | 1 | Review |
+| approve | 2 | Approve |
+| hold | 3 | Hold |
+| reject | 4 | Reject |
+| edit | 5 | Edit |

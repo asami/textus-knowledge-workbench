@@ -54,8 +54,7 @@ name: Research note
 ```
 
 The ID identifies the stored entity. A subsequent `listCandidates` call can
-return that same ID/name in a separate process. The starter exposes no separate
-lookup-by-ID operation.
+return that same ID/name in a separate process. Use `Candidate.getCandidateWork` for revision-aware work lookup by ID.
 
 ### listCandidates
 
@@ -255,3 +254,29 @@ registration/lookup/resend and its executable specifications. Evidence-aware edi
 approve/hold/reject, approval-target invalidation and List/Detail/edit/review
 views remain later Phase 1 work. Real KnowledgeHub Admission belongs to Phase
 1.1. TKL preparation, feedback and live provider adapters are follow-on work.
+
+## Candidate formation and human decisions
+
+`getCandidateWork(id)` returns the accessible native Candidate, its `revision`,
+effective `state`, `reviewEligible`, `approvalValid` and optional exact `target`.
+`editCandidateWork` takes `id`, `expectedRevision`, nonblank `content`, optional
+`context`, complete `evidenceRefs`, `groundingRefs`, `mappingRefs`, and `reason`.
+The evidence array must be nonempty. Omitted context clears it; arrays replace
+the selected target associations. Source identity and the first proposal stay retained.
+
+`decideCandidateWork(id, expectedRevision, decision, reason)` accepts explicit
+`review`, `approve`, `hold` or `reject`. The `edit` history code is produced only
+by the edit operation and is rejected as a decision input. Actor/time come from
+the native execution context. Both commands use native conditional Entity updates.
+Read the returned revision before the next command; stale revisions fail without writes.
+
+Review requires declared available, versioned/snapshotted evidence; approval
+requires an unchanged Reviewing target. Hold may resume Review. Reject requires
+explicit Edit before renewed Review. Changes invalidate approval; restoring old
+text does not restore an old approval. An identical ordinary edit writes nothing.
+Complete decision history and exact targets persist across normal runtime restart.
+These operations do not retrieve evidence from a provider, grant KnowledgeHub
+Admission or claim actual provider availability from supplied reference metadata.
+
+See the repository specification `docs/spec/candidate-formation-and-review.md`
+for the complete transition table and representation boundaries.

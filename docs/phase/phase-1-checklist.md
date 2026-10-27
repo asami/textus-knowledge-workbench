@@ -17,7 +17,7 @@ history. Existing review/full-validation/release obligations remain unchanged.
 | --- | --- | --- | --- |
 | STEP-1 / S1-A | Runnable standard CAR foundation | accepted | commit `70620d1aeaae4a3859df93d6ff6948bdcff5742c`; clean generation/runtime preparation, four factory/assembly scenarios, CAR packaging/manual/help/lint, separate-process registration/list/search/paging with SQLite evidence, 16 normal/debug routing cases, mechanical checks and admitted independent/closure reviews |
 | STEP-2 / S2-A | Provider-neutral proposal fixtures, durable registration/lookup and sequential resend preserving human edits | accepted | frozen contract `tkw-phase1-step2-proposal-contract-20261003@1`; local acceptance binding `tkw-step2-connected-acceptance-commit-20261019-01@1`; connected fixed-code XShort contract, generated consumer verification and independent focused closure accepted |
-| STEP-3 | Evidence-aware formation, grounding, human decisions and approval-target invalidation | pending | pending |
+| STEP-3 | Evidence-aware formation, grounding, human decisions and approval-target invalidation | accepted | [formation contract](../spec/candidate-formation-and-review.md); local acceptance binding `tkw-step3-acceptance-20261027-01@1`; native Detached revision commands, focused regression and independent closure accepted |
 | STEP-4 | Available List/Detail/edit/review and both input fixtures | pending | pending |
 | Phase release | Comprehensive Phase review, closure ledger, successful bootstrap full SBT suite and validated local release commit | pending | pending |
 
@@ -51,7 +51,13 @@ Earlier failures and the unknown historical repair count remain retained
 in private evidence; no history or counter is reset. The nonblocking Hygiene
 items retain their separate owner journals.
 
-STEP-3, STEP-4 and Phase release remain pending. Neither Step acceptance closes
+STEP-3 authors the [formation and human decision specification](../spec/candidate-formation-and-review.md).
+Its [decision record](../journal/2026/10/2026-10-27-phase-1-step3-candidate-formation.md)
+retains the native revision boundary and later owners. Source edits, decisions,
+exact approval targets and original proposal preservation share the native
+persistent Candidate; no separate approval store is introduced.
+
+STEP-4 and Phase release remain pending. No Step acceptance closes
 the Phase or satisfies its later comprehensive review and successful bootstrap
 full SBT suite/release obligations.
 

@@ -26,10 +26,11 @@ persistence.
 
 The canonical authored ABI source is `src/main/car/abi-manifest.json`, in
 `cozy.car.abi-manifest.v2` format with `abi.version=1`. It declares the component
-coordinate, Candidate service, four operations, eleven value types, six nominal
-DATATYPEs, the `ProposalPreparationState` POWERTYPE and the
-InformationCandidate entity with their complete fields, plus an empty
-dependency list. Later CML surface or component-coordinate changes must update
+coordinate, Candidate and MaterialWork services, thirteen operations (seven
+Candidate operations), thirty value types, seven nominal DATATYPEs, the
+`ProposalPreparationState` and `CandidateDecisionKind` POWERTYPEs and the
+InformationCandidate entity with their complete fields. Its KnowledgeLake
+dependency requires ABI range `[0.1.0,0.2.0)`. Later CML surface or component-coordinate changes must update
 the canonical ABI exports/version coherently and revalidate ordinary CAR
 packaging and runtime preparation.
 
@@ -194,3 +195,9 @@ formation/approval, List/Detail/edit/review, comprehensive Phase review, success
 bootstrap full SBT suite and final release remain pending. Real KnowledgeHub
 Admission belongs to [Phase 1.1](docs/phase/phase-1.1.md); TKL preparation,
 feedback and live provider adapters remain follow-on work.
+
+Candidate formation adds revision-aware `Candidate.getCandidateWork`,
+`editCandidateWork` and `decideCandidateWork` operations. Explicit human decisions
+retain their exact evidence target and native actor/time; target changes require
+renewed review. See the [formation contract](docs/spec/candidate-formation-and-review.md).
+This source addition does not itself close STEP-3 or Phase 1.

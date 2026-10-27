@@ -92,6 +92,27 @@
           "kind": "COMMAND",
           "input": "MaterialRegistrationMaterializeCommand",
           "output": "MaterialRegistrationResult"
+        },
+        {
+          "service": "Candidate",
+          "name": "getCandidateWork",
+          "kind": "QUERY",
+          "input": "CandidateWorkSelection",
+          "output": "CandidateWorkResult"
+        },
+        {
+          "service": "Candidate",
+          "name": "editCandidateWork",
+          "kind": "COMMAND",
+          "input": "CandidateWorkEdit",
+          "output": "CandidateWorkResult"
+        },
+        {
+          "service": "Candidate",
+          "name": "decideCandidateWork",
+          "kind": "COMMAND",
+          "input": "CandidateWorkDecision",
+          "output": "CandidateWorkResult"
         }
       ],
       "types": [
@@ -633,6 +654,251 @@
               "required": true
             }
           ]
+        },
+        {
+          "name": "CandidateWorkSelection",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "id",
+              "type": "entityid",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "CandidateWorkEdit",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "id",
+              "type": "entityid",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "expectedRevision",
+              "type": "long",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "CandidateContent",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "context",
+              "type": "CandidateContext",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "evidenceRefs",
+              "type": "ProposalReference",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "groundingRefs",
+              "type": "ProposalReference",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "mappingRefs",
+              "type": "ProposalReference",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "reason",
+              "type": "CandidateDecisionReason",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "CandidateWorkDecision",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "id",
+              "type": "entityid",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "expectedRevision",
+              "type": "long",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "decision",
+              "type": "CandidateDecisionKind",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "reason",
+              "type": "CandidateDecisionReason",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "CandidateApprovalTarget",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "content",
+              "type": "CandidateContent",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "context",
+              "type": "CandidateContext",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "evidenceRefs",
+              "type": "ProposalReference",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "preparedMaterialRefs",
+              "type": "ProposalReference",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "sourceRunRef",
+              "type": "ProposalReference",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "sourceContextRef",
+              "type": "ProposalReference",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "groundingRefs",
+              "type": "ProposalReference",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "mappingRefs",
+              "type": "ProposalReference",
+              "multiplicity": "*",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "CandidateReviewDecision",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "decision",
+              "type": "CandidateDecisionKind",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "actor",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "occurredAt",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "reason",
+              "type": "CandidateDecisionReason",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "target",
+              "type": "CandidateApprovalTarget",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "CandidateWorkResult",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "candidate",
+              "type": "InformationCandidate",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "revision",
+              "type": "long",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "state",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "reviewEligible",
+              "type": "boolean",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "approvalValid",
+              "type": "boolean",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "target",
+              "type": "CandidateApprovalTarget",
+              "multiplicity": "?",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "CandidateDecisionReason",
+          "kind": "datatype",
+          "fields": [
+            {
+              "name": "value",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "CandidateDecisionKind",
+          "kind": "powertype",
+          "fields": []
         }
       ],
       "entities": [
@@ -721,6 +987,24 @@
               "name": "sourceContextRef",
               "type": "ProposalReference",
               "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "groundingRefs",
+              "type": "ProposalReference",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "mappingRefs",
+              "type": "ProposalReference",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "decisions",
+              "type": "CandidateReviewDecision",
+              "multiplicity": "*",
               "required": false
             }
           ]
