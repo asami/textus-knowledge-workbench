@@ -322,3 +322,9 @@ Accepted phase phase-2.
 Evidence: 8e7f63e6e34ec5b0aefe9aff93509af9:ordered-local-completion@1
 Evidence: file:///Users/asami/src/Project2026/nict-editing-studio/.codex-workflow/checkouts/tkw-step3/target/sm-workflow/tasks/tkw-phase2-20261028/phase-review2-result.json
 Local record/commit closure is runtime-owned; later publication, return and synchronization outcomes are recorded separately.
+
+<!-- sm-workflow completion 963ef583fb3d4acdc16123c1d3032d13 phase phase-3 -->
+Accepted phase phase-3.
+Evidence: 963ef583fb3d4acdc16123c1d3032d13:ordered-validation:611:validation
+Evidence: file:///Users/asami/src/Project2026/nict-editing-studio/.codex-workflow/checkouts/tkw-phase3/target/sm-workflow/tasks/tkw-phase3-20261028/phase3-integrated-review-result.json
+Local record/commit closure is runtime-owned; later publication, return and synchronization outcomes are recorded separately.

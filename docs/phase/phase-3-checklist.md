@@ -144,3 +144,9 @@ ten decisions, with no automatic replay. TKL was controlled and the local Hub
 CAR was real. Current original-byte/source-version attestation and connected
 PostgreSQL restart remain P3-04; final full/integrated review/release remain Phase
 obligations. No P3-04 or Phase-closure acceptance is implied by this handoff.
+
+<!-- sm-workflow completion 963ef583fb3d4acdc16123c1d3032d13 phase phase-3 -->
+Accepted phase phase-3.
+Evidence: 963ef583fb3d4acdc16123c1d3032d13:ordered-validation:611:validation
+Evidence: file:///Users/asami/src/Project2026/nict-editing-studio/.codex-workflow/checkouts/tkw-phase3/target/sm-workflow/tasks/tkw-phase3-20261028/phase3-integrated-review-result.json
+Local record/commit closure is runtime-owned; later publication, return and synchronization outcomes are recorded separately.
