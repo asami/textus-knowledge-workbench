@@ -121,3 +121,9 @@ integrated gates.
 Producer: [TKL plan](../../../textus-knowledge-lake/docs/phase/material-access-and-processing-plan.md).
 Consumer: [Studio Phase 3](../../../../Project2026/nict-editing-studio/docs/phase/phase-3.md).
 No implementation, acceptance, Goal restart or publication is performed by this plan.
+
+<!-- sm-workflow completion 8e7f63e6e34ec5b0aefe9aff93509af9 phase phase-2 -->
+Accepted phase phase-2.
+Evidence: 8e7f63e6e34ec5b0aefe9aff93509af9:ordered-local-completion@1
+Evidence: file:///Users/asami/src/Project2026/nict-editing-studio/.codex-workflow/checkouts/tkw-step3/target/sm-workflow/tasks/tkw-phase2-20261028/phase-review2-result.json
+Local record/commit closure is runtime-owned; later publication, return and synchronization outcomes are recorded separately.

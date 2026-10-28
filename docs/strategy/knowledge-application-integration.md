@@ -295,3 +295,9 @@ progress and the [migration plan](../journal/2026/10/2026-10-14-asamiair-migrati
 for the handoff and operational decisions. Dependencies use the declared common
 SNAPSHOT artifacts in Ivy local; the earlier dedicated-checkout plan is
 historical. No Phase 100/78 completion is claimed by this coordination update.
+
+<!-- sm-workflow completion 8e7f63e6e34ec5b0aefe9aff93509af9 phase phase-2 -->
+Accepted phase phase-2.
+Evidence: 8e7f63e6e34ec5b0aefe9aff93509af9:ordered-local-completion@1
+Evidence: file:///Users/asami/src/Project2026/nict-editing-studio/.codex-workflow/checkouts/tkw-step3/target/sm-workflow/tasks/tkw-phase2-20261028/phase-review2-result.json
+Local record/commit closure is runtime-owned; later publication, return and synchronization outcomes are recorded separately.
