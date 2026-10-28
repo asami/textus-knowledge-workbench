@@ -1,5 +1,26 @@
 # Shared editing applications and TKL integration plan
 
+## Current delivery — TKW Phase 3 (2026-10-28)
+
+[Phase 3](phase-3.md) continues accepted Material-backed Candidate work with genuine
+TKL source-version evidence, explicit Review/Approve and confirmed KnowledgeHub
+Information. Session `963ef583fb3d4acdc16123c1d3032d13` issued P3-01. The
+[Phase 3 checklist](phase-3-checklist.md) owns progress; its items are not yet accepted.
+
+Phase 2 is complete at `7c320293`, with same-owner completion-record commit
+`a530dd82`; its implementation and prior checks/review/synchronization remain
+retained. Earlier dated progress text below is historical and does not reopen
+that Phase. Studio Phase1.2/full Studio K04 remain separately held.
+
+The current TKL public metadata projection omits source revision/snapshot.
+CNCF FileStoreMetadata already exposes an optional observed provider version,
+which is explicitly not a promise of version-pinned reads. P3-01 requests
+TKL-owned public evidence/read correspondence through native dependency-scope
+admission. Workbench does not invent version facts, bypass the human gate or
+add a provider adapter. New upstream source edits, main/push/publication and
+real Drive creation/materialize replay are not part of this initial authoring.
+
+
 status=planned
 planned_at=2026-10-21
 spec=../spec/knowledge-editing-component-boundary.md
