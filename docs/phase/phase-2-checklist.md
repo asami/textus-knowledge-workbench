@@ -10,7 +10,8 @@ This is the execution ledger for [TKW Phase 2](phase-2.md). Native Session
 `8e7f63e6e34ec5b0aefe9aff93509af9` closed P2-01 at `98adb364` after selected
 checks and independent review, then closed P2-02 at `b40de62c` after compile,
 48 tests across five suites including PostgreSQL, and independent review.
-ImplementStep P2-03 is active. Update an
+P2-03 closed at `f0949753` after successful checks and independent review.
+ImplementStep P2-04 is active. Update an
 item only from actual accepted evidence, and retain failed attempts and limits.
 The [Phase index](README.md) owns navigation; the
 [implementation considerations](../notes/material-candidate-work-design.md)
@@ -62,38 +63,38 @@ Native local Step commit: `b40de62c19a34d50a45276445e57f42576355e40`.
 ## P2-03 — Workbench browser interaction
 
 Stage Status:
-- Current status: IN_PROGRESS
+- Current status: CLOSED
 - Owner: TKW browser and independent review owners
 - Update rule: Close from actual served-browser observations and focused checks.
 
-Current boundary: compile passed; focused-browser ran 18 tests across two suites
-with two failures. Actual HTTP create returned 500 and browser lookup found no
-Candidate after one create attempt; no resend occurred. The same native Session
-issued a dependency-scope Human decision for common ingress collection handling
-in simplemodeling-lib. The user approved it; runtime retained that approval and
-admitted a six-file same-purpose inventory. Dependency source repair is authored
-on its dedicated branch; fresh checks and review remain pending. No P2-03 item
-is accepted. The test now preserves actual
-create failures before simulating response loss; this correction is unvalidated.
+Accepted source revision `484`: primary compile and 18 tests across two suites
+passed; the admitted dependency passed compile and 59 tests across five suites.
+Independent review accepted both candidates without blockers, resolving issue-3/4.
+Native Step commit: `f0949753f5b39d4a59ba6b3da905e9ce2b840cde`.
 
-- [ ] P2-03-A: Search -> select -> inspect -> safe original preview works through
+Earlier HTTP/collection and dependency test-compilation failures remain in Session
+history. The browser used a controlled logical Material producer and separate
+controlled ready evidence. Actual cloud original inspection and its persisted
+Candidate remain P2-04 obligations; no real-source approval is claimed.
+
+- [x] P2-03-A: Search -> select -> inspect -> safe original preview works through
   MaterialWork/TKL using the admitted caller and private binary-response policy.
-- [ ] P2-03-B: An explicit create action opens the confirmed Candidate; subsequent
+- [x] P2-03-B: An explicit create action opens the confirmed Candidate; subsequent
   editing/source navigation returns to the same ID and observed revision.
-- [ ] P2-03-C: Unsaved editing, empty results, missing/denied originals, conflicts and
+- [x] P2-03-C: Unsaved editing, empty results, missing/denied originals, conflicts and
   uncertain commands have truthful UI outcomes; no automatic mutation replay
   or stale successful selection is displayed.
-- [ ] P2-03-D: Inspect real-source evidence and record Edit/Hold. Review/Approve remain
+- [x] P2-03-D: Inspect real-source evidence and record Edit/Hold. Review/Approve remain
   unavailable where evidence readiness is insufficient; verify unchanged-target
   decisions and edit-driven approval invalidation with valid controlled evidence.
   No Information admission action is needed to complete this delivery.
-- [ ] P2-03-E: Complete focused browser/HTTP specifications and independent review;
+- [x] P2-03-E: Complete focused browser/HTTP specifications and independent review;
   retain the existing native Display and Business Operation boundaries.
 
 ## P2-04 — Connected acceptance and handoff
 
 Stage Status:
-- Current status: OPEN
+- Current status: IN_PROGRESS
 - Owner: TKW connected acceptance owner
 - Update rule: Close only from all connected evidence and final checks below.
 

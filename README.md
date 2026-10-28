@@ -3,9 +3,23 @@
 Phase 2 Material-to-Candidate contract and native creation are accepted through
 P2-02 commit `b40de62c19a34d50a45276445e57f42576355e40` (native compile,
 48 tests in five suites including PostgreSQL, and independent review).
-P2-03 authors served Material search/inspection/private preview, explicit
+P2-03 accepted served Material search/inspection/private preview, explicit
 creation and exact-intent reconciliation into existing Candidate edit/decision
-work. Its runtime/browser validation and independent review remain pending.
+work at `f0949753f5b39d4a59ba6b3da905e9ce2b840cde`.
+P2-04 authors a second neutral consumer with PostgreSQL restart and an opt-in
+existing-real-Material browser scenario in `MaterialCandidateIntegrationSpec`.
+Its connected execution and independent review remain pending; normal tests
+require no real credentials or external browser. The opt-in browser fixture writes
+an owner-only `target/material-candidate-real-browser-ready.json`; enter its random
+disposable `testToken` in `#token` before following the existing twelve-minute
+procedure. Native and HTTP clients use the same ordinary provider-authenticated
+fixture service caller under the standalone Fixed profile. The real opt-in case
+uses the existing read-only connection's admitted `editing-studio-mobile-development`
+caller; ordinary controlled-only runs use `material-candidate-integration-user`.
+The connection ACL and scope are unchanged. Recorded decisions attribute the
+actual selected caller; this does not establish
+real end-user OAuth. No Google token or service-account key enters the ready file.
+Full Studio K04 remains held.
 See the [view contract](docs/spec/candidate-workbench-views.md) and
 [Material-backed work contract](docs/spec/material-candidate-work-v1.md).
 

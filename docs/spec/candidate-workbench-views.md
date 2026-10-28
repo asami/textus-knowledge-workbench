@@ -97,8 +97,39 @@ invalidates approval with an edit. Completion is explicit at
 `/__fixture_complete`; the test checks actual persisted identity/history/source.
 Normal full-suite execution needs no external browser. The historical Phase 1
 probe has its own `textus.test.legacy-browser-probe=true` opt-in.
-P2-03 execution and independent review remain pending. P2-04 owns existing real
-source evidence; the controlled PNG producer does not establish that acceptance.
+P2-03 was accepted at `f0949753f5b39d4a59ba6b3da905e9ce2b840cde`.
+P2-04 owns existing real source evidence; the controlled PNG producer does not
+establish that acceptance.
+
+`MaterialCandidateIntegrationSpec` adds a separate opt-in actual TKL browser
+scenario, enabled by `textus.test.real-material-browser=true` and explicit private
+selection/read-only connection locators. Its owner-only ready file
+`target/material-candidate-real-browser-ready.json` contains public selectors,
+coordination instructions and a random disposable `testToken`. Enter that token
+in `#token` before the first browser request. The fixture installs a test-only
+AuthenticationProvider through the ordinary component/subsystem descriptor
+binding, preserving the existing component bindings, configuration and security.
+Native clients use IngressSecurityResolver and child-context execution; HTTP and
+browser clients send the same bearer. The real opt-in case uses the existing
+read-only connection's admitted service caller `editing-studio-mobile-development`;
+ordinary controlled-only runs use `material-candidate-integration-user`. Both use
+the standalone Fixed ingress profile. The connection ACL and Drive scope remain
+unchanged. Decisions retain the actual selected fixture caller ID;
+this is not evidence of real end-user OAuth authentication. The actual TKL
+provider-authentication guard and package subject allowlist remain authoritative.
+Anonymous and incorrect-token inspection/original/create attempts must fail and
+leave the Candidate store empty before the admitted real-source reads begin.
+No original response is returned to those rejected callers. The ready file never
+contains a Google token, service-account key or connection contents.
+The runtime owns a loopback native Workbench server and disposable PostgreSQL
+Candidate store. The browser searches/inspects/previews the existing real JPEG,
+explicitly creates Candidate work, edits/Holds it, reloads and follows the first
+source association. Completion is explicit at `/__real_material_complete` within
+twelve minutes. The fixture then verifies native identity, human actor/history,
+actual revision and association across restart, plus complete original byte
+equality at native Bag and native HTTP boundaries. Real evidence stays unverified
+and cannot enable Review/Approve. No remote mutations or source versions are
+introduced. This authored case still requires parent-owned execution and review.
 
 Both TKL prepared and Studio unprepared fixtures follow the same native List,
 Detail, edit and explicit decision lifecycle. Verify unavailable evidence remains

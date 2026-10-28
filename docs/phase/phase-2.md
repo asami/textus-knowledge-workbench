@@ -35,7 +35,9 @@ P2-02 then passed compile and 48 tests across five selected suites, including
 actual PostgreSQL restart, revision and authorization cases. Independent review
 accepted its corrected candidate; native local Step commit
 `b40de62c19a34d50a45276445e57f42576355e40` closed P2-02. Ordinary Advance
-issued ImplementStep P2-03 for browser interaction. The Phase remains open.
+closed P2-03 at `f0949753f5b39d4a59ba6b3da905e9ce2b840cde` after selected
+browser/native and dependency checks plus independent review, then issued
+ImplementStep P2-04. The Phase remains open.
 
 ## Inputs and preserved acceptance
 

@@ -140,3 +140,75 @@ validation. Native dependency capture, prerequisite local publication, fresh
 Workbench/browser and dependency focused checks, and independent review remain
 pending. The existing input constraints, original-byte policy and final Phase
 full/review/release obligations are unchanged.
+
+## P2-03 acceptance and P2-04 continuation
+
+Source revision `484` passed primary compile and 18 tests across two suites,
+including the coordinated served browser; dependency compile and 59 tests across
+five suites also passed. Independent reviewer `/root/tkw_p2_p202_review` accepted
+both exact trees, resolving issue-3/4. Native local commit
+`f0949753f5b39d4a59ba6b3da905e9ce2b840cde` closed P2-03; ordinary Advance
+issued ImplementStep P2-04. All earlier failures and accepted history remain.
+
+The browser proved one native create with a masked successful response, explicit
+retained-intent reconciliation, same-ID edit/Hold, source-denial clearing,
+controlled ready-evidence Review/Approve, unchanged-target approval retention and
+edit-driven invalidation. Source navigation preserved unsaved edits and first
+Material association. Creation text was deliberately cleared before actual reload
+because the in-app browser canceled beforeunload; no discard-dialog acceptance
+is claimed. These fixture results do not establish P2-04 real-cloud acceptance.
+
+Two dependency Test compilation failures were corrected without relaxing data or
+expectations: JSON quote syntax and the existing `RecordDecoder().json` API.
+A primary-only diagnostic Manifest rejected dependency paths; dependency diagnosis
+was preserved separately. The first review Submit omitted prepared execution
+evidence and failed before acceptance; supplying the actual reviewer identity
+corrected caller input without replaying successful checks or review.
+
+The existing real Material package and comparison originals were located for
+P2-04. Private connection/path selections remain task-local. Live source access
+will be read-only, without new Drive objects or materialize replay. Final full
+validation, independent whole-Phase review and local release remain required.
+Studio Phase1.2 remains held; no main integration, push or external publication.
+
+## P2-04 first connected check and authenticated fixture repair
+
+Source revision `527` passed compile. The selected connected check ran 19 tests
+in three suites: 18 passed, including neutral-consumer PostgreSQL restart; the
+actual-TKL case failed at its first metadata inspection because the fixture's
+standalone local subject was not provider-authenticated. No original was fetched
+and the real browser was not started. The original failure remains issue-5;
+the native repair counter is 1 of 10.
+
+The parent saved the pre-edit authenticated-fixture diagnosis, bound to the
+retained stdout lines 27–40. The limited repair uses an ordinary test-only
+authentication provider and ingress resolution for direct, HTTP and browser
+calls. TKL's provider-authentication guard and package subject allowlist stay
+required. A disposable loopback token is separate from the existing service
+account credential. Native revalidation and independent review remain pending.
+
+Source revision `560` confirmed the auth repair and retained 18 passing tests,
+but actual TKL inspection then reported an unavailable Material catalog. The
+parent's initial configuration example used qualified global keys where the
+component requires its declared initialization parameters. The limited fixture
+repair puts unchanged values in the KnowledgeLake component binding and resolves
+the actual declaration object for a package-mode assertion. Source repair only;
+revalidation and independent review remain required. The original failed result
+and counter 2 of 10 remain preserved.
+
+Source revision `593` resolved package configuration, then the existing readonly
+connection rejected the new fixture caller. Sanitized connection metadata
+confirmed only `editing-studio-mobile-development` is admitted with Drive readonly
+scope. The opt-in real case now selects that existing caller instead of expanding
+ACLs; ordinary controlled-only runs retain their neutral fixture caller. Native
+verification and review remain pending, with counter 3 of 10 and all failures
+preserved. Connection, credentials, scope and remote data remain unchanged.
+
+Source revision `626` confirmed caller authorization and reached outbound HTTP,
+which correctly rejected the unconfigured fixture host. The real opt-in Cwd now
+supplies the accepted bounded HTTP plan through its normal private config file:
+KnowledgeLake only, two exact Google origins, GET/POST, 10s connect/20s read and
+8MiB response. Methods are Cartesian, not origin-specific; the unchanged Drive
+readonly scope is still required. No PUT or default-test outbound grant is added.
+The original policy rejection remains; repair count 4 of 10 is retained pending
+native validation and independent review.

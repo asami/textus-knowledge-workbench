@@ -17,7 +17,9 @@ Ready evidence and approval remain governed by the existing human-work contract.
 The P2-01 contract was accepted at native local commit `98adb364` after selected
 checks and independent review. P2-02 generated bindings and implementation
 closed at `b40de62c` after compile, 48 tests across five suites including real
-PostgreSQL, and independent review. P2-03 owns browser interaction; P2-04 still
+PostgreSQL, and independent review. P2-03 browser interaction closed at
+`f0949753` after selected browser/native and dependency checks plus independent
+review. P2-04 now
 owns current real-source evidence. This note supplies no new cloud execution proof.
 
 ## Confirmed starting point

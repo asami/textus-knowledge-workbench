@@ -2,7 +2,7 @@
 
 Owner: TKW Phase 2 / P2-01
 Contract date: 2026-10-28
-Status: contract accepted in P2-01; P2-02 accepted at `b40de62c19a34d50a45276445e57f42576355e40` after native compile, 48 tests in five suites including PostgreSQL, and independent review; P2-03 browser implementation authored, validation and acceptance pending
+Status: contract accepted in P2-01; P2-02 accepted at `b40de62c19a34d50a45276445e57f42576355e40` after native compile, 48 tests in five suites including PostgreSQL, and independent review; P2-03 accepted at `f0949753f5b39d4a59ba6b3da905e9ce2b840cde`; P2-04 connected specifications authored, execution and review pending
 
 ## Owning contracts
 
@@ -145,8 +145,8 @@ remain TKL-owned and unchanged.
 
 P2-02's accepted generated/action/native persistence work is recorded below;
 P2-03 supplies browser behavior and safe binary preview, and P2-04 supplies
-neutral-consumer and separate real-source evidence. P2-03/P2-04 execution,
-independent review and Phase closure remain pending.
+neutral-consumer and separate real-source evidence. P2-03 is accepted;
+P2-04 execution, independent review and Phase closure remain pending.
 
 ## P2-02 implementation mapping
 
@@ -183,7 +183,51 @@ decision work. Reopen source navigation reads `original_proposal` and its exact
 first `materialSelection`, independently of current editable evidence. The
 current metadata may be unavailable; old previews are cleared before each read.
 
-P2-03 HTTP and opt-in served-browser specifications are authored in
-`CandidateViewsSpec`; parent-owned execution and independent review remain
-pending. The controlled producer is logical fixture evidence, not a real Drive
-or source-version claim.
+P2-03 HTTP and served-browser work in `CandidateViewsSpec` was accepted at
+`f0949753f5b39d4a59ba6b3da905e9ce2b840cde`. Its controlled producer is logical
+fixture evidence, not a real Drive or source-version claim.
+
+## Connected consumer handoff
+
+`MaterialCandidateIntegrationSpec.TechnicalObservationConsumer` is a second,
+domain-neutral consumer of public MaterialWork/Candidate operations. Its normal
+PostgreSQL scenario creates a technical observation, edits/Holds it, restarts
+the runtime, then uses exact public proposal lookup and same-intent creation to
+recover current work without a Material producer. No Book, ISBN, Studio or
+provider input is required. Original association, human actor/history and native
+revision remain native Candidate facts.
+
+The separately enabled existing-real-Material scenario uses the actual TKL
+component and its owning package configuration with an existing read-only
+service-account connection locator. The selection file is noncredential source
+metadata; this consumer never reads the connection credential contents. Provider
+mapping exists only in disposable test assembly configuration under `target/`.
+It is never part of the product Workbench request, Candidate intent or browser
+ready payload. There is no materialization, remote create, mutation or retry.
+
+The fixture resolves its source selection against both the expected manifest
+asset and actual public TKL metadata, then passes the returned resourceId
+unchanged. It compares the complete typed native Bag and native HTTP original
+bytes with the independently captured local original before/after browser work
+and reads the original again after runtime restart. Comparisons use every byte,
+not hashes, textual encodings or preview thumbnails. The public original must
+retain JPEG MIME and private/no-store, nosniff, sandbox and attachment headers.
+
+The real browser workflow creates local persistent Candidate work, edits and
+Holds it under the explicitly selected test subject, reopens its first source,
+and leaves evidence unverified with no revision/snapshot. Its state must remain
+Held and ineligible for Review/Approve. P2-03's controlled ready-evidence
+Review/Approve/invalidation observations remain separate; no real-source approval
+is claimed. Full Editing Studio K04 integration remains separately held.
+
+Activation is `textus.test.real-material-browser=true` together with absolute
+`textus.test.real-material-selection` and `textus.test.drive-connection` locators
+and the existing `textus.test.knowledge-lake.repository` source locator. Parent
+runtime supplies those only to the focused connected check. The ready file is
+`target/material-candidate-real-browser-ready.json`; its public URL/selectors and
+procedure are emitted only after successful real metadata and complete native/
+HTTP byte reads. The loopback server waits at most twelve minutes for explicit
+`/__real_material_complete`. Normal tests require no real credentials/browser.
+The fixture closes native runtimes/server/container and removes its disposable
+configuration and ready file. Connected execution, independent Step review and
+final Phase gates remain pending; this source authoring is not acceptance.

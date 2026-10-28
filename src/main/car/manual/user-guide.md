@@ -431,5 +431,28 @@ up to twelve minutes for explicit `/__fixture_complete`. It uses a controlled
 public logical producer and valid PNG, deliberately loses the first committed
 creation acknowledgement, then checks native history after browser reconciliation,
 Edit/Hold, controlled readiness, Review/Approve and invalidation. Normal test
-execution needs no external browser. These are authored scenarios; runtime
-execution/review remains pending, and P2-04 owns real-source acceptance.
+execution needs no external browser. P2-03 was accepted at
+`f0949753f5b39d4a59ba6b3da905e9ce2b840cde`; its controlled source does not
+establish P2-04 real-source acceptance.
+
+For the separately authorized existing-real-Material browser specification,
+the runtime owner sets `textus.test.real-material-browser=true`,
+`textus.test.real-material-selection=<absolute private metadata JSON>` and
+`textus.test.drive-connection=<absolute existing read-only connection JSON>`.
+The existing `textus.test.knowledge-lake.repository` selects actual TKL source.
+Do not enable the P2-03 browser property for this separately coordinated case.
+The consumer never opens the credential JSON; TKL owns connection loading and
+read-only package access. No remote Material creation or materialization occurs.
+
+Read `target/material-candidate-real-browser-ready.json` during the active test.
+It contains the loopback URL, exact public Material/resource selectors and steps.
+Use the ordinary served UI to inspect/preview, explicitly create the specified
+local Candidate, edit to `Real source human observation`, record Hold, reload
+and revisit its original source. Keep context present-empty. Review/Approve must
+remain unavailable; do not supply invented version/snapshot fields. Signal
+`/__real_material_complete` when finished. The twelve-minute fixture then checks
+native restart/readback, exact first association, attributed Edit/Hold and full
+original bytes before/after work, and cleans up local test resources. These
+P2-04 connected specifications are authored; execution/review remains pending.
+Normal tests use controlled source and PostgreSQL without real credentials or
+an external browser. Full Editing Studio K04 integration remains separately held.
