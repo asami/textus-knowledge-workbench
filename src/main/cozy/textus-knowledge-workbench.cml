@@ -345,6 +345,39 @@ CommandAction
 
 RegisterProposalResult
 
+#### refreshCandidateMaterialEvidence
+
+##### TYPE
+
+COMMAND
+
+##### ACCESS
+
+###### POLICY
+
+authenticated_only
+
+##### DESCRIPTION
+
+Explicitly acquire and apply caller-authorized TKL evidence for the immutable first
+Material/resource selection. Validate native revision, reason and binding ownership
+before source access. Preserve human target and history; effective changes require
+new Review/Approve. Identical observations retain state and revision after a fresh
+native revision check. Detached human references conflict without source access.
+Use getCandidateWork to reconcile uncertain acknowledgements; never replay writes.
+
+##### INPUT
+
+###### TYPE
+
+RefreshCandidateMaterialEvidence
+
+##### OUTPUT
+
+###### TYPE
+
+CandidateWorkResult
+
 #### searchMaterials
 
 ##### TYPE
@@ -667,6 +700,7 @@ MaterialRegistrationResult
 | mappingRefs | ProposalReference | * |
 | decisions | CandidateReviewDecision | * |
 | admissions | CandidateAdmissionRecord | * |
+| materialEvidence | MaterialEvidenceBinding | ? |
 
 # VALUE
 
@@ -839,6 +873,47 @@ MaterialRegistrationResult
 | revision       | long   | 1            |
 | state          | string | 1            |
 | materialRef    | string | 1            |
+
+## RefreshCandidateMaterialEvidence
+
+- input-kind :: COMMAND
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| id | entityid | 1 |
+| expectedRevision | long | 1 |
+| reason | CandidateDecisionReason | 1 |
+
+## MaterialEvidenceBinding
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| materialRef | string | 1 |
+| resourceIds | string | * |
+| status | string | 1 |
+| applications | MaterialEvidenceApplication | * |
+
+## MaterialEvidenceApplication
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| resources | MaterialResourceEvidence | * |
+
+## MaterialResourceEvidence
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| resourceId | string | 1 |
+| appliedReference | ProposalReference | 1 |
+
 
 ## CandidateWorkSelection
 

@@ -10,19 +10,19 @@ supply acceptance; a planning draft or caller narrative supplies none.
 ## P3-01
 
 Stage Status:
-- Current status: IN_PROGRESS
+- Current status: CLOSED
 - Owner: TKW Phase3 owner
 - Update rule: Update only from this Step's actual native acceptance and evidence.
 
-- [ ] P3-01-A: Record actual public producer/consumer capabilities and settle evidence/selected-resource, retrieval, version and safe-disclosure semantics.
-- [ ] P3-01-B: Preserve unversioned compatibility; use actual producer revision/snapshot only, with no editor/provider identity substitution or invented version.
-- [ ] P3-01-C: Report and obtain the owning dependency-scope decision for genuinely missing TKL capability before upstream source edits; retain its actual acceptance and consumption requirements.
-- [ ] P3-01-D: Adopt consistent Phase/checklist/spec/notes; pass selected focused contract checks and independent review before the local Step commit.
+- [x] P3-01-A: Record actual public producer/consumer capabilities and settle evidence/selected-resource, retrieval, version and safe-disclosure semantics.
+- [x] P3-01-B: Preserve unversioned compatibility; use actual producer revision/snapshot only, with no editor/provider identity substitution or invented version.
+- [x] P3-01-C: Report and obtain the owning dependency-scope decision for genuinely missing TKL capability before upstream source edits; retain its actual acceptance and consumption requirements.
+- [x] P3-01-D: Adopt consistent Phase/checklist/spec/notes; pass selected focused contract checks and independent review before the local Step commit.
 
 ## P3-02
 
 Stage Status:
-- Current status: OPEN
+- Current status: IN_PROGRESS
 - Owner: TKW Phase3 owner
 - Update rule: Update only from this Step's actual native acceptance and evidence.
 
@@ -111,3 +111,14 @@ exclusion concerns only the nine task-owned local preparation allocations;
 product source checks and original records are preserved. No checklist item is
 accepted by this record. The same native focused checks and genuine independent
 review remain pending.
+
+## P3-01 acceptance and P3-02 handoff
+
+Ordinary native closure accepted P3-01 in local commit `ffed0eb` after the actual
+primary 32-test/four-suite and TKL 108-test/four-suite successes, both compile
+checks and genuine independent review. The producer checks included an actually
+started PostgreSQL 17.11 container. No test was ignored or acceptance relaxed.
+Earlier failed receipts, preparation attempts, UNKNOWN records and actual Human
+ReviseWork remain retained. This is Step acceptance, not Phase completion or live
+Google verification. P3-02 is the next issued ImplementStep; all its boxes remain
+unchecked. The runtime owns its new counter window; the P3-01 repair history stays.

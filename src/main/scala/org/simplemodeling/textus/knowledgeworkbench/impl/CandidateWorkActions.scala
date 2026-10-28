@@ -10,7 +10,7 @@ import org.simplemodeling.textus.knowledgeworkbench.{KnowledgeWorkbenchComponent
 
 /*
  * @since   Oct. 27, 2026
- * @version Oct. 27, 2026
+ * @version Oct. 28, 2026
  */
 private[impl] object CandidateWorkActions {
   import KnowledgeWorkbenchComponent.CandidateService.*
@@ -49,7 +49,7 @@ private[impl] object CandidateWorkActions {
         snapshot <- entity_load_detached[entity.InformationCandidate](input.id)
         changed <- exec_from(CandidateFormation.edit(snapshot, input, actor, current_instant))
         persisted <- changed match {
-          case Some(candidate) => entity_update_detached(candidate, snapshot.revision)
+          case Some(candidate) => entity_update_detached(MaterialEvidenceWork.detachOnHumanEdit(snapshot.entity, candidate), snapshot.revision)
           case None => exec_pure(snapshot)
         }
       } yield OperationResponse(CandidateFormation.result(persisted).toRecord())

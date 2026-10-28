@@ -49,7 +49,9 @@ final class KnowledgeWorkbenchPrimaryComponent extends KnowledgeWorkbenchCompone
     super.componentDescriptors.map { descriptor =>
       descriptor.copy(entityRuntimeDescriptors = descriptor.entityRuntimeDescriptors.map { declaration =>
         if (declaration.collectionId == org.simplemodeling.textus.knowledgeworkbench.entity.InformationCandidate.collectionId)
-          declaration.copy(revisionRepresentation = Some(org.goldenport.cncf.entity.EntityRevisionRepresentation.Detached))
+          declaration.copy(
+            revisionRepresentation = Some(org.goldenport.cncf.entity.EntityRevisionRepresentation.Detached),
+            concurrencyPolicy = Some(org.goldenport.cncf.entity.EntityConcurrencyPolicy.Optimistic))
         else declaration
       })
     }

@@ -22,6 +22,11 @@ private[knowledgeworkbench] final class MaterialWorkServiceFactory
     action: CreateCandidateFromMaterial
   ): CreateCandidateFromMaterialActionCall = MaterialCandidateWorkActions.create(core, action)
 
+  override def createRefreshCandidateMaterialEvidenceActionCall(
+    core: ActionCall.Core,
+    action: RefreshCandidateMaterialEvidence
+  ): RefreshCandidateMaterialEvidenceActionCall = MaterialEvidenceWorkActions.refresh(core, action)
+
   override def createSearchMaterialsActionCall(
     core: ActionCall.Core,
     action: MaterialSearchQuery

@@ -134,6 +134,13 @@
           "kind": "COMMAND",
           "input": "CreateCandidateFromMaterial",
           "output": "RegisterProposalResult"
+        },
+        {
+          "service": "MaterialWork",
+          "name": "refreshCandidateMaterialEvidence",
+          "kind": "COMMAND",
+          "input": "RefreshCandidateMaterialEvidence",
+          "output": "CandidateWorkResult"
         }
       ],
       "types": [
@@ -1046,6 +1053,90 @@
               "required": false
             }
           ]
+        },
+        {
+          "name": "RefreshCandidateMaterialEvidence",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "id",
+              "type": "entityid",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "expectedRevision",
+              "type": "long",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "reason",
+              "type": "CandidateDecisionReason",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "MaterialEvidenceBinding",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "materialRef",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "resourceIds",
+              "type": "string",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "applications",
+              "type": "MaterialEvidenceApplication",
+              "multiplicity": "*",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "MaterialEvidenceApplication",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "resources",
+              "type": "MaterialResourceEvidence",
+              "multiplicity": "*",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "MaterialResourceEvidence",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "resourceId",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "appliedReference",
+              "type": "ProposalReference",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
         }
       ],
       "entities": [
@@ -1158,6 +1249,12 @@
               "name": "admissions",
               "type": "CandidateAdmissionRecord",
               "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "materialEvidence",
+              "type": "MaterialEvidenceBinding",
+              "multiplicity": "?",
               "required": false
             }
           ]

@@ -48,6 +48,7 @@ final class MaterialCandidateWorkSpec extends AnyWordSpec with Matchers with Giv
         result.candidate.preparationState.map(_.value) shouldBe Some("unprepared")
         result.candidate.context.map(_.value) shouldBe Some("")
         result.candidate.preparedMaterialRefs shouldBe empty
+        result.candidate.materialEvidence shouldBe None
         val evidence = result.candidate.evidenceRefs.head
         evidence.id shouldBe materialRef
         evidence.retrievalState shouldBe Some("unverified")
@@ -59,6 +60,24 @@ final class MaterialCandidateWorkSpec extends AnyWordSpec with Matchers with Giv
         session.producer.calls.map(_.request.operation) shouldBe Vector("getMaterial")
         session.producer.calls.head.subject.subjectId shouldBe owner
         session.component.isMcpReady("MaterialWork", "createCandidateFromMaterial") shouldBe false
+      }
+    }
+
+    "keep managed Material evidence out of generic client proposal registration" in {
+      Given("a client proposal carrying an extra forged managed-binding field")
+      _with_session { session =>
+        val first = _result(session.execute("createCandidateFromMaterial", _fields("intent:managed-field")))
+        val original = parse(first.candidate.originalProposal.get.value).toOption.get
+        val supplied = original.deepMerge(io.circe.Json.obj(
+          "proposalId" -> io.circe.Json.fromString("intent:forged-managed-field"),
+          "materialEvidence" -> io.circe.Json.obj("materialRef" -> io.circe.Json.fromString(materialRef),
+            "resourceIds" -> io.circe.Json.arr(io.circe.Json.fromString(resourceId)),
+            "status" -> io.circe.Json.fromString("active"), "applications" -> io.circe.Json.arr())))
+        When("the ordinary public proposal registration parses known declared target fields")
+        val result = _result(session.execute("registerProposal", Vector("proposalJson" -> supplied.noSpaces), service = "Candidate"))
+        Then("extra client JSON is retained only in its first proposal and never becomes native managed provenance")
+        result.candidate.materialEvidence shouldBe None
+        result.candidate.evidenceRefs shouldBe first.candidate.evidenceRefs
       }
     }
 

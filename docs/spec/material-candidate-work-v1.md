@@ -251,3 +251,20 @@ ready-evidence approval receipt 484 remain separate. The first whole-Phase
 review returned documentation REPAIR (issue-6). This documentation correction
 awaits closing review and native closure/local release; it does not claim Phase
 completion.
+
+## Explicit source evidence application (Phase3 additive contract)
+
+Creation and same-intent resend retain the metadata-only unverified contract above.
+Creation never silently acquires observed versions. The separate normal business
+command `MaterialWork.refreshCandidateMaterialEvidence(id, expectedRevision, reason)`
+derives its source exclusively from immutable first selection and obtains the
+same caller's public TKL observation. It preserves human content and unrelated
+references and appends native source correspondence atomically with effective
+ordinary edit/history. It never auto-reviews or approves. Identical observations
+preserve revision/state after a fresh revision check; human-changed managed source
+references permanently detach and conflict before source access.
+
+See [Material evidence contract](material-evidence-review-v1.md) for exact optional
+native binding/application fields, ordering, collision handling, observation
+failures and reconciliation. No client version claim, editor-side provider adapter,
+new shadow store or new query is introduced.

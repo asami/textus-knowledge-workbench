@@ -97,3 +97,38 @@ not a content hash, source revision, snapshot or retrieval proof. No secret or
 raw/base64 physical resource key is disclosed. The provider revision stays its
 actual observed value, and the native evidence change invalidates approval in
 the ordinary way. No mapping registry or additional persistence is introduced.
+
+## P3-02 selected consumer design — 2026-10-28
+
+The earlier alternatives above remain the P3-01 exploration history. The accepted
+producer addition is ordered `evidenceResourceIds` / optional `observedEvidence`
+on existing TKL getMaterial. The consumer uses one separate normal business
+acquisition/application command: `refreshCandidateMaterialEvidence(id,
+expectedRevision, reason)`. Generic Edit is human-declared complete-target editing;
+server-owned original acquisition has different responsibilities and no client
+version/provider inputs. Existing getCandidateWork suffices for reconciliation.
+
+Optional native `materialEvidence` binds immutable Material/ordered selection to
+active/detached ownership and append-only effective resource/reference applications.
+A first binding consumes only the still-current exact original unverified singleton.
+Latest managed projection must remain exact and unambiguous; generic human changes
+persist detachment and refresh cannot resurrect it. All human/unrelated target
+fields survive. No-op source observations preserve Held/Rejected/Approved and use
+one fresh native revision load after observation; effective changes use normal
+attributed edit and the native conditional atomic update. Source-window concurrent
+human edits are an explicit existing native revision failure model, with no replay
+or new exclusion protocol. No extra guard write, hash-based management or side store
+is introduced.
+
+A producer-issued opaque identity distinguishes backing incarnation; it is not a
+source version. Source versions/observation limits remain TKL-owned. Existing Hub
+Admission carries exact approved references plus Candidate ID/revision; native
+binding/application history supplies detailed resource correspondence jointly.
+Extra Entity provenance is not copied into Hub. A self-contained Hub mapping
+would require separately admitted scope; P3-04 verifies the joint trace instead.
+
+Authored consumer executable coverage includes public caller/selection dispatch,
+true no-op states, effective approval invalidation, managed-reference detachment,
+collision/malformed/failure refusal, concurrent/no-op revision conflict, lost-ACK
+read reconciliation and actual PostgreSQL restart. Runtime checks, independent
+review, browser delivery and connected P3-04 evidence remain separate obligations.

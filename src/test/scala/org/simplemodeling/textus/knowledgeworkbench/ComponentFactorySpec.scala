@@ -22,7 +22,6 @@ import org.scalatest.wordspec.AnyWordSpec
 
 /*
  * @since   Oct.  3, 2026
- *  version Oct. 18, 2026
  * @version Oct. 28, 2026
  */
 final class ComponentFactorySpec extends AnyWordSpec with Matchers with GivenWhenThen {
@@ -49,7 +48,8 @@ final class ComponentFactorySpec extends AnyWordSpec with Matchers with GivenWhe
         bundle.primary.isPrimaryParticipant shouldBe true
         bundle.primary.operationDefinitions.map(_.name) should contain allOf (
           "registerCandidate",
-          "listCandidates"
+          "listCandidates",
+          "refreshCandidateMaterialEvidence"
         )
         bundle.participants shouldBe Vector(bundle.primary)
       } finally {
@@ -76,6 +76,7 @@ final class ComponentFactorySpec extends AnyWordSpec with Matchers with GivenWhe
         Then("neither starter operation is published through MCP")
         registerready shouldBe false
         listready shouldBe false
+        bundle.primary.isMcpReady("MaterialWork", "refreshCandidateMaterialEvidence") shouldBe false
       } finally {
         subsystem.shutdown()
       }

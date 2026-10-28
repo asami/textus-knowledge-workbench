@@ -57,7 +57,7 @@ revision without changing the reviewed target.
 | Any other transition | Review / Approve | State conflict; no write |
 
 Review eligibility requires content and at least one evidence reference, every
-required evidence reference declaring `retrievalState=available` and a revision
+evidence reference declaring `retrievalState=available` and a revision
 or snapshot reference. This is declared reference readiness, not proof of actual
 provider retrieval. Unknown, unavailable, expired or unverified evidence can be
 edited, held or rejected, but cannot be approved. Optional preparation/Run facts
@@ -80,3 +80,19 @@ changes outside the target do not redefine the reviewed target.
 - Sequential proposal resend preserves formation/history and first proposal.
 - Focused executable specifications include property-based target invalidation.
   STEP-4 views and Phase-wide full validation remain separate obligations.
+
+## Source-managed Material evidence (Phase3 additive contract)
+
+The explicit MaterialWork refresh command supplies TKL-observed resource evidence
+under the [Material evidence contract](material-evidence-review-v1.md). It records
+ordinary attributed `edit` history only for an effective evidence change, preserving
+content/context and unrelated references. Its identical-observation no-op is
+separate from generic Edit semantics: Held/Rejected are not reopened by a no-op
+source refresh, and a fresh native revision check follows source observation.
+
+Generic human Edit remains complete-target replacement and can reopen Held/Rejected.
+If it changes/removes/reorders/duplicates the current managed evidence projection,
+it atomically marks native `materialEvidence.status=detached`. Restoring earlier
+references does not reattach. Unrelated edits preserve active ownership. Approval
+and EVERY-evidence-reference eligibility remain unchanged; source acquisition itself
+performs none of Review, Approve or Admission.

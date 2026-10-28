@@ -473,3 +473,29 @@ receipt 484 are separate evidence. The first whole-Phase review requested
 current-document reconciliation. This documentation repair awaits closing review
 and native closure/local release; Phase completion is not claimed. Full Editing
 Studio Candidate integration/K04 remain separately held.
+
+## Explicit Material evidence refresh
+
+Use `MaterialWork.refreshCandidateMaterialEvidence` with the native Candidate `id`,
+its latest `expectedRevision` from `Candidate.getCandidateWork`, and a nonblank
+`reason`. No source selection, version, provider address or credential is accepted
+by this command. It reads the original selected resources through the same caller's
+TKL getMaterial contract. First creation and same-intent resend remain metadata-only.
+
+The returned `CandidateWorkResult` exposes optional native `candidate.materialEvidence`:
+exact Material/resource selection, active/detached status and ordered historical
+resource/reference applications. Effective changes preserve human content and unrelated
+references, append ordinary attributed edit history, invalidate approval and require
+separate Review/Approve. Identical observations preserve revision and state, including
+Held/Rejected. Generic human changes to managed references detach them permanently;
+refresh refuses detached work before source access. This contract provides no rebind.
+
+On failed or uncertain acknowledgement, read the same known Candidate ID with
+getCandidateWork; do not automatically resubmit refresh. Unknown/unversioned producer
+evidence remains unverified and cannot pass Review/Approve. Provider storage mapping
+and credentials remain private. KnowledgeHub receives exact approved references plus
+Candidate ID/revision; detailed per-resource correspondence stays in native Candidate
+history and is not copied into Hub. See the repository
+`docs/spec/material-evidence-review-v1.md` for the complete command and provenance
+contract. Native qualification/review and Phase3 browser/connected acceptance remain
+required; authored behavior is not an acceptance claim.

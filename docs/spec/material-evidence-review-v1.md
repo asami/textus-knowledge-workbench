@@ -1,8 +1,9 @@
 # Material evidence and human review requirements v1
 
-Owner: TKW Phase3 / P3-01. Status: consumer requirements authored; producer
-contract selection, dependency admission, implementation and independent
-acceptance remain pending. This document does not publish a new TKL Operation.
+Owner: TKW Phase3 / P3-01–P3-02. P3-01 contract acceptance is retained at
+`ffed0eba623e66ad8c853436158e494e75cf4c0c`. The P3-02 consumer implementation
+and executable specifications require native qualification and independent review.
+This document does not publish a new TKL Operation.
 
 ## Public ownership
 
@@ -91,6 +92,91 @@ The existing confirmed/unknown Information Admission contract remains unchanged:
 retain the approved target, canonical ID/revision and provenance, and reconcile
 known identity without automatic write replay. Generic declared reference
 readiness remains its existing contract, not cryptographic provider attestation.
+
+## Explicit application command
+
+`MaterialWork.refreshCandidateMaterialEvidence(id: EntityId,
+expectedRevision: Long, reason: CandidateDecisionReason) -> CandidateWorkResult`
+is an authenticated normal business command. Its responsibility is source-owned
+acquisition and application; `Candidate.editCandidateWork` remains a complete
+human-declared target edit. Clients provide no alternate selection, provider
+address, evidence identity, revision, snapshot, actor or timestamp. The existing
+`Candidate.getCandidateWork` is the read and uncertain-acknowledgement reconciliation
+operation; no additional query or test-only API is added.
+
+The command authenticates and loads the caller-authorized native Candidate,
+checks expected revision and nonblank reason, validates the original
+`workbench-material` producer/proposal identity and `tkl-material` source kind,
+and derives the exact ordered selection from immutable first
+`originalProposal.materialSelection`. This validation and binding-ownership
+checking precede TKL access. The same caller invokes TKL `Material.getMaterial`
+with precisely `materialRef` and `evidenceResourceIds`. Whole-selection failure,
+unknown or malformed acknowledgement, missing/duplicate/wrongly ordered resources,
+wrong logical identity or inconsistent revision/readiness fails without a Candidate
+write. Structured source Conclusions are retained; no acquisition or mutation is
+replayed automatically.
+
+Each producer observation becomes a `ProposalReference` with exact opaque
+`id=evidenceRef`, `kind=material-resource`, actual optional revision, retrieval
+state and limitation. `snapshotRef` and `retentionUntil` remain absent. Available
+requires its actual nonblank revision; unversioned observations stay unverified.
+All current evidence references still pass the existing EVERY-reference gate.
+
+## Native managed correspondence
+
+`InformationCandidate.materialEvidence` is optional native provenance:
+
+- `MaterialEvidenceBinding(materialRef, resourceIds, status, applications)`.
+  `resourceIds` is the exact original ordered selection; status is `active` or
+  permanently `detached` for this contract.
+- Each `MaterialEvidenceApplication(resources)` retains ordered
+  `MaterialResourceEvidence(resourceId, appliedReference)` entries.
+- Applications are appended only for effective changes. Earlier exact logical
+  resource/reference correspondence remains available beside ordinary attributed
+  edit targets/history, in the same atomic native Candidate update.
+
+Generic proposal registration constructs known fields and does not accept a
+client-supplied managed binding. Absence is compatible with existing stored and
+new Phase2 Candidates. A first application is permitted only when the exact
+original singleton unverified Material reference remains unchanged and appears
+once in current evidence. It replaces that source slot with ordered resource
+references and preserves unrelated references. An existing active binding must
+match the original selection, have well-formed historical applications and retain
+its latest exact unambiguous current reference projection. A producer identity
+colliding with unrelated human evidence conflicts rather than overwriting it.
+
+A generic human edit that modifies, deletes, duplicates or reorders managed
+references records `detached` persistently with that edit. Restoring the old text
+or references does not reattach it. Refresh of detached/ambiguous ownership
+conflicts before source IO. Unrelated human content/context/references remain
+editable without detachment; no explicit rebind operation is supplied here.
+
+An effective application preserves content/context, first proposal, preparation,
+prepared-material/source/grounding/mapping fields and all earlier decisions. It
+appends the ordinary attributed `edit` target with the application's correspondence
+and uses the original native revision for one conditional atomic update. Concurrent
+native changes conflict without producer/mutation replay. This source refresh
+invalidates approval through the normal lifecycle, without Review, Approve or
+Admission. Identical exact managed references produce no write, no new application,
+no decision and no revision/state change, including Approved, Held and Rejected.
+After source observation the no-op path reloads the native Candidate and checks
+its original revision before returning, so it cannot report stale success during
+a concurrent edit. It performs no write solely to guard a no-op.
+
+## Canonical trace boundary
+
+Existing Hub Admission schema remains unchanged. It receives `candidateId`, the
+approved `candidateRevision` and the exact approved target/evidence references.
+The extra Entity `materialEvidence` binding and full per-resource application
+history are **not copied into KnowledgeHub**. Full resource correspondence is
+jointly traced by the native Candidate identity, its retained history and the Hub
+record's approved target/ID/revision; a self-contained Hub resource mapping is not
+claimed. P3-04 must verify that joint native/Hub trace after restart.
+
+Executable specifications: `MaterialEvidenceWorkSpec`, affected
+`MaterialCandidateWorkSpec`, `ComponentFactorySpec` and `CandidateAdmissionSpec`.
+Their authored coverage is not a claim of successful native execution or Phase
+acceptance. Browser delivery remains P3-03 and connected acceptance P3-04.
 
 ## Evidence required for acceptance
 

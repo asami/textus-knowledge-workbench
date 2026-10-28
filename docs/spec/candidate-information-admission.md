@@ -69,3 +69,16 @@ native authorization and expected-revision behavior remain unchanged.
 - Existing Candidate views show confirmed canonical identity and historical trace.
 - Focused executable behavior, independent reviews and final aggregate Phase 1/1.1
   full validation remain required; implementation alone is not acceptance.
+
+## Material resource correspondence (Phase3)
+
+The Admission target carries the exact approved TKL-issued `material-resource`
+evidence references, their observed revisions, retrieval states and limitations.
+The existing `candidateId` and approved `candidateRevision` link it to native
+Candidate history. The additional Entity `materialEvidence` binding and ordered
+resource/reference application history stay in that native Candidate; Admission
+does not copy them into Hub and does not promise a self-contained Hub mapping.
+No Hub/admission schema change is required. P3-04 verifies the joint native/Hub
+trace. Source refresh invalidates approval and requires separate renewed Review
+and Approve before a changed target can be submitted. Existing uncertain outcome
+reconciliation and no-replay rules remain unchanged.

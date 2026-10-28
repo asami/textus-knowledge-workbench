@@ -20,12 +20,18 @@ a child of held Editing Studio Phase 1.2; no Phase 2.1 is currently defined.
 
 Native Session `963ef583fb3d4acdc16123c1d3032d13` started at `a530dd82` on
 `codex/tkw-phase3-versioned-evidence`. Its original four-Step Plan is retained
-by the runtime. P3-01 is issued. The native Human decision approved KnowledgeLake producer
-development, and its same-purpose inventory continuation includes the existing
-registered-mode PostgreSQL specification. TKL work uses the dedicated local
-`codex/tkw-phase3-material-evidence` branch from `3619fbff`. Contract authoring and
-implementation are in progress; focused checks, independent review and the local
-Step commit remain pending. Approval is not producer delivery or acceptance.
+by the runtime. P3-01 is accepted in local commit `ffed0eb`: primary compile and
+32 tests in four suites passed; the admitted TKL producer candidate passed compile
+and 108 tests in four suites, including actual PostgreSQL 17.11. An independent
+review accepted the exact contract, source and native receipts without blockers.
+These are controlled-provider results, not real Google evidence or Phase closure.
+
+P3-02 is now issued for native Candidate evidence acquisition/application. TKL
+source remains on dedicated `codex/tkw-phase3-material-evidence` from `3619fbff`;
+its native accepted candidate is retained without main/remote changes. The actual
+ReviseWork direction, earlier failures/UNKNOWN records and repair history remain
+in the same Session. Native counting starts the P3-02 window at 0/10; the prior
+P3-01 three repairs are historical facts, not erased or refunded.
 
 ## Entry and ownership
 
@@ -36,12 +42,14 @@ TKL owns Material/resource identity, authoritative version/snapshot, retrieval
 correspondence and physical providers. Workbench owns Candidate evidence
 binding, explicit human work and its UI. KnowledgeHub owns canonical Information.
 
-Current public TKL metadata exposes logical resources and provenance but no
-source revision/snapshot. The existing Candidate gate deliberately requires
-available required evidence with a revision or snapshot. P3-01 settles the
-minimal owning contract and reports this gap through native dependency admission.
-A public API addition is justified only if existing Operations cannot carry the
-required meaning. No Workbench workaround supplies invented readiness.
+At Phase entry, public TKL metadata exposed logical resources and provenance
+without source revision/snapshot. P3-01 admitted and qualified the optional
+resource-scoped observation on the existing `Material.getMaterial` operation;
+ordinary metadata reads retain their previous behavior. The Candidate gate still
+requires available required evidence with a revision or snapshot. P3-02 applies
+the producer's actual observations without inventing readiness. New public
+operations require a business responsibility that existing operations cannot
+express.
 
 ## Steps
 

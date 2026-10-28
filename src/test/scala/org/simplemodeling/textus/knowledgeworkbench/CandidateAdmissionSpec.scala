@@ -71,6 +71,58 @@ final class CandidateAdmissionSpec extends AnyWordSpec with Matchers with GivenW
       }
     }
 
+    "Material-bound approved evidence" which {
+      "retain updated managed correspondence natively while admitting the exact approved evidence to the actual Hub" in {
+        Given("a public Material-created Candidate and controlled TKL observations beside the actual KnowledgeHub CAR")
+        val handle = _handle(_root())
+        try {
+          val producer = MaterialEvidenceWorkSpec.installProducer(handle.subsystem)
+          val createdresponse = handle.subsystem.executeOperationResponse(Request.of(component = KnowledgeWorkbenchComponent.name,
+            service = "MaterialWork", operation = "createCandidateFromMaterial", properties = List(
+              Property("proposalId", "admission:material-evidence", None),
+              Property("materialRef", MaterialWorkFixture.materialRef, None),
+              Property("resourceIds", Vector(MaterialWorkFixture.resourceId), None),
+              Property("name", "Material evidence admission", None), Property("content", "Human candidate statement", None))))
+          val created = _success(workbenchvalue.RegisterProposalResult.createC(_record(_success(createdresponse)))).candidate
+          val first = _get(handle.subsystem, created.id.print)
+          val bound = _work(handle.subsystem.executeOperationResponse(Request.of(component = KnowledgeWorkbenchComponent.name,
+            service = "MaterialWork", operation = "refreshCandidateMaterialEvidence", properties = List(
+              Property("id", created.id.print, None), Property("expectedRevision", first.revision, None),
+              Property("reason", "Observe original evidence", None)))))
+          val previous = Vector("review", "approve").foldLeft(bound) { (current, decision) =>
+            _work(_call(handle.subsystem, "decideCandidateWork", "id" -> current.candidate.id.print,
+              "expectedRevision" -> current.revision, "decision" -> decision, "reason" -> "Human reviewed observed evidence"))
+          }
+          producer.observations = producer.observations.map(_.upsertSingle("revision", "2"))
+          producer.observations.map(_.getString("revision")) shouldBe Vector(Some("2"))
+          val updated = _work(handle.subsystem.executeOperationResponse(Request.of(component = KnowledgeWorkbenchComponent.name,
+            service = "MaterialWork", operation = "refreshCandidateMaterialEvidence", properties = List(
+              Property("id", created.id.print, None), Property("expectedRevision", previous.revision, None),
+              Property("reason", "Observe changed original version", None)))))
+          updated.approvalValid shouldBe false
+          val approved = Vector("review", "approve").foldLeft(updated) { (current, decision) =>
+            _work(_call(handle.subsystem, "decideCandidateWork", "id" -> current.candidate.id.print,
+              "expectedRevision" -> current.revision, "decision" -> decision, "reason" -> "Review changed evidence again"))
+          }
+          When("explicit Admission submits the current eligible approved target")
+          val admitted = _admit(handle.subsystem, approved)
+          val saved = admitted.candidate.admissions.last
+          val information = _json(_information(handle.subsystem, saved.informationId.print)).hcursor.downField("information")
+          Then("the Hub keeps exact source references and Candidate trace while resource correspondence stays in native Candidate history")
+          admitted.state shouldBe "Admitted"
+          admitted.candidate.materialEvidence shouldBe approved.candidate.materialEvidence
+          information.get[String]("candidateId").toOption shouldBe Some(created.id.print)
+          information.get[Long]("candidateRevision").toOption shouldBe Some(approved.revision)
+          information.downField("target").downField("evidenceRefs").focus shouldBe
+            Some(_json(CandidateAdmission.request(created.id, saved)).hcursor.downField("target").downField("evidenceRefs").focus.get)
+          information.downField("materialEvidence").succeeded shouldBe false
+          saved.approval.target.evidenceRefs shouldBe approved.candidate.materialEvidence.get.applications.last.resources.map(_.appliedReference)
+          producer.calls.count(_._1.properties.exists(_.name == "evidenceResourceIds")) shouldBe 2
+          admitted.candidate.materialEvidence.get.applications should have size 2
+        } finally handle.close()
+      }
+    }
+
     "eligibility and retained uncertainty" which {
       "reject unapproved changed and stale targets without a reservation or canonical call" in {
         Given("one approved native Candidate and a newer explicit human edit")
