@@ -373,3 +373,16 @@ history and is not copied into Hub. See the repository
 `docs/spec/material-evidence-review-v1.md` for the complete command and provenance
 contract. Native qualification/review and Phase3 browser/connected acceptance remain
 required; authored behavior is not an acceptance claim.
+
+## Material evidence presentation
+
+Candidate Detail definition `tkw-candidate-work-2` presents the native managed
+Material/resource binding and application history beside exact evidence refs.
+Its inert `refresh-evidence` action resolves to existing
+`MaterialWork.refreshCandidateMaterialEvidence`, not a new Display mutation API.
+Availability checks existing local origin/binding/revision preconditions without
+source acquisition; the command still owns independent authorization and mutation
+validation. The browser requires a reason, blocks refresh while edits are unsaved,
+and reconciles unknown acknowledgements through `getCandidateWork` without replay.
+Public native HTTP errors preserve disclosed Conclusion information as text;
+debug diagnostics and credentials are not copied into the page.

@@ -22,19 +22,19 @@ Stage Status:
 ## P3-02
 
 Stage Status:
-- Current status: IN_PROGRESS
+- Current status: CLOSED
 - Owner: TKW Phase3 owner
 - Update rule: Update only from this Step's actual native acceptance and evidence.
 
-- [ ] P3-02-A: Bind exact caller-authorized TKL evidence to selected Material/resources through the accepted public contract.
-- [ ] P3-02-B: Keep evidence changes explicit and guarded by observed native revision, preserving original proposal, human edits/history and approval invalidation.
-- [ ] P3-02-C: Preserve persisted evidence/selection and honest source readiness across real PostgreSQL restart, denial, change, failure and unknown outcomes.
-- [ ] P3-02-D: Pass affected native behavioral checks and independent review, then complete the local Step commit.
+- [x] P3-02-A: Bind exact caller-authorized TKL evidence to selected Material/resources through the accepted public contract.
+- [x] P3-02-B: Keep evidence changes explicit and guarded by observed native revision, preserving original proposal, human edits/history and approval invalidation.
+- [x] P3-02-C: Preserve persisted evidence/selection and honest source readiness across real PostgreSQL restart, denial, change, failure and unknown outcomes.
+- [x] P3-02-D: Pass affected native behavioral checks and independent review, then complete the local Step commit.
 
 ## P3-03
 
 Stage Status:
-- Current status: OPEN
+- Current status: IN_PROGRESS
 - Owner: TKW Phase3 owner
 - Update rule: Update only from this Step's actual native acceptance and evidence.
 
@@ -122,3 +122,14 @@ Earlier failed receipts, preparation attempts, UNKNOWN records and actual Human
 ReviseWork remain retained. This is Step acceptance, not Phase completion or live
 Google verification. P3-02 is the next issued ImplementStep; all its boxes remain
 unchecked. The runtime owns its new counter window; the P3-01 repair history stays.
+
+## P3-02 acceptance and P3-03 handoff
+
+Ordinary native closure accepted P3-02 in local commit `b10952b` after compile,
+34 passing tests in four suites and independent review of the actual 21-path
+candidate. Actual PostgreSQL restart and independently committed concurrent edits
+qualified both changed-evidence CAS and no-op conflicts. Native Candidate
+Optimistic concurrency is explicit alongside Detached revision storage. Earlier
+failures and four repairs remain retained. TKL observations were controlled;
+real-source/browser/final-full obligations remain open. P3-03 is the next issued
+ImplementStep and none of its acceptance boxes are checked by this record.

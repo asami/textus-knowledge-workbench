@@ -37,6 +37,13 @@
         <button id="reload" type="button" disabled>選択中を再読み込み</button></div>
         <div id="detail"><p>Candidateを選択すると、根拠と編集内容を表示します。</p></div>
         <button id="candidate-source" type="button" disabled>最初に選択した元資料を確認</button>
+        <form id="evidence-form"><fieldset id="evidence-fields" disabled><legend>元資料の根拠を更新</legend>
+          <p>最初に選択した原本の版と取得状態をTKLで確認します。未保存の編集がある間は更新できません。
+            同じ根拠なら判断を維持し、変更があればReview・Approveをやり直します。</p>
+          <p id="evidence-state" role="status">資料の対応と操作可否は再読み込みして確認します。</p>
+          <label>根拠を更新する理由<input id="evidence-reason" required></label>
+          <button id="refresh-evidence" type="submit" disabled>原本の根拠を明示的に更新</button>
+        </fieldset></form>
         <form id="edit-form"><fieldset id="edit-fields" disabled><legend>内容と根拠の編集</legend>
           <label>内容<textarea id="content" rows="5" required></textarea></label>
           <label><input id="context-present" type="checkbox">文脈を設定する（空文字も保持）</label>

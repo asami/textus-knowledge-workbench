@@ -1116,7 +1116,7 @@ sourceRevision = "phase-1-step4"
 
 ## LIST
 screenId = "candidate-list"
-definitionRevision = "tkw-candidate-work-1"
+definitionRevision = "tkw-candidate-work-2"
 viewBindingId = "candidate.work"
 title = "Candidate Workbench"
 detailTarget = "candidate-detail"
@@ -1160,7 +1160,7 @@ allowedKinds = ["boolean"]
 
 ## DETAIL
 screenId = "candidate-detail"
-definitionRevision = "tkw-candidate-work-1"
+definitionRevision = "tkw-candidate-work-2"
 viewBindingId = "candidate.work"
 title = "Candidate work and review"
 
@@ -1232,6 +1232,13 @@ id = "evidence"
 label = "Evidence: version, availability and limitations"
 role = "content"
 bindingId = "read.evidence"
+allowedKinds = ["text"]
+
+###### FIELD
+id = "material-evidence"
+label = "Material/resource evidence correspondence and application history"
+role = "content"
+bindingId = "read.material-evidence"
 allowedKinds = ["text"]
 
 ###### FIELD
@@ -1311,3 +1318,8 @@ bindingId = "candidate.admit"
 id = "confirm-admission"
 label = "Confirm saved Information"
 bindingId = "candidate.confirm-admission"
+
+#### ACTION
+id = "refresh-evidence"
+label = "Explicitly refresh original evidence"
+bindingId = "candidate.refresh-evidence"

@@ -26,12 +26,21 @@ and 108 tests in four suites, including actual PostgreSQL 17.11. An independent
 review accepted the exact contract, source and native receipts without blockers.
 These are controlled-provider results, not real Google evidence or Phase closure.
 
-P3-02 is now issued for native Candidate evidence acquisition/application. TKL
-source remains on dedicated `codex/tkw-phase3-material-evidence` from `3619fbff`;
-its native accepted candidate is retained without main/remote changes. The actual
-ReviseWork direction, earlier failures/UNKNOWN records and repair history remain
-in the same Session. Native counting starts the P3-02 window at 0/10; the prior
-P3-01 three repairs are historical facts, not erased or refunded.
+P3-02 is accepted in local commit `b10952b` after compile, 34 passing tests
+across four suites and independent review of all 21 changed paths. Actual
+PostgreSQL restart and independently confirmed concurrent human edits qualified
+both effective-change CAS and no-op revision reconciliation. The owning Candidate
+declaration explicitly selects native Optimistic concurrency with Detached revision
+storage. Earlier fixture/compiler failures and four repairs remain recorded.
+These are controlled TKL observations with the actual Hub CAR, not live Drive
+or browser acceptance.
+
+P3-03 is now issued for served-browser evidence/readiness and explicit refresh.
+TKL source remains on dedicated `codex/tkw-phase3-material-evidence` from `3619fbff`;
+its accepted producer candidate is retained without main/remote changes. The
+actual ReviseWork direction, earlier failures/UNKNOWN records and all repair
+history remain in the same Session. The runtime starts the new Step window at
+0/10; earlier repair history is not erased or refunded.
 
 ## Entry and ownership
 

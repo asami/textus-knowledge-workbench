@@ -45,7 +45,9 @@ trait CandidateDisplayRuntime extends Component with KnowledgeWorkbenchLogicalUi
     DisplayBusinessOperation.Binding("candidate-detail", DisplayBusinessOperation.ActionScope.Screen,
       "admit", "Candidate", "admitCandidateWork"),
     DisplayBusinessOperation.Binding("candidate-detail", DisplayBusinessOperation.ActionScope.Screen,
-      "confirm-admission", "Candidate", "confirmCandidateAdmission"))
+      "confirm-admission", "Candidate", "confirmCandidateAdmission"),
+    DisplayBusinessOperation.Binding("candidate-detail", DisplayBusinessOperation.ActionScope.Screen,
+      "refresh-evidence", "MaterialWork", "refreshCandidateMaterialEvidence"))
 }
 
 private final class CandidateBrowser(component: Component) extends Browser[value.CandidateWorkResult] {

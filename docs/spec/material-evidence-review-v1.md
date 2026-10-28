@@ -1,8 +1,9 @@
 # Material evidence and human review requirements v1
 
-Owner: TKW Phase3 / P3-01–P3-02. P3-01 contract acceptance is retained at
-`ffed0eba623e66ad8c853436158e494e75cf4c0c`. The P3-02 consumer implementation
-and executable specifications require native qualification and independent review.
+Owner: TKW Phase3 / P3-01–P3-03. Contract acceptance is retained at
+`ffed0eba623e66ad8c853436158e494e75cf4c0c`; native consumer acceptance is retained
+at `b10952b25c89c8e23624e289c2ac79dfde94d03f`. P3-03 browser implementation and
+executable specifications require native qualification and independent review.
 This document does not publish a new TKL Operation.
 
 ## Public ownership
@@ -198,3 +199,37 @@ References: [Phase3 checklist](../phase/phase-3-checklist.md),
 [human lifecycle](candidate-formation-and-review.md),
 [Information admission](candidate-information-admission.md),
 [design notes](../notes/material-evidence-review-design.md).
+
+## Served Workbench evidence work (P3-03)
+
+The existing Candidate Detail projects the native `materialEvidence` binding and
+its ordered applications beside the exact current evidence references. Display
+availability for `refresh-evidence` is a pure application of the existing owning
+preconditions; reading the screen acquires no source bytes. Its business binding
+is the existing `MaterialWork.refreshCandidateMaterialEvidence` command. Display
+metadata is inert and the command independently enforces authorization and state.
+
+The browser submits only the known Candidate ID, acknowledged native revision and
+a nonblank operator reason. It blocks evidence refresh, Review, Approve and
+Admission while human edits are unsaved. It never silently saves/discards those
+edits. Detached or invalid original associations disable refresh. Source versions,
+evidence identity, retrieval state and limitations are rendered as exact text;
+missing version remains unknown. Generic manually declared references remain
+editable under the existing policy and cannot become source-attested merely by UI.
+
+A refresh is distinct from Review, Approve and Admission. An identical observation
+keeps the current state/revision; an effective change returns to ordinary Draft.
+Before any command, the browser marks the current read as unconfirmed. An error,
+malformed acknowledgement or lost response leaves mutations blocked until an
+explicit read reconciles the same known Candidate. No refresh or Admission is
+replayed. Safe native HTTP error message, detail code and disclosed Conclusion
+are rendered using text nodes; debug diagnostics are not copied into the UI.
+Bearer values remain in memory/input only and are not included in error text,
+storage, URLs or handoff records. A caller change clears previews and invalidates
+current action availability until an explicit fresh read.
+
+`MaterialEvidenceViewsSpec` supplies normal native HTTP/view coverage and an
+explicitly opt-in loopback browser scenario. Its producer/fault controls are
+owned test endpoints and establish controlled observations, not real Google Drive
+or end-user OAuth. Native validation, actual browser observations and independent
+review retain their separate owners; source authoring does not establish PASS.

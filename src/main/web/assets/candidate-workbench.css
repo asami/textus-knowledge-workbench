@@ -11,3 +11,5 @@ fieldset{margin-top:24px;padding-top:8px}legend{font-weight:600;padding:0 8px}fi
 input[type=checkbox]{display:inline-block;width:auto;margin-right:8px}
 #material-list button{margin:8px}#original-preview img{display:block;max-width:100%;max-height:420px;object-fit:contain}#original-preview audio{display:block;width:100%}#original-preview a{display:block;margin:12px 0}#creation-status{white-space:pre-wrap;overflow-wrap:anywhere}main>section{margin-bottom:24px}
 @media(max-width:850px){header,main{padding:20px}.workspace{grid-template-columns:1fr}.connection,.section-heading{display:block}.connection button{margin-top:12px}.reference-grid{grid-template-columns:1fr}}
+
+#evidence-state{padding:10px 14px;background:#edf2f1;border-left:3px solid #245268;white-space:pre-wrap;overflow-wrap:anywhere}#evidence-fields p{font-size:.9rem}

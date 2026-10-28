@@ -499,3 +499,26 @@ history and is not copied into Hub. See the repository
 `docs/spec/material-evidence-review-v1.md` for the complete command and provenance
 contract. Native qualification/review and Phase3 browser/connected acceptance remain
 required; authored behavior is not an acceptance claim.
+
+## Update source evidence in the Workbench
+
+Open the served Candidate Workbench, load the list and select the existing
+Candidate. Detail shows each exact source version, retrieval state, limitation
+and native Material/resource application history. A preview alone is not source
+version evidence. An absent version stays unverified and cannot enable Review.
+
+Save any intended content/reference edits first. In **元資料の根拠を更新**, enter
+a reason and choose **原本の根拠を明示的に更新**. This uses the existing
+`MaterialWork.refreshCandidateMaterialEvidence` command with the acknowledged
+Candidate ID/revision and your reason. The first Material selection is retained;
+there is no field for supplying a provider ID or source version. Human-detached
+references are not restored by refresh.
+
+An identical observation retains current state and revision. If evidence changes,
+confirm the displayed target and perform Review and Approve separately before
+Information Admission. The refresh never performs those decisions. Unavailable,
+denied, changed or stale responses display the safe native error information.
+If the response is unconfirmed, do not press the command again: use **選択中を
+再読み込み** to reconcile the same Candidate. Commands stay blocked until a fresh
+read succeeds. Retain unsaved work deliberately; reading another Candidate asks
+before discarding edits. Tokens are not saved with work or errors.

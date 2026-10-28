@@ -134,7 +134,8 @@ final class CandidateViewsSpec extends AnyWordSpec with Matchers with GivenWhenT
           Then("metadata points only to admitted existing business Operations and malformed reads cannot mutate the Candidate")
           descriptor.hcursor.get[Vector[Json]]("actions").toOption.get.map(
             _.hcursor.downField("operation").get[String]("operation").toOption.get).toSet shouldBe
-              Set("editCandidateWork", "decideCandidateWork", "admitCandidateWork", "confirmCandidateAdmission")
+              Set("editCandidateWork", "decideCandidateWork", "admitCandidateWork", "confirmCandidateAdmission",
+                "refreshCandidateMaterialEvidence")
           Vector(wrongresource, wrongscreen).foreach(_ shouldBe a[Consequence.Failure[?]])
           _get(subsystem, current.candidate.id.print).toRecord() shouldBe current.toRecord()
         }

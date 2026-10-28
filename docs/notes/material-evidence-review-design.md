@@ -132,3 +132,24 @@ true no-op states, effective approval invalidation, managed-reference detachment
 collision/malformed/failure refusal, concurrent/no-op revision conflict, lost-ACK
 read reconciliation and actual PostgreSQL restart. Runtime checks, independent
 review, browser delivery and connected P3-04 evidence remain separate obligations.
+
+## P3-03 browser implementation direction — 2026-10-28
+
+Keep one inert Display action for the admitted source-refresh business command,
+using the existing owning preparation check to determine local availability.
+This avoids a second copy of origin/binding rules or an extra query. Add one
+structured read projection for native Material evidence applications. Display
+reads acquire no originals and cannot prove current provider availability.
+
+Browser command dispatch verifies the declared service as well as component and
+operation: source acquisition belongs to MaterialWork; human decisions and
+Admission remain Candidate operations. Source refresh refuses unsaved work,
+requires a reason and preserves known identity when acknowledgement is missing.
+Only an explicit read unblocks uncertain commands. Exact native public Conclusion
+information is displayed as text, without debug fields or bearer persistence.
+
+The controlled loopback browser fixture is selected explicitly through
+`textus.test.material-evidence.browser-probe=true`; ordinary full runs stay
+noninteractive. It supplies ready/complete/fault/version locators and verifies
+native outcomes and command counts. Actual browser observations and subsequent
+independent native review remain separate; authored checks alone prove no PASS.

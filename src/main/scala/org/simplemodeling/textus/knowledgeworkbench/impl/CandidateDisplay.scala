@@ -3,6 +3,8 @@ package org.simplemodeling.textus.knowledgeworkbench.impl
 import org.goldenport.Consequence
 import org.goldenport.cncf.display.*
 import org.goldenport.record.Record
+import org.goldenport.cncf.entity.EntityRevisionCarrier
+import org.simplemodeling.textus.knowledgeworkbench.value.RefreshCandidateMaterialEvidence
 import org.simplemodeling.model.datatype.EntityRevision
 import org.simplemodeling.textus.knowledgeworkbench.value.CandidateWorkResult
 
@@ -23,6 +25,7 @@ private[knowledgeworkbench] object CandidateDisplay {
     listRow.values ++ Vector(_optional("content", _.candidate.content.map(_.value)),
       _optional("context", _.candidate.context.map(_.value)), _boolean("approved", _.approvalValid),
       _records("evidence", _.candidate.evidenceRefs.map(_.toRecord())),
+      _records("material-evidence", _.candidate.materialEvidence.toVector.map(_.toRecord())),
       _records("materials", _.candidate.preparedMaterialRefs.map(_.toRecord())),
       _records("run", _.candidate.sourceRunRef.toVector.map(_.toRecord())),
       _records("source-context", _.candidate.sourceContextRef.toVector.map(_.toRecord())),
@@ -33,12 +36,24 @@ private[knowledgeworkbench] object CandidateDisplay {
       _records("target", _.target.toVector.map(_.toRecord()))),
     Vector("edit", "decide").map(id => ActionBinding[CandidateWorkResult](s"candidate.$id",
       _ => Consequence.success(DisplayModel.ActionAvailability.Enabled))) ++ Vector(
+      ActionBinding[CandidateWorkResult]("candidate.refresh-evidence", _refresh_availability),
       ActionBinding[CandidateWorkResult]("candidate.admit", (work: CandidateWorkResult) => Consequence.success(
         if (work.approvalValid && CandidateAdmission.current(work.candidate).isEmpty) DisplayModel.ActionAvailability.Enabled
         else DisplayModel.ActionAvailability.Disabled)),
       ActionBinding[CandidateWorkResult]("candidate.confirm-admission", (work: CandidateWorkResult) => Consequence.success(
         if (work.candidate.admissions.nonEmpty) DisplayModel.ActionAvailability.Enabled
         else DisplayModel.ActionAvailability.Disabled))))
+
+  private def _refresh_availability(work: CandidateWorkResult): Consequence[DisplayModel.ActionAvailability] =
+    for {
+      revision <- EntityRevision.createC(work.revision)
+      input <- RefreshCandidateMaterialEvidence.createC(Record.data("id" -> work.candidate.id,
+        "expectedRevision" -> work.revision, "reason" -> "Inspect source evidence availability"))
+    } yield {
+      if (MaterialEvidenceWork.prepare(EntityRevisionCarrier(work.candidate, revision), input).toOption.nonEmpty)
+        DisplayModel.ActionAvailability.Enabled
+      else DisplayModel.ActionAvailability.Disabled
+    }
 
   private def _resource(work: CandidateWorkResult): Consequence[DisplayModel.Resource] =
     EntityRevision.createC(work.revision).map(DisplayModel.Resource(work.candidate.id, _))

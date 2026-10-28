@@ -10,10 +10,12 @@
     evidenceRefs: "根拠", preparedMaterialRefs: "処理済み資料", sourceRunRef: "処理Run", sourceContextRef: "元の文脈",
     groundingRefs: "Grounding", mappingRefs: "Mapping", information_id: "Information ID", candidate_revision: "承認時のCandidate版",
     approval: "元の承認", requested_by: "採用操作の担当者", requested_at: "採用操作の日時",
-    status: "採用結果", information_revision: "確認したInformation版" };
+    status: "状態", information_revision: "確認したInformation版", materialRef: "Material ID", material_ref: "Material ID",
+    resourceIds: "最初の原本選択", resource_ids: "最初の原本選択", resourceId: "原本ID", resource_id: "原本ID",
+    applications: "根拠の適用履歴", resources: "原本との対応", appliedReference: "適用した根拠", applied_reference: "適用した根拠" };
   const groups = [["evidenceRefs", "根拠参照"], ["groundingRefs", "Grounding参照"], ["mappingRefs", "Mapping参照"]];
   const referenceKeys = ["id", "kind", "revision", "snapshotRef", "retrievalState", "retentionUntil", "limitation"];
-  let busy = false, selectedId, work, revision, baseline, actions, needsRead = true, acknowledgement = "";
+  let busy = false, selectedId, work, revision, baseline, actions, displayActions = [], needsRead = true, acknowledgement = "", acknowledgedCaller = "";
   const producer = "workbench-material", intentStorage = "workbench-material-intent";
   let intent, retainedIntents = [], intentReady = false, intentCaller, material, selectedResources = [], previewUrl;
   try {
@@ -37,7 +39,14 @@
     byId("edit-fields").disabled = busy || !work || needsRead;
     byId("decision-fields").disabled = busy || !work || needsRead;
     byId("admission-fields").disabled = busy || !work || needsRead;
-    byId("admit").disabled = busy || needsRead || work?.state !== "Approved";
+    byId("admit").disabled = busy || needsRead || dirty() || !work?.approval_valid || work?.state !== "Approved";
+    byId("evidence-fields").disabled = busy || !work || needsRead;
+    byId("refresh-evidence").disabled = busy || needsRead || dirty() || !refreshAvailable();
+    byId("evidence-state").textContent = needsRead ? "現在の根拠は未確認です。同じCandidateを再読み込みして照合してください。" :
+      dirty() ? "未保存の編集を保持しています。保存するまで根拠を更新できません。" :
+      refreshAvailable() ? "最初の原本選択を使って明示的に取得します。観測済みの版と制約は詳細に表示します。" :
+      work?.candidate.material_evidence?.status === "detached" ? "根拠参照は人の編集により切り離されています。更新で復元しません。" :
+      "このCandidateには更新可能な元資料の対応がありません。";
     byId("confirm-admission").disabled = busy || needsRead || !work?.candidate.admissions?.length;
     byId("context").disabled = !byId("context-present").checked;
     byId("list").querySelectorAll("button").forEach(button => { button.disabled = busy; });
@@ -79,7 +88,18 @@
     let value;
     try { value = await response.json(); }
     catch { throw new Error(`HTTP ${response.status}: 応答を確認できません。再読み込みして照合してください。`); }
-    if (!response.ok) throw new Error(`HTTP ${response.status}: 処理を完了できませんでした。権限・入力・最新状態を確認してください。`);
+    if (!response.ok) {
+      const error = value?.error;
+      const publicDetail = error && typeof error === "object" ? {
+        message: error.message, detailCode: error.detail_code ?? error.detailCode,
+        appCode: error.app_code ?? error.appCode, conclusion: error.conclusion
+      } : undefined;
+      let detail = publicDetail ? JSON.stringify(publicDetail) : "公開されたエラー詳細がありません。";
+      // Only the server-disclosed envelope is used; debug data is deliberately absent.
+      const token = byId("token").value;
+      if (token) detail = detail.replaceAll(token, "[credential omitted]");
+      throw new Error(`HTTP ${response.status}: ${detail}\n再送せず、同じCandidateを読み込み直して状態を確認してください。`);
+    }
     return value.data ?? value;
   }
   function displayValue(value) {
@@ -109,7 +129,7 @@
     const values = node("dl");
     display.model.sections.flatMap(section => section.fields).forEach(field => {
       values.append(node("dt", field.label)); const dd = node("dd");
-      if (["evidence", "materials", "run", "source-context", "grounding", "mapping", "history", "target", "admissions"].includes(field.id)) {
+      if (["evidence", "material-evidence", "materials", "run", "source-context", "grounding", "mapping", "history", "target", "admissions"].includes(field.id)) {
         const data = JSON.parse(field.value.text); dd.append(structured(data.items));
       } else dd.textContent = String(displayValue(field.value));
       values.append(dd);
@@ -125,7 +145,7 @@
       label.append(input); grid.append(label);
     });
     const remove = node("button", "この参照を外す", "remove"); remove.type = "button";
-    remove.addEventListener("click", () => card.remove()); card.append(grid, remove); return card;
+    remove.addEventListener("click", () => { card.remove(); controls(); }); card.append(grid, remove); return card;
   }
   function workResponse(received) {
     // Standard Record responses use native snake_case; Display JSON has its own closed protocol.
@@ -147,7 +167,7 @@
     byId("content").value = current.candidate.content ?? "";
     byId("context").value = current.candidate.context ?? "";
     byId("context-present").checked = Object.hasOwn(current.candidate, "context");
-    byId("edit-reason").value = ""; byId("decision-reason").value = "";
+    byId("edit-reason").value = ""; byId("decision-reason").value = ""; byId("evidence-reason").value = "";
     byId("references").replaceChildren();
     groups.forEach(([key, title]) => {
       const group = node("div"); group.dataset.group = key;
@@ -155,7 +175,7 @@
       const rows = node("div"); rows.dataset.rows = key;
       (current.candidate[key] ?? []).forEach(reference => rows.append(referenceEditor(key, reference)));
       const add = node("button", `${title}を追加`); add.type = "button";
-      add.addEventListener("click", () => rows.append(referenceEditor(key)));
+      add.addEventListener("click", () => { rows.append(referenceEditor(key)); controls(); });
       group.append(rows, add); byId("references").append(group);
     }); baseline = JSON.stringify(draft());
   }
@@ -181,8 +201,8 @@
     if (current.candidate.id !== id || display.model.resource.entityId !== id || !Number.isSafeInteger(current.revision) ||
         current.revision <= 0 || String(current.revision) !== display.model.resource.revision)
       throw new Error("読取りの間に状態が変わりました。編集せず、明示的に再読み込みしてください。");
-    actions = metadata.actions;
-    renderDetail(display); populate(current); work = current; revision = current.revision; needsRead = false;
+    actions = metadata.actions; displayActions = display.model.actions;
+    renderDetail(display); populate(current); work = current; revision = current.revision; acknowledgedCaller = byId("token").value; needsRead = false;
     status(`${acknowledgement ? acknowledgement + "\n" : ""}最新の内容を表示しました。`);
   }
   async function loadList() {
@@ -197,12 +217,16 @@
       card.append(select); container.append(card);
     }); status("一覧を読み込みました。Candidateを選択してください。");
   }
-  function operation(actionId, expected) {
+  function refreshAvailable() {
+    return !!work && Array.isArray(displayActions) &&
+      displayActions.some(action => action.id === "refresh-evidence" && action.availability === "enabled");
+  }
+  function operation(actionId, expected, service = "Candidate") {
     const action = actions?.find(value => value.id === actionId);
-    if (!action || action.operation.service !== "Candidate" || action.operation.operation !== expected ||
+    if (!action || action.operation.service !== service || action.operation.operation !== expected ||
         !["KnowledgeWorkbench", "org.simplemodeling.textus.KnowledgeWorkbench"].includes(action.operation.componentId))
       throw new Error("業務操作の対応を確認できません。再読み込みしてください。");
-    return `candidate/${expected}`;
+    return `${service}/${expected}`;
   }
   async function reconcileSelected() {
     needsRead = true;
@@ -214,7 +238,10 @@
   }
   async function mutate(path, body, success) {
     needsRead = true; controls(); acknowledgement = "";
-    await request(path, { body });
+    const result = await request(path, { body });
+    if (result?.candidate?.id !== selectedId || !Number.isSafeInteger(result.revision) ||
+        result.revision < body.expectedRevision || typeof result.state !== "string")
+      throw new Error("保存の応答を照合できません。同じCandidateを読み直し、自動再送はしないでください。");
     acknowledgement = success; baseline = JSON.stringify(draft());
     status(`${success}\n最新の表示を読み込みます。`);
     await reconcileSelected();
@@ -358,7 +385,15 @@
     });
   });
   byId("token").addEventListener("input", () => {
-    intentReady = false; needsRead = true; clearMaterial(); byId("material-list").replaceChildren();
+    if (dirty()) {
+      byId("token").value = acknowledgedCaller;
+      status("未保存の編集を保持しています。現在の呼出者で保存または明示的に破棄してから呼出者を変更してください。");
+      controls(); return;
+    }
+    intentReady = false; needsRead = true; displayActions = []; actions = undefined; work = undefined; baseline = undefined;
+    byId("content").value = ""; byId("context").value = ""; byId("references").replaceChildren();
+    byId("edit-reason").value = ""; byId("decision-reason").value = ""; byId("evidence-reason").value = "";
+    clearMaterial(); byId("material-list").replaceChildren();
     byId("detail").replaceChildren(node("p", "呼出者が変わりました。明示的に再読み込みしてください。"));
     creationStatus("呼出者が変わりました。以前の作成意図は元の呼出者で照合してください。新規作成は明示的に開始してください。");
   });
@@ -371,6 +406,20 @@
     event.preventDefault(); if (needsRead || !work || busy) return;
     run(async () => { const reason = byId("edit-reason").value; if (!reason.trim()) throw new Error("編集の理由を入力してください。");
       await mutate(operation("edit", "editCandidateWork"), { id: selectedId, expectedRevision: revision, ...draft(), reason }, "編集内容の保存が確認できました。"); });
+  });
+  byId("edit-form").addEventListener("input", controls);
+  byId("edit-form").addEventListener("change", controls);
+  byId("evidence-form").addEventListener("submit", event => {
+    event.preventDefault(); if (needsRead || !work || busy || !refreshAvailable()) return;
+    run(async () => {
+      if (dirty()) throw new Error("未保存の編集があります。内容を保存してから根拠を更新してください。");
+      const reason = byId("evidence-reason").value;
+      if (!reason.trim()) throw new Error("根拠を更新する理由を入力してください。");
+      clearPreview();
+      await mutate(operation("refresh-evidence", "refreshCandidateMaterialEvidence", "MaterialWork"),
+        { id: selectedId, expectedRevision: revision, reason },
+        "根拠の更新結果を確認しました。現在の版・制約・判断状態を確認してください。");
+    });
   });
   byId("decision-form").addEventListener("submit", event => {
     event.preventDefault(); if (needsRead || !work || busy) return;
