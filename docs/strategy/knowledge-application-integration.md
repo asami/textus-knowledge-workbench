@@ -169,7 +169,7 @@ Their minimal representation is owned by TKW; preparation execution stays with T
 | --- | --- | --- |
 | 1 | [TKW Phase 1 — Candidate Formation](../phase/phase-1.md) | Existing items 1-4: runnable component, durable registration/lookup, evidence-aware edit/ground/review/approval and both fixture views; create root build.sbt and pass bootstrap full validation |
 | 2 | [TKW Phase 1.1 — KnowledgeHub Admission](../phase/phase-1.1.md) | Former item 5: actual canonical Information Admission, confirmed outcome and Candidate/Evidence trace; final owner of the repository-complete SBT suite for both Phases |
-| 3 | [TKW Phase 2 — Material-backed Candidate Work](../phase/phase-2.md) | Existing Material -> Candidate/source correspondence -> Workbench edit/decision, neutral consumer and Phase-local full validation/review/closure; P2-01/02/03 accepted, native P2-04 active. |
+| 3 | [TKW Phase 2 — Material-backed Candidate Work](../phase/phase-2.md) | Existing Material -> Candidate/source correspondence -> Workbench edit/decision, neutral consumer and Phase-local full validation/review/closure; All four Steps accepted through P2-04 `166f10c5`; full receipt 672 passed; documentation repair/closing review and native local release pending. |
 
 Current handoff (2026-10-28): Phase 1.1's native Session
 `dc5aec0f04843c377ad539f04783861f` completed at local release
@@ -186,7 +186,21 @@ sm-goal-phase 2 invocation started native Session
 `8e7f63e6e34ec5b0aefe9aff93509af9` from `0be13b99`; P2-01 passed selected
 checks and independent review and closed at `98adb364`. P2-02 passed compile,
 48 tests across five suites including PostgreSQL, and independent review, then
-closed at `b40de62c`; P2-03 closed at `f0949753` after selected checks and independent review. ImplementStep P2-04 is active. Planning
+closed at `b40de62c`; P2-03 closed at `f0949753` after selected checks and
+independent review. P2-04 closed at `166f10c5b95a800a09f457003891ac77a5f72211`
+after connected receipt 659 (compile, 19 tests/three suites, actual real-Material
+browser and PostgreSQL restart) and independent Step review. Full receipt 672
+passed 71 tests/nine suites including PostgreSQL 17.11. K03 is delivered through
+P2-01–03; the Workbench-owned neutral-consumer/failure portion of K04 is delivered
+through P2-04. Actual Studio Candidate integration/full K04 remain held with
+Studio Phase 1.2. Real-source Edit/Hold and full 1,535,406-byte original equality
+are separate from controlled ready-evidence approval in receipt 484. The real
+caller is the admitted fixture service `editing-studio-mobile-development`, not
+real end-user OAuth; unversioned evidence stays unverified.
+
+The first whole-Phase review returned REPAIR solely for stale current ledgers
+and handoff. This documentation repair is authored; independent closing review,
+native closure recording and the distinct local release remain pending. Planning
 alone supplied no execution or acceptance. Main integration, push and external
 publication remain excluded.
 

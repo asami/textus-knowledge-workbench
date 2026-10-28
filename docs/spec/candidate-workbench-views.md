@@ -129,7 +129,20 @@ twelve minutes. The fixture then verifies native identity, human actor/history,
 actual revision and association across restart, plus complete original byte
 equality at native Bag and native HTTP boundaries. Real evidence stays unverified
 and cannot enable Review/Approve. No remote mutations or source versions are
-introduced. This authored case still requires parent-owned execution and review.
+introduced. P2-04 was accepted at `166f10c5b95a800a09f457003891ac77a5f72211`
+after connected receipt 659 (compile, 19 tests/three suites) and independent Step
+review. The actual 3000 × 4000 JPEG preview, one explicit Candidate create,
+same-ID Edit/Hold at revisions 1/2/3, present-empty context and source reopen were
+observed. PostgreSQL restart restored complete work, revision and exact-intent
+lookup. All 1,535,406 original bytes matched through native Bag/HTTP before/after
+work; the original was read again after restart.
+
+Final full receipt 672 passed 71 tests/nine suites including PostgreSQL 17.11;
+the normal full run excludes opt-in cloud/browser cases. Real-source receipt
+659 and controlled ready-evidence approval receipt 484 remain separate. The
+first whole-Phase review returned documentation REPAIR (issue-6). This current
+handoff repair awaits closing review and native closure/local release. Full
+Studio Candidate integration/K04 remain held; Phase completion is not claimed.
 
 Both TKL prepared and Studio unprepared fixtures follow the same native List,
 Detail, edit and explicit decision lifecycle. Verify unavailable evidence remains
@@ -138,7 +151,7 @@ and normal restart preserves the displayed work. Native transport checks cover
 the registered Display Operations and static application route. Browser checks
 exercise actual served assets and the human workflow without external providers.
 
-STEP-4 focused validation and independent review do not close Phase 1. The final
-Phase review, bootstrap full suite and release remain separate gates. Actual
-KnowledgeHub Admission belongs to Phase 1.1. Historical unmanaged databases
+Historical STEP-4 focused validation and independent review were separate from
+Phase 1's final validation/review/release. Phase 1 and Phase 1.1 are now closed;
+actual KnowledgeHub Admission remains the accepted Phase 1.1 contract. Historical unmanaged databases
 still require an explicit migration decision; no automatic migration is added.

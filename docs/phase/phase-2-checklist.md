@@ -11,8 +11,12 @@ This is the execution ledger for [TKW Phase 2](phase-2.md). Native Session
 checks and independent review, then closed P2-02 at `b40de62c` after compile,
 48 tests across five suites including PostgreSQL, and independent review.
 P2-03 closed at `f0949753` after successful checks and independent review.
-ImplementStep P2-04 is active. Update an
-item only from actual accepted evidence, and retain failed attempts and limits.
+P2-04 closed at `166f10c5b95a800a09f457003891ac77a5f72211` after connected
+checks and independent review. Final full validation passed at receipt
+`8e7f63e6e34ec5b0aefe9aff93509af9:ordered-validation:672:validation@1`.
+The first whole-Phase review returned REPAIR for stale documentation (issue-6).
+This documentation repair is authored; closing review, native closure recording
+and the distinct local release remain pending. Retain failed attempts and limits.
 The [Phase index](README.md) owns navigation; the
 [implementation considerations](../notes/material-candidate-work-design.md)
 remain non-normative design input.
@@ -75,7 +79,7 @@ Native Step commit: `f0949753f5b39d4a59ba6b3da905e9ce2b840cde`.
 Earlier HTTP/collection and dependency test-compilation failures remain in Session
 history. The browser used a controlled logical Material producer and separate
 controlled ready evidence. Actual cloud original inspection and its persisted
-Candidate remain P2-04 obligations; no real-source approval is claimed.
+Candidate were subsequently accepted in P2-04 below; no real-source approval is claimed.
 
 - [x] P2-03-A: Search -> select -> inspect -> safe original preview works through
   MaterialWork/TKL using the admitted caller and private binary-response policy.
@@ -94,22 +98,40 @@ Candidate remain P2-04 obligations; no real-source approval is claimed.
 ## P2-04 — Connected acceptance and handoff
 
 Stage Status:
-- Current status: IN_PROGRESS
+- Current status: CLOSED
 - Owner: TKW connected acceptance owner
-- Update rule: Close only from all connected evidence and final checks below.
+- Update rule: Closed from connected receipt 659, independent Step review and the native Step commit.
 
-- [ ] P2-04-A: A second domain-neutral consumer fixture creates/loads the same work
+Native Step commit: `166f10c5b95a800a09f457003891ac77a5f72211`.
+Connected receipt `8e7f63e6e34ec5b0aefe9aff93509af9:ordered-validation:659:validation@1`
+records compile and 19 passing tests across three suites. The actual TKL/browser
+case inspected one existing real Material and a 3000 × 4000 JPEG, created exactly
+one Candidate, edited revision 1 to 2, then Held revision 3 with present-empty
+context. Same-ID reload/source preview and PostgreSQL restart retained complete
+work, revision, first association and exact-intent lookup. All 1,535,406 bytes
+matched the captured original at native Bag and HTTP boundaries before/after
+work; the public original was read again after restart.
+
+The real fixture caller was the already admitted
+`editing-studio-mobile-development`, a provider-authenticated service subject
+using a disposable loopback bearer, not real end-user OAuth. The neutral consumer
+uses a separate fixture caller and requires no Book/ISBN/Studio/provider fields.
+Real evidence stays unverified without revision/snapshot; Review/Approve remain
+unavailable. Controlled ready-evidence approval is separate P2-03 receipt 484.
+Four earlier failed fixture preconditions remain in history.
+
+- [x] P2-04-A: A second domain-neutral consumer fixture creates/loads the same work
   through the public contract without mandatory Book/ISBN/Studio/provider fields.
-- [ ] P2-04-B: One existing real Material is inspected and referenced from a persisted
+- [x] P2-04-B: One existing real Material is inspected and referenced from a persisted
   Candidate in the actual Workbench browser, with restart/readback, truthful
   evidence limitations and a recorded human decision. Original bytes remain
   unchanged; record complete equality at the binary boundary when available.
-- [ ] P2-04-C: Keep real-source observations separate from controlled ready-evidence
+- [x] P2-04-C: Keep real-source observations separate from controlled ready-evidence
   Review/Approve tests; no fixture outcome claims real versioned-source approval.
-- [ ] P2-04-D: Complete focused connected checks and independent Step review
+- [x] P2-04-D: Complete focused connected checks and independent Step review
   against the actual combined source, neutral-consumer and failure evidence;
   keep final repository-full validation with the separate Phase closure gate.
-- [ ] P2-04-E: Record accepted source/contracts, executable/browser evidence and limits;
+- [x] P2-04-E: Record accepted source/contracts, executable/browser evidence and limits;
   update only the demonstrated K03/K04 checklist scope and complete the local
   P2-04 acceptance commit through the normal execution owner.
 
@@ -120,7 +142,7 @@ Stage Status:
 - Owner: TKW Phase acceptance owner
 - Update rule: Close after all accepted Step commits and the actual Phase gates below.
 
-- [ ] P2-C01: After accepted P2-01 through P2-04, run the repository-complete
+- [x] P2-C01: After accepted P2-01 through P2-04, run the repository-complete
   TKW SBT suite on the final frozen product tree and retain actual PostgreSQL
   results. Intermediate Steps require focused checks, not repeated full suites.
 - [ ] P2-C02: Complete independent whole-Phase review, qualifying any admitted
@@ -130,6 +152,18 @@ Stage Status:
 - [ ] P2-C04: Complete the distinct local Phase release commit through the
   owning workflow and confirm Phase completion. Main integration, push and
   external publication remain excluded.
+
+Full receipt `8e7f63e6e34ec5b0aefe9aff93509af9:ordered-validation:672:validation@1`
+passed 71 tests in nine suites, including actual PostgreSQL 17.11, on the accepted
+P2-04 product candidate. The normal full run excludes opt-in cloud/browser cases;
+connected receipt 659 and controlled browser receipt 484 remain separate evidence.
+
+The initial whole-Phase review confirmed integrated behavior and matching full
+validation, but returned REPAIR for the stale ledger/current handoff (issue-6).
+This source repair reconciles those documents. P2-C02 awaits independent closing
+review; P2-C03 awaits its native closure record; P2-C04 awaits the owning workflow's
+distinct local release and terminal result. No release commit or Phase completion
+is claimed by these documentation edits.
 
 ## Retained external obligations
 

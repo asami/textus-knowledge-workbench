@@ -445,14 +445,31 @@ The consumer never opens the credential JSON; TKL owns connection loading and
 read-only package access. No remote Material creation or materialization occurs.
 
 Read `target/material-candidate-real-browser-ready.json` during the active test.
-It contains the loopback URL, exact public Material/resource selectors and steps.
-Use the ordinary served UI to inspect/preview, explicitly create the specified
+Its owner-only payload contains the loopback URL, exact public Material/resource
+selectors, disposable `testToken` and steps. Enter `testToken` in `#token` first.
+The admitted real caller is the existing `editing-studio-mobile-development`
+fixture service subject under the standalone Fixed ingress profile; recorded
+Edit/Hold attribution is not evidence of real end-user OAuth. No Google token or
+service-account key is included. Use the ordinary served UI to inspect/preview, explicitly create the specified
 local Candidate, edit to `Real source human observation`, record Hold, reload
 and revisit its original source. Keep context present-empty. Review/Approve must
 remain unavailable; do not supply invented version/snapshot fields. Signal
 `/__real_material_complete` when finished. The twelve-minute fixture then checks
 native restart/readback, exact first association, attributed Edit/Hold and full
 original bytes before/after work, and cleans up local test resources. These
-P2-04 connected specifications are authored; execution/review remains pending.
-Normal tests use controlled source and PostgreSQL without real credentials or
-an external browser. Full Editing Studio K04 integration remains separately held.
+P2-04 connected specifications were accepted at
+`166f10c5b95a800a09f457003891ac77a5f72211`, after connected receipt 659
+(compile, 19 tests/three suites) and independent review. The actual browser
+previewed the 3000 × 4000 JPEG and created exactly one Candidate; same-ID Edit/Hold
+advanced revisions 1/2/3 with present-empty context. Reload/source preview and
+PostgreSQL restart retained complete work and exact-intent lookup. All 1,535,406
+original bytes matched via native Bag/HTTP before/after work; the public original
+was read again after restart. Evidence remained unverified and unversioned.
+
+Final full receipt 672 passed 71 tests/nine suites including PostgreSQL 17.11.
+Normal full tests use controlled sources and PostgreSQL without real credentials
+or an external browser; opt-in real receipt 659 and controlled approval/browser
+receipt 484 are separate evidence. The first whole-Phase review requested
+current-document reconciliation. This documentation repair awaits closing review
+and native closure/local release; Phase completion is not claimed. Full Editing
+Studio Candidate integration/K04 remain separately held.

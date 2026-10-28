@@ -36,8 +36,25 @@ actual PostgreSQL restart, revision and authorization cases. Independent review
 accepted its corrected candidate; native local Step commit
 `b40de62c19a34d50a45276445e57f42576355e40` closed P2-02. Ordinary Advance
 closed P2-03 at `f0949753f5b39d4a59ba6b3da905e9ce2b840cde` after selected
-browser/native and dependency checks plus independent review, then issued
-ImplementStep P2-04. The Phase remains open.
+browser/native and dependency checks plus independent review. P2-04 closed at
+`166f10c5b95a800a09f457003891ac77a5f72211` after connected receipt
+`8e7f63e6e34ec5b0aefe9aff93509af9:ordered-validation:659:validation@1`
+(compile, 19 tests in three suites) and independent Step review. It demonstrated
+the neutral PostgreSQL consumer and existing real-Material browser Edit/Hold,
+retained source correspondence and complete 1,535,406-byte Bag/HTTP equality.
+The actual fixture caller was the admitted `editing-studio-mobile-development`
+service subject, not real end-user OAuth; unversioned evidence remained unverified
+and Review/Approve unavailable.
+
+Final full receipt
+`8e7f63e6e34ec5b0aefe9aff93509af9:ordered-validation:672:validation@1`
+passed 71 tests in nine suites including PostgreSQL 17.11 on that accepted
+product candidate. Normal full validation excludes opt-in cloud/browser work;
+receipts 659 and 484 retain real and controlled browser observations separately.
+The initial whole-Phase review confirmed behavior and validation but returned
+REPAIR for stale documentation (issue-6). This documentation repair is authored;
+independent closing review, native closure recording and the distinct local
+release remain pending. The Phase remains open.
 
 ## Inputs and preserved acceptance
 
@@ -57,8 +74,8 @@ evidence only where relevant to the unchanged consumed source and boundary.
 | Existing item | Phase 2 responsibility | Separate responsibility retained |
 | --- | --- | --- |
 | TKW-K01/K02 | Consume and bind the accepted reference route. | No replay of registration/materialization or reopening of accepted reference work. |
-| TKW-K03 | Deliver selected-Material -> Candidate correspondence and human work. | Candidate admission behavior remains the accepted Phase 1.1 contract. |
-| TKW-K04 | Neutral consumer, Workbench browser integration and failure outcomes. | Actual Studio Candidate integration remains separately owned with Studio Phase 1.2 on hold. |
+| TKW-K03 | Delivered by accepted P2-01 through P2-03: selected-Material -> Candidate correspondence and human work. | Candidate admission behavior remains the accepted Phase 1.1 contract. |
+| TKW-K04 | Workbench-owned neutral consumer, browser integration and failure outcomes delivered by accepted P2-04. | Actual Studio Candidate integration remains separately owned with Studio Phase 1.2 on hold. |
 
 Phase 2 is not a child of Studio Phase 1.2. That hold does not prevent direct
 Workbench use. Full K04 is not claimed complete by accepting this scoped

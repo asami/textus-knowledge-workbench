@@ -11,21 +11,26 @@ K03 and the Workbench-owned neutral-consumer portion of K04. Editing Studio
 Phase 1.2 is on hold; Phase 2's [checklist](phase-2-checklist.md) is the execution
 ledger. Native Session `8e7f63e6e34ec5b0aefe9aff93509af9` accepted P2-01 at
 `98adb364`, then P2-02 at `b40de62c` after native checks and independent
-review. P2-03 closed at `f0949753`; P2-04 connected acceptance is active following the user's explicit Phase start. This coordination plan itself starts no
-execution and does not close K04's
-actual Studio integration criterion.
+review. P2-03 closed at `f0949753`; P2-04 closed at
+`166f10c5b95a800a09f457003891ac77a5f72211` after connected receipt 659 and
+independent Step review. Final full receipt 672 passed 71 tests in nine suites,
+including PostgreSQL 17.11. The first whole-Phase review returned REPAIR for
+stale current documentation; this repair awaits closing review and native
+closure/local release. This coordination plan starts no execution and does not
+close K04's actual Studio integration criterion.
 
 Accepted Material reference/registration work remains input from closed Studio
 Phase 3. TKW Phase 1/1.1 native closures and KnowledgeHub's accepted local
 commit are retained by the new plan. The original OPEN table/checklist below
 is the retained 2026-10-21 planning snapshot, not a claim that the accepted
 reference route must be implemented again. Reconcile individual items against
-their exact evidence at Phase 2 entry; no checkbox is closed here.
+their exact evidence using the current disposition below; the historical
+checkboxes are preserved as the entry snapshot.
 
 | Item | Current execution owner | Residual boundary |
 | --- | --- | --- |
-| TKW-K03 | Phase 2 P2-01 through P2-03. | Complete selected-Material/Candidate work against the Phase 2 checklist. |
-| TKW-K04 | Phase 2 P2-04 for Workbench/neutral-consumer/failure evidence. | Actual Studio Candidate integration remains separately owned with Studio Phase 1.2 on hold; full K04 remains unresolved. |
+| TKW-K03 | Delivered by accepted Phase 2 P2-01 through P2-03. | Selected-Material/Candidate correspondence and Workbench human work are delivered; Phase release remains pending. |
+| TKW-K04 | Workbench-owned neutral-consumer/failure portion delivered by accepted P2-04, connected receipt 659. | Actual Studio Candidate integration remains separately owned with Studio Phase 1.2 on hold; full K04 remains unresolved. |
 
 ## Original reference and registration planning — 2026-10-21
 

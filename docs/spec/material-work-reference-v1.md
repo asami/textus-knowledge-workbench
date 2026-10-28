@@ -1,6 +1,6 @@
 # Material work reference contract v1
 
-Status: fixed-forward implementation and executable specifications authored; validation and connected acceptance pending
+Status: fixed-forward implementation consumed by accepted Phase 2 Steps through P2-04 `166f10c5`; connected receipt 659 and final full receipt 672 passed; closing review/native closure/local release pending
 Contract date: 2026-10-21
 Owner: TKW K01/K02
 
@@ -21,13 +21,13 @@ Bind actual artifacts and ABI through the normal producer build before acceptanc
 
 Phase 2 binds explicit Candidate creation in
 [Material-backed Candidate work v1](material-candidate-work-v1.md). Its authored
-command is separate from these queries; implementation and acceptance remain
-pending. The logical Material/resource selection is retained in the existing
+command is separate from these queries; its implementation and connected Step
+acceptance are complete through P2-04. The logical Material/resource selection is retained in the existing
 Candidate's first proposal, without a second Material registry.
 
 For this first slice, searching/inspecting/reading may precede Candidate creation
 and performs no work/Candidate mutation. It must not create dummy Candidates to
-display an original. Subsequent K03 binds selection/evidence to Workbench-owned
+display an original. Accepted K03 binds selection/evidence to Workbench-owned
 Candidate identity and revision; an editor-local workspace is not a competing
 Candidate or Information store. A read result alone is not a persisted selection.
 
@@ -183,10 +183,21 @@ not a simulated TKL persistence lifecycle or evidence of cloud registration.
 The existing reference-read, factory and Candidate specifications retain their
 own scope and semantics.
 
-Parent-owned focused validation remains pending for this authored change.
-Owning TKL generated/native PostgreSQL coverage remains producer evidence only;
-it does not establish Workbench or Studio availability or acceptance. Actual
-composed Studio/native PostgreSQL outcomes, Studio's authorized immutable-source
-conversion/action and original display, private CAR and real Google/App
-evidence, integrated independent review and final whole Phase gates remain
-required. Authored code and specifications do not close any Step or Phase.
+Workbench forwarding coverage is retained by final full receipt 672: 71 tests
+in nine suites including PostgreSQL 17.11. Accepted P2-04 at
+`166f10c5b95a800a09f457003891ac77a5f72211` adds actual TKL/Workbench connected
+receipt 659: 19 tests/three suites, real JPEG inspection, one persistent Candidate,
+same-ID Edit/Hold, source navigation and PostgreSQL restart/readback. Complete
+1,535,406-byte equality was observed at native Bag/HTTP boundaries before/after
+work, and the original was read again after restart. The admitted caller is the
+fixture service `editing-studio-mobile-development`, not real end-user OAuth.
+Source evidence stays unverified without revision/snapshot; controlled approval
+receipt 484 remains separate.
+
+The original registration/Studio planning obligations retain their historical
+scope; producer coverage alone does not establish consumer acceptance. K03 and
+the Workbench-owned neutral-consumer/failure portion of K04 are delivered by
+Phase 2; actual Studio Candidate integration/full K04 remain held with Studio
+Phase 1.2. The first whole-Phase review requested documentation reconciliation.
+This source repair awaits closing review and native closure/local release and
+does not close the Phase.

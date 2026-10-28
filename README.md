@@ -6,10 +6,20 @@ P2-02 commit `b40de62c19a34d50a45276445e57f42576355e40` (native compile,
 P2-03 accepted served Material search/inspection/private preview, explicit
 creation and exact-intent reconciliation into existing Candidate edit/decision
 work at `f0949753f5b39d4a59ba6b3da905e9ce2b840cde`.
-P2-04 authors a second neutral consumer with PostgreSQL restart and an opt-in
-existing-real-Material browser scenario in `MaterialCandidateIntegrationSpec`.
-Its connected execution and independent review remain pending; normal tests
-require no real credentials or external browser. The opt-in browser fixture writes
+P2-04 accepted the neutral PostgreSQL consumer and existing-real-Material
+browser scenario at `166f10c5b95a800a09f457003891ac77a5f72211`, after connected
+receipt 659 (compile, 19 tests/three suites) and independent Step review. The
+actual browser inspected a 3000 × 4000 JPEG, created one Candidate, edited/Held
+that same ID through revisions 1/2/3, reloaded its source and retained complete
+work and exact-intent lookup across PostgreSQL restart. All 1,535,406 original
+bytes matched through native Bag/HTTP before and after work. Real evidence stayed
+unverified without revision/snapshot; Review/Approve remained unavailable.
+Final full receipt 672 passed 71 tests/nine suites including PostgreSQL 17.11.
+Normal full tests require no real credentials/browser; opt-in connected receipt
+659 and controlled approval/browser receipt 484 remain separate. The first
+whole-Phase review returned documentation REPAIR (issue-6). This source repair
+awaits independent closing review and native closure/local release; Phase 2 is
+not yet complete. The opt-in browser fixture writes
 an owner-only `target/material-candidate-real-browser-ready.json`; enter its random
 disposable `testToken` in `#token` before following the existing twelve-minute
 procedure. Native and HTTP clients use the same ordinary provider-authenticated
@@ -75,8 +85,9 @@ Material/resource selection to native Candidate registration. Retain a caller-ow
 same-intent resend returns current work without source reads or overwriting human
 edits. Initial evidence stays unverified and unversioned. See the
 [Material-backed work contract](docs/spec/material-candidate-work-v1.md).
-The source and executable specifications are authored; generation, native validation
-and Step acceptance remain workflow-owned. The PostgreSQL specification uses the
+The generated/native implementation and all four Phase 2 Steps are accepted;
+final full validation passed. Closing review, closure recording and local release
+remain workflow-owned. The PostgreSQL specification uses the
 same Testcontainers PostgreSQL 17.11 fixture approach as KnowledgeHub and requires
 that image to be available locally; it never falls back to SQLite.
 All Candidate operations remain outside MCP publication. STEP-2 is accepted
@@ -225,7 +236,8 @@ for registration, lookup, generated content-only edit and same-key resend exampl
 Phase 1 is closed at `f96057bd85f17b5647c520e2f00e690e14c63363`, retaining
 its proposal registration, human formation/approval and List/Detail/edit/review
 contracts and full-suite/review history. Real KnowledgeHub Admission belongs to
-[Phase 1.1](docs/phase/phase-1.1.md), currently in progress; TKL preparation,
+[Phase 1.1](docs/phase/phase-1.1.md), closed at local release
+`43205e2db92a3fb70ea618971b5e7a6e2b82a856`; TKL preparation,
 feedback and live provider adapters remain follow-on work.
 
 Accepted STEP-3 adds revision-aware `Candidate.getCandidateWork`,
@@ -251,5 +263,7 @@ uncertain outcomes are resolved only by lookup of that identity, without resend.
 See the [Admission contract](docs/spec/candidate-information-admission.md) and
 [user guide](src/main/car/manual/user-guide.md). Integration tests select the actual
 published CAR with JVM property `textus.test.knowledge-hub.car`; the default is its
-standard `~/.cncf/local/repository/car` coordinate. Native validation and whole-Phase
-acceptance are still pending in the [execution checklist](docs/phase/phase-1.1-checklist.md).
+standard `~/.cncf/local/repository/car` coordinate. Native Session
+`dc5aec0f04843c377ad539f04783861f` completed Phase 1.1 at local release
+`43205e2db92a3fb70ea618971b5e7a6e2b82a856`; the
+[execution checklist](docs/phase/phase-1.1-checklist.md) retains its historical snapshot.

@@ -2,7 +2,7 @@
 
 Owner: TKW Phase 2 / P2-01
 Contract date: 2026-10-28
-Status: contract accepted in P2-01; P2-02 accepted at `b40de62c19a34d50a45276445e57f42576355e40` after native compile, 48 tests in five suites including PostgreSQL, and independent review; P2-03 accepted at `f0949753f5b39d4a59ba6b3da905e9ce2b840cde`; P2-04 connected specifications authored, execution and review pending
+Status: contract accepted in P2-01; P2-02 accepted at `b40de62c19a34d50a45276445e57f42576355e40` after native compile, 48 tests in five suites including PostgreSQL, and independent review; P2-03 accepted at `f0949753f5b39d4a59ba6b3da905e9ce2b840cde`; P2-04 accepted at `166f10c5b95a800a09f457003891ac77a5f72211` after connected receipt 659 and independent review; final full receipt 672 passed; documentation repair/closing review and native closure/local release pending
 
 ## Owning contracts
 
@@ -146,7 +146,8 @@ remain TKL-owned and unchanged.
 P2-02's accepted generated/action/native persistence work is recorded below;
 P2-03 supplies browser behavior and safe binary preview, and P2-04 supplies
 neutral-consumer and separate real-source evidence. P2-03 is accepted;
-P2-04 execution, independent review and Phase closure remain pending.
+P2-04 connected execution and independent Step review are accepted; Phase
+closing review, native closure recording and local release remain pending.
 
 ## P2-02 implementation mapping
 
@@ -229,5 +230,24 @@ procedure are emitted only after successful real metadata and complete native/
 HTTP byte reads. The loopback server waits at most twelve minutes for explicit
 `/__real_material_complete`. Normal tests require no real credentials/browser.
 The fixture closes native runtimes/server/container and removes its disposable
-configuration and ready file. Connected execution, independent Step review and
-final Phase gates remain pending; this source authoring is not acceptance.
+configuration and ready file. P2-04 was accepted at
+`166f10c5b95a800a09f457003891ac77a5f72211` after connected receipt
+`8e7f63e6e34ec5b0aefe9aff93509af9:ordered-validation:659:validation@1`
+(compile and 19 tests/three suites) and independent Step review. The actual
+3000 × 4000 JPEG preview and one explicit Candidate creation led to same-ID
+Edit/Hold at revisions 1/2/3, present-empty context, source reopen and full native
+work/intent-lookup restoration after PostgreSQL restart. All 1,535,406 bytes
+matched the captured original via native Bag and HTTP before/after work, with
+an additional original read after restart. The admitted real fixture caller was
+`editing-studio-mobile-development`, a provider-authenticated service subject
+using a disposable loopback bearer, not real end-user OAuth. Normal neutral
+consumer runs retain their separate fixture caller.
+
+Final full receipt
+`8e7f63e6e34ec5b0aefe9aff93509af9:ordered-validation:672:validation@1`
+passed 71 tests/nine suites including PostgreSQL 17.11. Normal full validation
+excludes opt-in cloud/browser work; connected receipt 659 and controlled
+ready-evidence approval receipt 484 remain separate. The first whole-Phase
+review returned documentation REPAIR (issue-6). This documentation correction
+awaits closing review and native closure/local release; it does not claim Phase
+completion.

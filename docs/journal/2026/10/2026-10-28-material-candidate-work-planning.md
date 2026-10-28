@@ -212,3 +212,68 @@ KnowledgeLake only, two exact Google origins, GET/POST, 10s connect/20s read and
 readonly scope is still required. No PUT or default-test outbound grant is added.
 The original policy rejection remains; repair count 4 of 10 is retained pending
 native validation and independent review.
+
+
+## P2-04 connected acceptance and final full validation
+
+After the four retained fixture-precondition failures above, connected receipt
+`8e7f63e6e34ec5b0aefe9aff93509af9:ordered-validation:659:validation@1`
+passed compile and all 19 tests across three suites. The neutral technical
+observation consumer demonstrated the public contract without mandatory
+Book/ISBN/Studio/provider fields and recovered current human work through
+PostgreSQL restart and exact public intent lookup without a producer.
+
+The separate actual TKL/browser case used existing Material `437e5b…` and its
+first selected resource `5a8453…`; these abbreviated identities describe the
+retained private selection and are not replacement selectors. The browser
+previewed the actual 3000 × 4000 JPEG and issued exactly one explicit Candidate
+creation. The confirmed same Candidate advanced from revision 1 through Edit 2
+to Hold 3 with present-empty context; reload/source preview and PostgreSQL
+restart retained complete native work, revision, first source association and
+exact-intent lookup. Complete 1,535,406-byte equality with the captured local
+original was observed through native Bag and HTTP before and after work; the
+public original was read again after restart.
+
+The real fixture used the already admitted `editing-studio-mobile-development`
+provider-authenticated service caller with a disposable loopback token. This
+attributes the observed decisions to the fixture caller, not real end-user OAuth.
+The neutral consumer retains a separate fixture caller. Real evidence remained
+unverified, without revision/snapshot; Review/Approve were unavailable. Controlled
+ready-evidence approval/invalidation and uncertain-write exact lookup with one
+create/no replay remain separate P2-03 receipt 484 evidence.
+
+Independent Step review accepted the connected result. Native local commit
+`166f10c5b95a800a09f457003891ac77a5f72211` closed P2-04, following P2-01
+`98adb364573893ab87e3f35309b75118d35b63e9`, P2-02
+`b40de62c19a34d50a45276445e57f42576355e40` and P2-03
+`f0949753f5b39d4a59ba6b3da905e9ce2b840cde`. The admitted core dependency's
+six-path correction at `f4ad94ab…`, its compile/59 tests in five suites at 484
+and independent review remain retained on its unchanged dedicated branch.
+Earlier HTTP collection, two dependency test-compilation and four connected
+fixture failures, all accepted history and repair counters remain preserved.
+
+Final full receipt
+`8e7f63e6e34ec5b0aefe9aff93509af9:ordered-validation:672:validation@1`
+passed all 71 tests in nine suites, including actual PostgreSQL 17.11, against
+the accepted P2-04 product candidate. The normal full run excludes opt-in
+cloud/browser execution; actual connected receipt 659 and controlled browser
+receipt 484 remain separate. No Drive writes, materialize replay, main
+integration, push or external publication occurred.
+
+## First whole-Phase review and current-document repair
+
+The first independent whole-Phase review confirmed the integrated behavior,
+all four accepted Steps and matching final full validation, then returned REPAIR
+for stale current ledger/handoff text. Native issue-6 is the REVIEW finding;
+the phase-level release repair contract retains counter 1 of 10. This issued
+documentation repair reconciles the twelve owned current-status paths with
+P2-04 acceptance and full receipt 672, marking the demonstrated P2-04 items and
+P2-C01. The original K03/K04 OPEN table remains a historical planning snapshot;
+current disposition records K03 delivered through P2-01–03 and Workbench-owned
+neutral-consumer/failure K04 delivered through P2-04. Actual Studio Candidate
+integration/full K04 remain held with Studio Phase 1.2.
+
+This is source documentation repair only. Independent closing review, the
+native closure record and distinct local FinalRelease remain pending through
+the owning workflow. No Phase completion, unexecuted release commit or release
+hash is claimed. Earlier failed-attempt paragraphs remain historical observations.

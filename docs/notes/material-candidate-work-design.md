@@ -1,7 +1,7 @@
 # Material selection to Candidate work implementation considerations
 
 Date: 2026-10-28
-Status: planning proposal; not a new public API specification
+Status: historical planning considerations with current acceptance disposition; not a public API specification
 Phase: [Phase 2](../phase/phase-2.md)
 Execution ledger: [Phase 2 Checklist](../phase/phase-2-checklist.md)
 
@@ -19,10 +19,16 @@ checks and independent review. P2-02 generated bindings and implementation
 closed at `b40de62c` after compile, 48 tests across five suites including real
 PostgreSQL, and independent review. P2-03 browser interaction closed at
 `f0949753` after selected browser/native and dependency checks plus independent
-review. P2-04 now
-owns current real-source evidence. This note supplies no new cloud execution proof.
+review. P2-04 subsequently closed at `166f10c5b95a800a09f457003891ac77a5f72211`
+from connected receipt 659 and independent review, including the neutral consumer,
+real-Material browser, complete 1,535,406-byte equality and PostgreSQL readback.
+Full receipt 672 passed 71 tests/nine suites. K03 and Workbench-owned K04 scope
+are delivered; actual Studio integration/full K04 remain held. The first
+whole-Phase review requested current-document reconciliation; closing review
+and native closure/local release remain pending. This note summarizes accepted
+evidence and supplies no additional cloud execution proof.
 
-## Confirmed starting point
+## Historical starting point before implementation
 
 MaterialWork already forwards `searchMaterials`, `inspectMaterial` and
 `readOriginal` to the public KnowledgeLake/Material Operations using the caller's
