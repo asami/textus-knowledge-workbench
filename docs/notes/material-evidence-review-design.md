@@ -70,6 +70,31 @@ necessary for changed/unknown/denied cases and a neutral consumer. A fixture
 service caller is not real end-user OAuth. No real Drive creation/materialize
 replay, provider fallback, main integration or external publication is implied.
 
+## Connected acceptance design — P3-04
+
+The selected connected executable specification composes the existing public
+Workbench commands, the actual Hub CAR and real PostgreSQL Candidate storage.
+Its neutral consumer has no Book, Studio or physical Drive vocabulary. A fresh
+runtime must restore the same first selection, human target, source version,
+native binding/applications, decisions and canonical Information outcome. Full
+resource correspondence remains native and is joined by the canonical record's
+approved Candidate ID/revision; the Hub schema is unchanged.
+
+The existing real-original comparison is reused for one explicit read-only case.
+The TKL package reader alone receives its owning physical configuration and
+credential locator. The consumer selects from public logical metadata, then uses
+the ordinary server-owned refresh. The source observation is not replaced by a
+local content hash, registration revision or Candidate revision. Complete bytes
+are compared through public native and HTTP original responses before and after
+restart. A small non-secret `target/` record can retain actual execution facts for
+the caller; its presence is not independent review or Phase acceptance.
+
+Controlled failure and uncertain-outcome cases remain separate from real-source
+claims. The already admitted service caller exercises genuine ingress and source
+authorization; it does not establish real end-user OAuth. No cloud mutation or
+materialize retry is needed. These are authored test/design choices awaiting
+native execution, focused review, final full validation and integrated review.
+
 ## Selected producer direction after native scope approval
 
 The owner selected alternative 1: optional `evidenceResourceIds` on the existing

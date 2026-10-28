@@ -34,19 +34,19 @@ Stage Status:
 ## P3-03
 
 Stage Status:
-- Current status: IN_PROGRESS
+- Current status: CLOSED
 - Owner: TKW Phase3 owner
 - Update rule: Update only from this Step's actual native acceptance and evidence.
 
-- [ ] P3-03-A: Served browser displays authoritative version/readiness and limitations; source selection and unknown/unversioned facts cannot silently enable approval.
-- [ ] P3-03-B: Explicit evidence update where specified, Review, Approve and Admission use actual acknowledged revisions and exact unchanged target; preserve unsaved work.
-- [ ] P3-03-C: Structured denied/missing/changed/stale/unknown outcomes retain known identities, private original handling and no automatic mutation replay.
-- [ ] P3-03-D: Pass affected HTTP/view/browser checks with actual served-browser evidence and independent review, then complete the local Step commit.
+- [x] P3-03-A: Served browser displays authoritative version/readiness and limitations; source selection and unknown/unversioned facts cannot silently enable approval.
+- [x] P3-03-B: Explicit evidence update where specified, Review, Approve and Admission use actual acknowledged revisions and exact unchanged target; preserve unsaved work.
+- [x] P3-03-C: Structured denied/missing/changed/stale/unknown outcomes retain known identities, private original handling and no automatic mutation replay.
+- [x] P3-03-D: Pass affected HTTP/view/browser checks with actual served-browser evidence and independent review, then complete the local Step commit.
 
 ## P3-04
 
 Stage Status:
-- Current status: OPEN
+- Current status: IN_PROGRESS
 - Owner: TKW Phase3 owner
 - Update rule: Update only from this Step's actual native acceptance and evidence.
 
@@ -133,3 +133,14 @@ Optimistic concurrency is explicit alongside Detached revision storage. Earlier
 failures and four repairs remain retained. TKL observations were controlled;
 real-source/browser/final-full obligations remain open. P3-03 is the next issued
 ImplementStep and none of its acceptance boxes are checked by this record.
+
+## P3-03 acceptance and P3-04 handoff
+
+Ordinary native closure accepted P3-03 in local commit `38441cc` after compile,
+28 passing tests across three suites and independent review. The actual served
+browser and native final assertions agreed on five refresh requests (including
+one denial and one lost ACK), one Hub Admission, three evidence applications and
+ten decisions, with no automatic replay. TKL was controlled and the local Hub
+CAR was real. Current original-byte/source-version attestation and connected
+PostgreSQL restart remain P3-04; final full/integrated review/release remain Phase
+obligations. No P3-04 or Phase-closure acceptance is implied by this handoff.

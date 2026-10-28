@@ -35,7 +35,15 @@ storage. Earlier fixture/compiler failures and four repairs remain recorded.
 These are controlled TKL observations with the actual Hub CAR, not live Drive
 or browser acceptance.
 
-P3-03 is now issued for served-browser evidence/readiness and explicit refresh.
+P3-03 is accepted in local commit `38441cc` after compile, 28 passing tests
+across three suites and independent review. An actual served IAB browser performed
+the explicit workflow; native assertions confirmed five refresh attempts, one
+Hub Admission, three evidence applications and ten decisions. The no-op preserved
+approval/revision; version changes invalidated approval; denial and lost ACK were
+reconciled through reads without replay. TKL was controlled, not a real provider.
+
+P3-04 is now issued for the existing real read-only Material, exact canonical
+Information/native trace and PostgreSQL restart.
 TKL source remains on dedicated `codex/tkw-phase3-material-evidence` from `3619fbff`;
 its accepted producer candidate is retained without main/remote changes. The
 actual ReviseWork direction, earlier failures/UNKNOWN records and all repair

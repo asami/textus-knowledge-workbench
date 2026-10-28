@@ -233,3 +233,41 @@ explicitly opt-in loopback browser scenario. Its producer/fault controls are
 owned test endpoints and establish controlled observations, not real Google Drive
 or end-user OAuth. Native validation, actual browser observations and independent
 review retain their separate owners; source authoring does not establish PASS.
+
+## Connected verification (P3-04)
+
+`MaterialEvidenceIntegrationSpec` separates controlled public-source cases from
+explicitly selected real-source acceptance. A neutral technical-observation
+consumer speaks only logical Material, Candidate and Information Operations.
+It retains the first ordered selection, human target, exact opaque source
+revision, native application history and attributed decisions through actual
+PostgreSQL restart. The actual KnowledgeHub CAR persists and reopens the exact
+approved Information target and canonical ID/revision. Its approved Candidate
+ID/revision joins to the detailed native resource correspondence; the extra
+`materialEvidence` Entity field is not copied into Information.
+
+Controlled cases cover denied, missing, unavailable, unversioned and stale work,
+plus a durable unconfirmed Information identity. Confirmation reads the same
+reserved identity after the original owning write finishes; it does not allocate
+or resend Admission. Generated target substitutions cannot confirm a different
+canonical outcome under the original approved trace.
+
+The opt-in connected case uses one existing read-only TKL package and the
+already admitted service subject. Public TKL metadata determines the selected
+logical resource, and the existing refresh command obtains its authoritative
+source observation. No client chooses a provider version. Complete original
+byte arrays are compared before and after native restart, including the normal
+HTTP binary response and its private/no-store policy. Only local disposable
+Candidate/Information records and PostgreSQL fixtures are created. No Drive
+creation, upload, delete, ACL change or materialize replay is performed.
+
+Real execution may record logical source/Candidate/Information identities,
+observed source revision, original byte length and comparison results in a
+test-owned `target/` observation artifact. Credential contents, bearer values,
+private provider mappings and original bytes are excluded. A provider-authenticated
+fixture service caller is not real end-user OAuth. An observed source revision
+does not promise historical pinned retrieval or retention. Normal full validation
+has no real-source or interactive-browser prerequisite and retains the separately
+qualified connected evidence. Source authoring does not establish execution or
+Phase acceptance; final full validation and integrated independent review remain
+required, and Studio Phase1.2 remains held.

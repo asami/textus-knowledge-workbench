@@ -22,7 +22,7 @@ import org.http4s.syntax.all.*
 
 /*
  * @since   Oct. 27, 2026
- * @version Oct. 27, 2026
+ * @version Oct. 28, 2026
  */
 /** Test-scope access to the existing native HTTP router; no product API added. */
 object WorkbenchHttpFixture {
