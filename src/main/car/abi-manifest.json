@@ -20,6 +20,9 @@
         },
         {
           "name": "MaterialWork"
+        },
+        {
+          "name": "SemanticWork"
         }
       ],
       "operations": [
@@ -141,6 +144,48 @@
           "kind": "COMMAND",
           "input": "RefreshCandidateMaterialEvidence",
           "output": "CandidateWorkResult"
+        },
+        {
+          "service": "SemanticWork",
+          "name": "openSemanticWork",
+          "kind": "COMMAND",
+          "input": "SemanticWorkOpen",
+          "output": "SemanticWorkResult"
+        },
+        {
+          "service": "SemanticWork",
+          "name": "getSemanticWork",
+          "kind": "QUERY",
+          "input": "SemanticWorkSelection",
+          "output": "SemanticWorkResult"
+        },
+        {
+          "service": "SemanticWork",
+          "name": "correctSemanticWork",
+          "kind": "COMMAND",
+          "input": "SemanticWorkCorrection",
+          "output": "SemanticWorkResult"
+        },
+        {
+          "service": "SemanticWork",
+          "name": "decideSemanticWork",
+          "kind": "COMMAND",
+          "input": "SemanticWorkDecision",
+          "output": "SemanticWorkResult"
+        },
+        {
+          "service": "SemanticWork",
+          "name": "formSemanticWork",
+          "kind": "COMMAND",
+          "input": "SemanticWorkFormation",
+          "output": "SemanticWorkResult"
+        },
+        {
+          "service": "SemanticWork",
+          "name": "confirmSemanticFormation",
+          "kind": "COMMAND",
+          "input": "ConfirmSemanticFormation",
+          "output": "SemanticWorkResult"
         }
       ],
       "types": [
@@ -1137,6 +1182,318 @@
               "required": true
             }
           ]
+        },
+        {
+          "name": "SemanticBinding",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "predicate",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "conceptId",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "value",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "SemanticFormationTarget",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "informationId",
+              "type": "entityid",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "informationRevision",
+              "type": "long",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "contextId",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "contextRevision",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "interpretation",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "bindings",
+              "type": "SemanticBinding",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "outcome",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "rationale",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "provider",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "SemanticWorkOpen",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "informationId",
+              "type": "entityid",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "SemanticWorkSelection",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "id",
+              "type": "entityid",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "SemanticWorkCorrection",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "id",
+              "type": "entityid",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "expectedRevision",
+              "type": "long",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "target",
+              "type": "SemanticFormationTarget",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "reason",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "SemanticWorkDecision",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "id",
+              "type": "entityid",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "expectedRevision",
+              "type": "long",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "decision",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "reason",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "SemanticWorkFormation",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "id",
+              "type": "entityid",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "expectedRevision",
+              "type": "long",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "ConfirmSemanticFormation",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "id",
+              "type": "entityid",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "expectedRevision",
+              "type": "long",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "SemanticFormationDecision",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "decision",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "actor",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "occurredAt",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "reason",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "target",
+              "type": "SemanticFormationTarget",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "SemanticFormationReservation",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "id",
+              "type": "entityid",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "target",
+              "type": "SemanticFormationTarget",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "decision",
+              "type": "SemanticFormationDecision",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "resultRevision",
+              "type": "long",
+              "multiplicity": "?",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "SemanticWorkResult",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "work",
+              "type": "SemanticFormationWork",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "revision",
+              "type": "long",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "state",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "approvalValid",
+              "type": "boolean",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
         }
       ],
       "entities": [
@@ -1255,6 +1612,47 @@
               "name": "materialEvidence",
               "type": "MaterialEvidenceBinding",
               "multiplicity": "?",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "SemanticFormationWork",
+          "fields": [
+            {
+              "name": "id",
+              "type": "entityid",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "informationId",
+              "type": "entityid",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "informationRevision",
+              "type": "long",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "target",
+              "type": "SemanticFormationTarget",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "decisions",
+              "type": "SemanticFormationDecision",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "formations",
+              "type": "SemanticFormationReservation",
+              "multiplicity": "*",
               "required": false
             }
           ]

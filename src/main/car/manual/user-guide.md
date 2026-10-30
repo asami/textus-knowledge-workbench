@@ -522,3 +522,7 @@ If the response is unconfirmed, do not press the command again: use **選択中�
 再読み込み** to reconcile the same Candidate. Commands stay blocked until a fresh
 read succeeds. Retain unsaved work deliberately; reading another Candidate asks
 before discarding edits. Tokens are not saved with work or errors.
+
+## Saved Information semantic formation
+
+The `SemanticWork` service exposes `openSemanticWork`, `getSemanticWork`, `correctSemanticWork`, `decideSemanticWork`, `formSemanticWork`, `confirmSemanticFormation`. Open saved Information, correct the complete semantic target, explicitly review and approve, then form Knowledge. Admission approval is separate. Changing a target invalidates its semantic approval. Reopen uncertain formation and confirm the retained result identity; never blindly resubmit creation. Original access remains Workbench MaterialWork / KnowledgeLake. This source addition has not yet been qualified or locally released.

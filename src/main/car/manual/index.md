@@ -386,3 +386,7 @@ validation. The browser requires a reason, blocks refresh while edits are unsave
 and reconciles unknown acknowledgements through `getCandidateWork` without replay.
 Public native HTTP errors preserve disclosed Conclusion information as text;
 debug diagnostics and credentials are not copied into the page.
+
+## Saved Information semantic formation
+
+The `SemanticWork` service exposes `openSemanticWork`, `getSemanticWork`, `correctSemanticWork`, `decideSemanticWork`, `formSemanticWork`, `confirmSemanticFormation`. Open saved Information, correct the complete semantic target, explicitly review and approve, then form Knowledge. Admission approval is separate. Changing a target invalidates its semantic approval. Reopen uncertain formation and confirm the retained result identity; never blindly resubmit creation. Original access remains Workbench MaterialWork / KnowledgeLake. This source addition has not yet been qualified or locally released.

@@ -22,7 +22,7 @@ import org.scalatest.wordspec.AnyWordSpec
 
 /*
  * @since   Oct.  3, 2026
- * @version Oct. 28, 2026
+ * @version Oct. 30, 2026
  */
 final class ComponentFactorySpec extends AnyWordSpec with Matchers with GivenWhenThen {
   private val _foundation = afterWord(
@@ -51,10 +51,33 @@ final class ComponentFactorySpec extends AnyWordSpec with Matchers with GivenWhe
           "listCandidates",
           "refreshCandidateMaterialEvidence"
         )
+        Vector("openSemanticWork", "getSemanticWork", "correctSemanticWork", "decideSemanticWork", "formSemanticWork", "confirmSemanticFormation").foreach { operation =>
+          bundle.primary.operationDefinitions.map(_.name) should contain(operation)
+        }
         bundle.participants shouldBe Vector(bundle.primary)
       } finally {
         subsystem.shutdown()
       }
+    }
+
+    "retain separate native formation and confirmation request ownership" in {
+      Given("a Workbench component initialized through its production bundle factory")
+      val subsystem = DefaultSubsystemFactory.default(Some("server"))
+      try {
+        val component = new impl.ComponentFactory().create(ComponentCreate(subsystem,
+          ComponentOrigin.Repository("semantic-work-contract-spec"))).primary
+        When("the two deliberate semantic commands expose their generated public contracts")
+        val definitions = component.operationDefinitions.filter(operation =>
+          Set("formSemanticWork", "confirmSemanticFormation").contains(operation.name))
+        Then("each command has its own request type and the same observed native selection fields")
+        definitions.map(operation => operation.name -> operation.inputType).toSet shouldBe Set(
+          "formSemanticWork" -> "SemanticWorkFormation", "confirmSemanticFormation" -> "ConfirmSemanticFormation")
+        definitions.foreach { operation =>
+          operation.kind shouldBe "COMMAND"
+          operation.parameters.map(field => field.name -> field.multiplicity) shouldBe Vector("id" -> "1", "expectedRevision" -> "1")
+          operation.outputType shouldBe "SemanticWorkResult"
+        }
+      } finally subsystem.shutdown()
     }
 
     "keep starter Candidate operations outside MCP publication" in {

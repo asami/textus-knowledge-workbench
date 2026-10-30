@@ -11,7 +11,7 @@ import org.goldenport.record.Record
 
 /*
  * @since   Oct.  3, 2026
- * @version Oct. 28, 2026
+ * @version Oct. 30, 2026
  */
 final class ComponentFactory extends Component.BundleFactory {
   def primaryFactory: Component.PrimaryComponentFactory =
@@ -25,6 +25,7 @@ abstract class KnowledgeWorkbenchParticipantFactoryBase extends KnowledgeWorkben
   protected final val shared_services =
     Vector(
       KnowledgeWorkbenchComponent.CandidateService,
+      KnowledgeWorkbenchComponent.SemanticWorkService,
       KnowledgeWorkbenchComponent.MaterialWorkService,
       KnowledgeWorkbenchComponent.AggregateService,
       KnowledgeWorkbenchComponent.ViewService,
@@ -37,6 +38,8 @@ abstract class KnowledgeWorkbenchParticipantFactoryBase extends KnowledgeWorkben
   ): Component.Core =
     spec_create(name, componentId, shared_services)
 
+  override val SemanticWork: KnowledgeWorkbenchComponent.SemanticWorkServiceFactory = new SemanticFormationWorkServiceFactory
+
   override val Candidate: KnowledgeWorkbenchComponent.CandidateServiceFactory = DefaultCandidateServiceFactory()
   override val MaterialWork: KnowledgeWorkbenchComponent.MaterialWorkServiceFactory = MaterialWorkServiceFactory()
   override val aggregate: KnowledgeWorkbenchComponent.AggregateServiceFactory = AggregateServiceFactoryImpl()
@@ -48,7 +51,8 @@ final class KnowledgeWorkbenchPrimaryComponent extends KnowledgeWorkbenchCompone
   override def componentDescriptors: Vector[org.goldenport.cncf.component.ComponentDescriptor] =
     super.componentDescriptors.map { descriptor =>
       descriptor.copy(entityRuntimeDescriptors = descriptor.entityRuntimeDescriptors.map { declaration =>
-        if (declaration.collectionId == org.simplemodeling.textus.knowledgeworkbench.entity.InformationCandidate.collectionId)
+        if ((declaration.collectionId == org.simplemodeling.textus.knowledgeworkbench.entity.InformationCandidate.collectionId ||
+            declaration.collectionId == org.simplemodeling.textus.knowledgeworkbench.entity.SemanticFormationWork.collectionId))
           declaration.copy(
             revisionRepresentation = Some(org.goldenport.cncf.entity.EntityRevisionRepresentation.Detached),
             concurrencyPolicy = Some(org.goldenport.cncf.entity.EntityConcurrencyPolicy.Optimistic))
@@ -201,7 +205,97 @@ object DefaultCandidateServiceFactory {
   }
 }
 
-final class DefaultEntityServiceFactory extends KnowledgeWorkbenchComponent.EntityServiceFactory
+final class DefaultEntityServiceFactory extends KnowledgeWorkbenchComponent.EntityServiceFactory {
+  import KnowledgeWorkbenchComponent.EntityService.*
+  override def createCreateSemanticFormationWorkActionCall(core: org.goldenport.cncf.action.ActionCall.Core, action: CreateSemanticFormationWorkCommand): CreateSemanticFormationWorkActionCall = SemanticFormationEntityGuard.createSemanticFormationWork(core, action)
+  override def createCreateInformationCandidateActionCall(core: org.goldenport.cncf.action.ActionCall.Core, action: CreateInformationCandidateCommand): CreateInformationCandidateActionCall =
+    { val owningcore = core; val owningaction = action
+    if (org.simplemodeling.model.datatype.EntityId.createC(action.request.toRecord).toOption.exists(_.collection == entity.SemanticFormationWork.collectionId))
+      new CreateInformationCandidateActionCall {
+        val core: org.goldenport.cncf.action.ActionCall.Core = owningcore
+        override val action: CreateInformationCandidateCommand = owningaction
+        protected def build_Program: ExecUowM[OperationResponse] = exec_from(org.goldenport.Consequence.securityPermissionDenied("Semantic work mutations require the owning service"))
+      }
+    else super.createCreateInformationCandidateActionCall(core, action)
+    }
+  override def createCreateSemanticFormationWorkRecordActionCall(core: org.goldenport.cncf.action.ActionCall.Core, action: CreateSemanticFormationWorkRecordCommand): CreateSemanticFormationWorkRecordActionCall = SemanticFormationEntityGuard.createSemanticFormationWorkRecord(core, action)
+  override def createCreateInformationCandidateRecordActionCall(core: org.goldenport.cncf.action.ActionCall.Core, action: CreateInformationCandidateRecordCommand): CreateInformationCandidateRecordActionCall =
+    { val owningcore = core; val owningaction = action
+    if (org.simplemodeling.model.datatype.EntityId.createC(action.request.toRecord).toOption.exists(_.collection == entity.SemanticFormationWork.collectionId))
+      new CreateInformationCandidateRecordActionCall {
+        val core: org.goldenport.cncf.action.ActionCall.Core = owningcore
+        override val action: CreateInformationCandidateRecordCommand = owningaction
+        protected def build_Program: ExecUowM[OperationResponse] = exec_from(org.goldenport.Consequence.securityPermissionDenied("Semantic work mutations require the owning service"))
+      }
+    else super.createCreateInformationCandidateRecordActionCall(core, action)
+    }
+  override def createSaveSemanticFormationWorkActionCall(core: org.goldenport.cncf.action.ActionCall.Core, action: SaveSemanticFormationWorkCommand): SaveSemanticFormationWorkActionCall = SemanticFormationEntityGuard.saveSemanticFormationWork(core, action)
+  override def createSaveInformationCandidateActionCall(core: org.goldenport.cncf.action.ActionCall.Core, action: SaveInformationCandidateCommand): SaveInformationCandidateActionCall =
+    { val owningcore = core; val owningaction = action
+    if (org.simplemodeling.model.datatype.EntityId.createC(action.request.toRecord).toOption.exists(_.collection == entity.SemanticFormationWork.collectionId))
+      new SaveInformationCandidateActionCall {
+        val core: org.goldenport.cncf.action.ActionCall.Core = owningcore
+        override val action: SaveInformationCandidateCommand = owningaction
+        protected def build_Program: ExecUowM[OperationResponse] = exec_from(org.goldenport.Consequence.securityPermissionDenied("Semantic work mutations require the owning service"))
+      }
+    else super.createSaveInformationCandidateActionCall(core, action)
+    }
+  override def createSaveSemanticFormationWorkRecordActionCall(core: org.goldenport.cncf.action.ActionCall.Core, action: SaveSemanticFormationWorkRecordCommand): SaveSemanticFormationWorkRecordActionCall = SemanticFormationEntityGuard.saveSemanticFormationWorkRecord(core, action)
+  override def createSaveInformationCandidateRecordActionCall(core: org.goldenport.cncf.action.ActionCall.Core, action: SaveInformationCandidateRecordCommand): SaveInformationCandidateRecordActionCall =
+    { val owningcore = core; val owningaction = action
+    if (org.simplemodeling.model.datatype.EntityId.createC(action.request.toRecord).toOption.exists(_.collection == entity.SemanticFormationWork.collectionId))
+      new SaveInformationCandidateRecordActionCall {
+        val core: org.goldenport.cncf.action.ActionCall.Core = owningcore
+        override val action: SaveInformationCandidateRecordCommand = owningaction
+        protected def build_Program: ExecUowM[OperationResponse] = exec_from(org.goldenport.Consequence.securityPermissionDenied("Semantic work mutations require the owning service"))
+      }
+    else super.createSaveInformationCandidateRecordActionCall(core, action)
+    }
+  override def createUpdateSemanticFormationWorkActionCall(core: org.goldenport.cncf.action.ActionCall.Core, action: UpdateSemanticFormationWorkCommand): UpdateSemanticFormationWorkActionCall = SemanticFormationEntityGuard.updateSemanticFormationWork(core, action)
+  override def createUpdateInformationCandidateActionCall(core: org.goldenport.cncf.action.ActionCall.Core, action: UpdateInformationCandidateCommand): UpdateInformationCandidateActionCall =
+    { val owningcore = core; val owningaction = action
+    if (org.simplemodeling.model.datatype.EntityId.createC(action.request.toRecord).toOption.exists(_.collection == entity.SemanticFormationWork.collectionId))
+      new UpdateInformationCandidateActionCall {
+        val core: org.goldenport.cncf.action.ActionCall.Core = owningcore
+        override val action: UpdateInformationCandidateCommand = owningaction
+        protected def build_Program: ExecUowM[OperationResponse] = exec_from(org.goldenport.Consequence.securityPermissionDenied("Semantic work mutations require the owning service"))
+      }
+    else super.createUpdateInformationCandidateActionCall(core, action)
+    }
+  override def createUpdateSemanticFormationWorkRecordActionCall(core: org.goldenport.cncf.action.ActionCall.Core, action: UpdateSemanticFormationWorkRecordCommand): UpdateSemanticFormationWorkRecordActionCall = SemanticFormationEntityGuard.updateSemanticFormationWorkRecord(core, action)
+  override def createUpdateInformationCandidateRecordActionCall(core: org.goldenport.cncf.action.ActionCall.Core, action: UpdateInformationCandidateRecordCommand): UpdateInformationCandidateRecordActionCall =
+    { val owningcore = core; val owningaction = action
+    if (org.simplemodeling.model.datatype.EntityId.createC(action.request.toRecord).toOption.exists(_.collection == entity.SemanticFormationWork.collectionId))
+      new UpdateInformationCandidateRecordActionCall {
+        val core: org.goldenport.cncf.action.ActionCall.Core = owningcore
+        override val action: UpdateInformationCandidateRecordCommand = owningaction
+        protected def build_Program: ExecUowM[OperationResponse] = exec_from(org.goldenport.Consequence.securityPermissionDenied("Semantic work mutations require the owning service"))
+      }
+    else super.createUpdateInformationCandidateRecordActionCall(core, action)
+    }
+  override def createDeleteSemanticFormationWorkActionCall(core: org.goldenport.cncf.action.ActionCall.Core, action: DeleteSemanticFormationWorkCommand): DeleteSemanticFormationWorkActionCall = SemanticFormationEntityGuard.deleteSemanticFormationWork(core, action)
+  override def createDeleteInformationCandidateActionCall(core: org.goldenport.cncf.action.ActionCall.Core, action: DeleteInformationCandidateCommand): DeleteInformationCandidateActionCall =
+    { val owningcore = core; val owningaction = action
+    if (org.simplemodeling.model.datatype.EntityId.createC(action.request.toRecord).toOption.exists(_.collection == entity.SemanticFormationWork.collectionId))
+      new DeleteInformationCandidateActionCall {
+        val core: org.goldenport.cncf.action.ActionCall.Core = owningcore
+        override val action: DeleteInformationCandidateCommand = owningaction
+        protected def build_Program: ExecUowM[OperationResponse] = exec_from(org.goldenport.Consequence.securityPermissionDenied("Semantic work mutations require the owning service"))
+      }
+    else super.createDeleteInformationCandidateActionCall(core, action)
+    }
+  override def createDeleteSemanticFormationWorkHardActionCall(core: org.goldenport.cncf.action.ActionCall.Core, action: DeleteSemanticFormationWorkHardCommand): DeleteSemanticFormationWorkHardActionCall = SemanticFormationEntityGuard.deleteSemanticFormationWorkHard(core, action)
+  override def createDeleteInformationCandidateHardActionCall(core: org.goldenport.cncf.action.ActionCall.Core, action: DeleteInformationCandidateHardCommand): DeleteInformationCandidateHardActionCall =
+    { val owningcore = core; val owningaction = action
+    if (org.simplemodeling.model.datatype.EntityId.createC(action.request.toRecord).toOption.exists(_.collection == entity.SemanticFormationWork.collectionId))
+      new DeleteInformationCandidateHardActionCall {
+        val core: org.goldenport.cncf.action.ActionCall.Core = owningcore
+        override val action: DeleteInformationCandidateHardCommand = owningaction
+        protected def build_Program: ExecUowM[OperationResponse] = exec_from(org.goldenport.Consequence.securityPermissionDenied("Semantic work mutations require the owning service"))
+      }
+    else super.createDeleteInformationCandidateHardActionCall(core, action)
+    }
+}
 
 object DefaultEntityServiceFactory {
   def apply(): DefaultEntityServiceFactory = new DefaultEntityServiceFactory()

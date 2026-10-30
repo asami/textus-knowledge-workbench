@@ -1323,3 +1323,296 @@ bindingId = "candidate.confirm-admission"
 id = "refresh-evidence"
 label = "Explicitly refresh original evidence"
 bindingId = "candidate.refresh-evidence"
+
+# SERVICE
+
+## SemanticWork
+
+### SUMMARY
+
+Saved Information semantic formation.
+
+### OPERATION
+
+#### openSemanticWork
+
+##### SUMMARY
+
+openSemanticWork.
+
+##### TYPE
+
+COMMAND
+
+##### INPUT
+
+###### TYPE
+
+SemanticWorkOpen
+
+##### OUTPUT
+
+###### TYPE
+
+SemanticWorkResult
+
+#### getSemanticWork
+
+##### SUMMARY
+
+getSemanticWork.
+
+##### TYPE
+
+QUERY
+
+##### INPUT
+
+###### TYPE
+
+SemanticWorkSelection
+
+##### OUTPUT
+
+###### TYPE
+
+SemanticWorkResult
+
+#### correctSemanticWork
+
+##### SUMMARY
+
+correctSemanticWork.
+
+##### TYPE
+
+COMMAND
+
+##### INPUT
+
+###### TYPE
+
+SemanticWorkCorrection
+
+##### OUTPUT
+
+###### TYPE
+
+SemanticWorkResult
+
+#### decideSemanticWork
+
+##### SUMMARY
+
+decideSemanticWork.
+
+##### TYPE
+
+COMMAND
+
+##### INPUT
+
+###### TYPE
+
+SemanticWorkDecision
+
+##### OUTPUT
+
+###### TYPE
+
+SemanticWorkResult
+
+#### formSemanticWork
+
+##### SUMMARY
+
+formSemanticWork.
+
+##### TYPE
+
+COMMAND
+
+##### INPUT
+
+###### TYPE
+
+SemanticWorkFormation
+
+##### OUTPUT
+
+###### TYPE
+
+SemanticWorkResult
+
+#### confirmSemanticFormation
+
+##### SUMMARY
+
+confirmSemanticFormation.
+
+##### TYPE
+
+COMMAND
+
+##### INPUT
+
+###### TYPE
+
+ConfirmSemanticFormation
+
+##### OUTPUT
+
+###### TYPE
+
+SemanticWorkResult
+
+# ENTITY
+
+## SemanticFormationWork
+
+### SUMMARY
+
+Common semantic work with exact-target decisions and retained formation identities.
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| id | entityid | 1 |
+| informationId | entityid | 1 |
+| informationRevision | long | 1 |
+| target | SemanticFormationTarget | ? |
+| decisions | SemanticFormationDecision | * |
+| formations | SemanticFormationReservation | * |
+
+# VALUE
+
+## SemanticBinding
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| predicate | string | 1 |
+| conceptId | string | 1 |
+| value | string | 1 |
+
+## SemanticFormationTarget
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| informationId | entityid | 1 |
+| informationRevision | long | 1 |
+| contextId | string | 1 |
+| contextRevision | string | 1 |
+| interpretation | string | 1 |
+| label | string | 1 |
+| bindings | SemanticBinding | * |
+| outcome | string | 1 |
+| rationale | string | 1 |
+| provider | string | 1 |
+
+## SemanticWorkOpen
+
+- input-kind :: COMMAND
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| informationId | entityid | 1 |
+
+## SemanticWorkSelection
+
+- input-kind :: QUERY
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| id | entityid | 1 |
+
+## SemanticWorkCorrection
+
+- input-kind :: COMMAND
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| id | entityid | 1 |
+| expectedRevision | long | 1 |
+| target | SemanticFormationTarget | 1 |
+| reason | string | 1 |
+
+## SemanticWorkDecision
+
+- input-kind :: COMMAND
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| id | entityid | 1 |
+| expectedRevision | long | 1 |
+| decision | string | 1 |
+| reason | string | 1 |
+
+## SemanticWorkFormation
+
+- input-kind :: COMMAND
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| id | entityid | 1 |
+| expectedRevision | long | 1 |
+
+## ConfirmSemanticFormation
+
+- input-kind :: COMMAND
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| id | entityid | 1 |
+| expectedRevision | long | 1 |
+
+## SemanticFormationDecision
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| decision | string | 1 |
+| actor | string | 1 |
+| occurredAt | string | 1 |
+| reason | string | 1 |
+| target | SemanticFormationTarget | 1 |
+
+## SemanticFormationReservation
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| id | entityid | 1 |
+| target | SemanticFormationTarget | 1 |
+| decision | SemanticFormationDecision | 1 |
+| status | string | 1 |
+| resultRevision | long | ? |
+
+## SemanticWorkResult
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| work | SemanticFormationWork | 1 |
+| revision | long | 1 |
+| state | string | 1 |
+| approvalValid | boolean | 1 |

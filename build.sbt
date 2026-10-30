@@ -22,6 +22,8 @@ lazy val root = project
     libraryDependencies ++= ProjectYamlBuild.dependencies(cozyProjectMetadata.value),
     // Native fixture/bootstrap process-global lifecycle must be serialized.
     Test / parallelExecution := false,
+    // Native component-dev-dir fixtures require ordinary runtime evidence.
+    Test / compile := (Test / compile).dependsOn(cozyPrepareRuntime).value,
 
     cozyGeneratorBackend := "cozy",
     cozyDelegateProjectDir := None,
