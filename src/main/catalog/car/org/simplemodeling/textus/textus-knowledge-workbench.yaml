@@ -1,0 +1,23 @@
+schemaVersion: 2
+kind: car
+namespace: org.simplemodeling.textus
+id: KnowledgeWorkbench
+artifactId: textus-knowledge-workbench
+latestSnapshot: 0.1.0-SNAPSHOT
+status: active
+aliases: []
+tags: []
+terms: []
+versions:
+  - version: 0.1.0-SNAPSHOT
+    channel: snapshot
+    status: active
+    component: org.simplemodeling.textus.KnowledgeWorkbench
+    publishedAt: 2026-10-30T09:48:50.547955+09:00
+    file: repository/car/org/simplemodeling/textus/textus-knowledge-workbench/0.1.0-SNAPSHOT/textus-knowledge-workbench-0.1.0-SNAPSHOT.car
+    runtime:
+      cncf:
+        minimum: 0.5.3-SNAPSHOT
+        excluded: []
+        tested:
+          - 0.5.3-SNAPSHOT
