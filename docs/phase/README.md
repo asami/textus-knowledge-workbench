@@ -1,6 +1,23 @@
 # Workbench Phase index
 
+## EAI Material consumer workstream — 2026-11-02
+
+[EAI Material consumer acceptance](eai-material-consumer-plan.md) adds bounded
+acceptance of mail Excel and mobile Materials from TKL Phase 2 through existing
+reference/Candidate contracts. No direct EAI/Drive adapter, duplicate storage,
+automatic human approval or reopened accepted Phase is introduced. The
+WB-EAI-01..03 ledger remains OPEN and starts no Session.
+
 Updated: 2026-10-28
+
+## Studio Knowledge formation contribution — 2026-10-29
+
+[Bounded shared-work/review plan](studio-knowledge-formation-review-plan.md)
+supports Studio Phase 4 and KnowledgeHub Phase 6. Hub owns semantic proposals
+and formation; Workbench supplies common work and explicit decisions. This is
+planned work and not the proposed AI Candidate-drafting Phase 4. Earlier Studio
+Phase 1.2 hold statements below are historical: its completed consumer branch
+is the baseline recorded in the new Studio plan.
 
 This directory records engineering scope, checklist progress and handoffs.
 Specs own public behavior, notes hold provisional design, and journals retain
