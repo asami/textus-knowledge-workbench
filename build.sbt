@@ -20,7 +20,6 @@ lazy val root = project
     resolvers += "Local Maven Repository" at ("file://" + Path.userHome.absolutePath + "/.m2/repository"),
     resolvers += "SimpleModeling.org" at "https://www.simplemodeling.org/repository/maven",
     libraryDependencies ++= ProjectYamlBuild.dependencies(cozyProjectMetadata.value),
-    libraryDependencies += "org.apache.poi" % "poi-ooxml" % "6.0.0",
     // Native fixture/bootstrap process-global lifecycle must be serialized.
     Test / parallelExecution := false,
     Test / test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-l", "org.scalatest.tags.Slow"),
