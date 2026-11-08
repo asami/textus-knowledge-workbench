@@ -235,3 +235,5 @@ Phase 2; actual Studio Candidate integration/full K04 remain held with Studio
 Phase 1.2. The first whole-Phase review requested documentation reconciliation.
 This source repair awaits closing review and native closure/local release and
 does not close the Phase.
+
+Workbook preview admits opaque printer settings only at the standard numbered `xl/printerSettings/printerSettingsN.bin` path, with the matching OPC content type and internal worksheet relationship. The bounded payload must have a consistent DEVMODEW size header; it is not interpreted or executed. Other binary parts, external relationships, macros and oversized packages remain unsupported. This narrow format check does not cover every printer or platform layout.

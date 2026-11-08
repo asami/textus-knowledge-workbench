@@ -251,6 +251,102 @@ final class MaterialWorkbookPreviewSpec extends AnyWordSpec with Matchers with G
       }
     }
 
+    "admit only associated opaque printer settings with a valid header" in {
+      Given("a real XLSX package with an internally referenced printer settings part")
+      val original = _entries(_workbook())
+      val path = "xl/printerSettings/printerSettings1.bin"
+      val ctype = "application/vnd.openxmlformats-officedocument.spreadsheetml.printerSettings"
+      val reltype = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/printerSettings"
+      val payload = new Array[Byte](220)
+      payload(68) = 220.toByte
+      def _package_(data: Array[Byte], contenttype: String = ctype, relation: String = reltype,
+                    source: String = "xl/worksheets/_rels/sheet1.xml.rels"): Array[Byte] = {
+        val updated = original.map { case (name, bytes) =>
+          if (name == "[Content_Types].xml") name -> new String(bytes, StandardCharsets.UTF_8)
+            .replace("</Types>", s"<Default Extension=\"bin\" ContentType=\"$contenttype\"/></Types>").getBytes(StandardCharsets.UTF_8)
+          else name -> bytes
+        }
+        val rel = s"<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\"><Relationship Id=\"rId1\" Type=\"$relation\" Target=\"../printerSettings/printerSettings1.bin\"/></Relationships>"
+        _zip(updated :+ (path -> data) :+ (source -> rel.getBytes(StandardCharsets.UTF_8)))
+      }
+      withSession() { session =>
+        When("the public route previews the valid package")
+        session.producer.respondWith(Consequence.success(_original(_package_(payload))))
+        workbenchvalue.MaterialWorkbookPreviewResult.createC(_record(session.execute("previewWorkbook", Vector("materialRef" -> materialRef, "resourceId" -> resourceId)))).TAKE.sheets should not be empty
+        Then("invalid headers, content types and relationships are rejected")
+        val short = new Array[Byte](219)
+        val mismatch = payload.clone()
+        mismatch(70) = 1
+        val disguised = payload.clone()
+        Array.copy("<worksheet/>".getBytes(StandardCharsets.UTF_8), 0, disguised, 0, 12)
+        val utf16 = Vector(StandardCharsets.UTF_16LE, StandardCharsets.UTF_16BE).map { encoding =>
+          val data = payload.clone()
+          val bom = if (encoding == StandardCharsets.UTF_16LE) Array[Byte](0xff.toByte, 0xfe.toByte) else Array[Byte](0xfe.toByte, 0xff.toByte)
+          Array.copy(bom, 0, data, 0, bom.length)
+          val xml = "<worksheet/>".getBytes(encoding)
+          Array.copy(xml, 0, data, bom.length, xml.length)
+          _package_(data)
+        }
+        utf16.foreach { bytes =>
+          session.producer.respondWith(Consequence.success(_original(bytes)))
+          _message(session.execute("previewWorkbook", Vector("materialRef" -> materialRef, "resourceId" -> resourceId))) should include ("invalid printer settings payload")
+        }
+        val cases = Vector(_package_(short), _package_(mismatch), _package_(disguised),
+          _package_(payload, contenttype = "application/xml"),
+          _package_(payload, relation = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet"),
+          _package_(payload, source = "xl/_rels/workbook.xml.rels"))
+        val renamed = Vector("xl/worksheets/sheet1.xml", "xl/sharedStrings.xml", "xl/styles.xml").map { name =>
+          val data = original.find(_._1 == name).get._2
+          val disguisedpart = java.util.Arrays.copyOf(data, math.max(220, data.length))
+          disguisedpart(68) = 220.toByte
+          disguisedpart(69) = 0
+          val extra = disguisedpart.length - 220
+          disguisedpart(70) = (extra & 0xff).toByte
+          disguisedpart(71) = ((extra >> 8) & 0xff).toByte
+          val changed = original.filterNot(_._1 == name).map { case (entry, bytes) =>
+            if (entry == "[Content_Types].xml") {
+              val xml = new String(bytes, StandardCharsets.UTF_8)
+                .replace("</Types>", s"<Default Extension=\"bin\" ContentType=\"$ctype\"/></Types>")
+              entry -> xml.getBytes(StandardCharsets.UTF_8)
+            } else if (entry == "xl/_rels/workbook.xml.rels") {
+              val factory = javax.xml.parsers.DocumentBuilderFactory.newInstance()
+              factory.setNamespaceAware(true)
+              val document = factory.newDocumentBuilder().parse(new ByteArrayInputStream(bytes))
+              val relations = document.getElementsByTagNameNS("http://schemas.openxmlformats.org/package/2006/relationships", "Relationship")
+              val matching = (0 until relations.getLength).map(index => relations.item(index).asInstanceOf[org.w3c.dom.Element]).filter { relation =>
+                new java.net.URI("/xl/workbook.xml").resolve(new java.net.URI(relation.getAttribute("Target"))).normalize().getPath == "/" + name
+              }
+              matching.size shouldBe 1
+              matching.head.setAttribute("Target", "/xl/printerSettings/printerSettings1.bin")
+              val out = new ByteArrayOutputStream()
+              javax.xml.transform.TransformerFactory.newInstance().newTransformer().transform(
+                new javax.xml.transform.dom.DOMSource(document), new javax.xml.transform.stream.StreamResult(out))
+              entry -> out.toByteArray
+            } else entry -> bytes
+          }
+          val relation = s"<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\"><Relationship Id=\"rId1\" Type=\"$reltype\" Target=\"../printerSettings/printerSettings1.bin\"/></Relationships>"
+          _zip(changed :+ (path -> disguisedpart) :+ ("xl/worksheets/_rels/sheet2.xml.rels" -> relation.getBytes(StandardCharsets.UTF_8)))
+        }
+        renamed.foreach { bytes =>
+          session.producer.respondWith(Consequence.success(_original(bytes)))
+          _message(session.execute("previewWorkbook", Vector("materialRef" -> materialRef, "resourceId" -> resourceId))) should include ("invalid printer settings relationship")
+        }
+        val valid = _entries(_package_(payload))
+        val orphan = _zip(valid.filterNot(_._1 == "xl/worksheets/_rels/sheet1.xml.rels"))
+        val outgoing = _zip(valid :+ ("xl/printerSettings/_rels/printerSettings1.bin.rels" ->
+          "<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\"/>".getBytes(StandardCharsets.UTF_8)))
+        val duplicate = _zip(valid.map { case (name, data) =>
+          if (name == "[Content_Types].xml") name -> new String(data, StandardCharsets.UTF_8)
+            .replace("</Types>", s"<Default Extension=\"bin\" ContentType=\"$ctype\"/></Types>").getBytes(StandardCharsets.UTF_8)
+          else name -> data
+        })
+        (cases ++ Vector(orphan, outgoing, duplicate)).foreach { bytes =>
+          session.producer.respondWith(Consequence.success(_original(bytes)))
+          session.execute("previewWorkbook", Vector("materialRef" -> materialRef, "resourceId" -> resourceId)) shouldBe a[Consequence.Failure[?]]
+        }
+      }
+    }
+
     "accept a value at the documented cell text boundary" in {
       Given("a real workbook containing exactly ten thousand characters in a cell")
       val text = "x" * 10000
@@ -326,5 +422,36 @@ final class MaterialWorkbookPreviewSpec extends AnyWordSpec with Matchers with G
       }
       entries.result()
     } finally zip.close()
+  }
+}
+
+@org.scalatest.tags.Slow
+final class MaterialWorkbookOriginalFileSpec extends AnyWordSpec with Matchers with GivenWhenThen {
+  import MaterialWorkFixture.*
+
+  "An explicitly supplied original workbook" should {
+    "preview through MaterialWork without changing its bytes" in {
+      Given("the private original supplied through the explicit test property")
+      val path = java.nio.file.Paths.get(sys.props.getOrElse("textus.test.workbook.original", fail("Missing textus.test.workbook.original property")))
+      val bytes = java.nio.file.Files.readAllBytes(path)
+      val digest = java.security.MessageDigest.getInstance("SHA-256")
+      val before = digest.digest(bytes).toVector
+      val original = OperationResponse.Http(HttpResponse.Binary(HttpStatus.Ok,
+        ContentType(MimeType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"), None),
+        Bag.binary(bytes), Record.empty))
+      withSession() { session =>
+        session.producer.respondWith(Consequence.success(original))
+        When("the authenticated public preview route reads it")
+        val result = session.execute("previewWorkbook", Vector("materialRef" -> materialRef, "resourceId" -> resourceId)).TAKE
+        Then("a nonempty generic preview is returned and the original is unchanged")
+        val record = result match {
+          case OperationResponse.RecordResponse(value) => value
+          case _ => fail("Expected workbook preview record")
+        }
+        workbenchvalue.MaterialWorkbookPreviewResult.createC(record).TAKE.sheets should not be empty
+        digest.digest(java.nio.file.Files.readAllBytes(path)).toVector shouldBe before
+        digest.digest(bytes).toVector shouldBe before
+      }
+    }
   }
 }

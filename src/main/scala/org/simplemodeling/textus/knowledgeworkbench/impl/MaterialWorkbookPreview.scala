@@ -2,6 +2,8 @@ package org.simplemodeling.textus.knowledgeworkbench.impl
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream}
 import java.util.Locale
+import java.net.URI
+import scala.collection.mutable
 import javax.xml.XMLConstants
 import javax.xml.parsers.SAXParserFactory
 import scala.jdk.CollectionConverters.*
@@ -97,18 +99,22 @@ private[knowledgeworkbench] object MaterialWorkbookPreview {
         }
       }
       val budget = new XmlBudget
+      val metadata = new PackageMetadata
+      val parts = mutable.Map.empty[String, Array[Byte]]
       collected.foreach { entry =>
         if (!entry.isDirectory) {
           val stream = zip.getInputStream(entry)
           val data = try _read_bounded(stream, _max_entry) finally stream.close()
           val name = entry.getName.toLowerCase(Locale.ROOT)
+          parts += entry.getName -> data
           if (name.endsWith("vbaproject.bin") || name.startsWith("xl/externallinks/"))
             throw new IllegalArgumentException("macros and external workbook links are unsupported")
-          if (name.endsWith(".xml") || name.endsWith(".rels")) _check_xml(data, budget)
-          else if (!_inert_image(name, data))
+          if (name.endsWith(".xml") || name.endsWith(".rels")) _check_xml(data, budget, entry.getName, metadata)
+          else if (!_inert_image(name, data) && !_printer_path(entry.getName))
             throw new IllegalArgumentException(s"unsupported workbook package part: ${entry.getName}")
         }
       }
+      _check_package(parts.toMap, metadata)
       if (!collected.exists(_.getName == "[Content_Types].xml") || !collected.exists(_.getName == "xl/workbook.xml"))
         throw new IllegalArgumentException("unsupported or malformed XLSX package")
       val pkg = OPCPackage.open(new ZipFileZipEntrySource(zip))
@@ -162,6 +168,76 @@ private[knowledgeworkbench] object MaterialWorkbookPreview {
       ((name.endsWith(".jpg") || name.endsWith(".jpeg")) && bytes.startsWith(jpeg)))
   }
 
+  private val _printer_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.printerSettings"
+  private val _printer_rel = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/printerSettings"
+
+  private def _printer_path(name: String): Boolean =
+    name.matches("xl/printerSettings/printerSettings[1-9][0-9]*\\.bin")
+
+  private final class PackageMetadata {
+    val defaults = mutable.Map.empty[String, String]
+    val overrides = mutable.Map.empty[String, String]
+    val relationships = mutable.ArrayBuffer.empty[(String, String, String, String)]
+  }
+
+  private def _check_package(parts: Map[String, Array[Byte]], metadata: PackageMetadata): Unit = {
+    val printers = parts.keys.filter(_printer_path).toSet
+    def _content_type_(name: String): Option[String] = metadata.overrides.get("/" + name).orElse {
+      name.lastIndexOf('.') match {
+        case -1 => None
+        case index => metadata.defaults.get(name.substring(index + 1).toLowerCase(Locale.ROOT))
+      }
+    }
+    parts.keys.foreach { name =>
+      if (name.toLowerCase(Locale.ROOT).endsWith(".png") && !_content_type_(name).contains("image/png") ||
+          (name.toLowerCase(Locale.ROOT).endsWith(".jpg") || name.toLowerCase(Locale.ROOT).endsWith(".jpeg")) && !_content_type_(name).contains("image/jpeg"))
+        throw new IllegalArgumentException("invalid image content type")
+      if (_content_type_(name).contains(_printer_type) != printers.contains(name))
+        throw new IllegalArgumentException("invalid printer settings content type or path")
+    }
+    metadata.overrides.foreach { case (name, contenttype) =>
+      if (contenttype == _printer_type && !printers.contains(name.stripPrefix("/")))
+        throw new IllegalArgumentException("orphan printer settings content type")
+    }
+    if (metadata.defaults.get("bin").contains(_printer_type) && printers.isEmpty)
+      throw new IllegalArgumentException("orphan printer settings content type")
+    if (printers.exists(name => parts.contains(name.substring(0, name.lastIndexOf('/') + 1) + "_rels/" + name.split("/").last + ".rels")))
+      throw new IllegalArgumentException("printer settings outgoing relationships")
+    val incoming = mutable.Set.empty[String]
+    metadata.relationships.foreach { case (source, target, kind, mode) =>
+      val base = new URI("/" + source)
+      val resolved = base.resolve(new URI(target)).normalize()
+      if (resolved.isAbsolute || resolved.getRawQuery != null || resolved.getRawFragment != null ||
+          resolved.getRawPath == null || !resolved.getRawPath.startsWith("/") || resolved.getRawPath.contains("%"))
+        throw new IllegalArgumentException("invalid relationship target")
+      val path = resolved.getRawPath.stripPrefix("/")
+      if (_printer_path(source)) throw new IllegalArgumentException("printer settings outgoing relationship")
+      if (parts.get(path).exists(data => _inert_image(path.toLowerCase(Locale.ROOT), data)) &&
+          kind != "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" &&
+          kind != "http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail")
+        throw new IllegalArgumentException("invalid image relationship")
+      if (printers.contains(path) || kind == _printer_rel || _printer_path(path)) {
+        if (!printers.contains(path) || kind != _printer_rel || (mode.nonEmpty && mode != "Internal") ||
+            !source.matches("xl/worksheets/sheet[1-9][0-9]*\\.xml") || !parts.contains(source))
+          throw new IllegalArgumentException("invalid printer settings relationship")
+        incoming += path
+      }
+    }
+    if (incoming.toSet != printers) throw new IllegalArgumentException("orphan printer settings part")
+    printers.foreach { name =>
+      val bytes = parts(name)
+      def _unsigned_short_(offset: Int): Int = (bytes(offset) & 0xff) | ((bytes(offset + 1) & 0xff) << 8)
+      if (bytes.length < 220) throw new IllegalArgumentException("invalid printer settings payload")
+      val size = _unsigned_short_(68)
+      val extra = _unsigned_short_(70)
+      val prefix = bytes.take(128).filterNot(b => b == 0 || b == 0x20 || b == 0x09 || b == 0x0a || b == 0x0d)
+      if (size < 220 || size > bytes.length || size + extra != bytes.length ||
+          prefix.headOption.contains('<'.toByte) || prefix.startsWith(Array[Byte](0xef.toByte, 0xbb.toByte, 0xbf.toByte, '<'.toByte)) ||
+          bytes.startsWith(Array[Byte](0xff.toByte, 0xfe.toByte)) || bytes.startsWith(Array[Byte](0xfe.toByte, 0xff.toByte)))
+        throw new IllegalArgumentException("invalid printer settings payload")
+    }
+  }
+
   private final class XmlBudget {
     var elements = 0
     var attributes = 0
@@ -172,7 +248,7 @@ private[knowledgeworkbench] object MaterialWorkbookPreview {
     var styles = 0
   }
 
-  private def _check_xml(bytes: Array[Byte], budget: XmlBudget): Unit = {
+  private def _check_xml(bytes: Array[Byte], budget: XmlBudget, name: String, metadata: PackageMetadata): Unit = {
     val factory = SAXParserFactory.newInstance()
     factory.setNamespaceAware(true)
     factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true)
@@ -189,6 +265,31 @@ private[knowledgeworkbench] object MaterialWorkbookPreview {
       private var _value_text = 0
       override def startElement(uri: String, localName: String, qName: String, attributes: Attributes): Unit = {
         _depth += 1
+        if (name == "[Content_Types].xml" && uri == "http://schemas.openxmlformats.org/package/2006/content-types") {
+          if (localName == "Default") {
+            val extension = Option(attributes.getValue("Extension")).getOrElse(throw new SAXException("missing extension")).toLowerCase(Locale.ROOT)
+            val contenttype = Option(attributes.getValue("ContentType")).getOrElse(throw new SAXException("missing content type"))
+            if (metadata.defaults.contains(extension)) throw new SAXException("duplicate content type default")
+            metadata.defaults += extension -> contenttype
+          } else if (localName == "Override") {
+            val part = Option(attributes.getValue("PartName")).getOrElse(throw new SAXException("missing part name"))
+            val contenttype = Option(attributes.getValue("ContentType")).getOrElse(throw new SAXException("missing content type"))
+            if (metadata.overrides.contains(part)) throw new SAXException("duplicate content type override")
+            metadata.overrides += part -> contenttype
+          }
+        }
+        if (name.endsWith(".rels") && uri == "http://schemas.openxmlformats.org/package/2006/relationships" && localName == "Relationship") {
+          val source = if (name == "_rels/.rels") "" else {
+            val marker = "/_rels/"
+            val index = name.lastIndexOf(marker)
+            if (index < 0) throw new SAXException("invalid relationships path")
+            name.substring(0, index + 1) + name.substring(index + marker.length).stripSuffix(".rels")
+          }
+          metadata.relationships += ((source,
+            Option(attributes.getValue("Target")).getOrElse(throw new SAXException("missing relationship target")),
+            Option(attributes.getValue("Type")).getOrElse(throw new SAXException("missing relationship type")),
+            Option(attributes.getValue("TargetMode")).getOrElse("")))
+        }
         if (_value_depth == 0 && (localName == "c" || localName == "si")) {
           _value_depth = _depth
           _value_text = 0

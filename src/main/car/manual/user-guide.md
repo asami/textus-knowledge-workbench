@@ -563,3 +563,5 @@ does not request removal.
 Review the complete target again after any effective change. Existing scalar
 requests remain valid. If Admission has an uncertain outcome, use confirmation
 to read the saved Information identity rather than repeating Admission.
+
+Workbook preview admits opaque printer settings only at the standard numbered `xl/printerSettings/printerSettingsN.bin` path, with the matching OPC content type and internal worksheet relationship. The bounded payload must have a consistent DEVMODEW size header; it is not interpreted or executed. Other binary parts, external relationships, macros and oversized packages remain unsupported. This narrow format check does not cover every printer or platform layout.
