@@ -338,6 +338,7 @@ CommandAction
 | name | name | 1 |
 | content | string | 1 |
 | context | string | ? |
+| structured | InformationStructuredTarget | ? |
 
 ##### OUTPUT
 
@@ -701,6 +702,7 @@ MaterialRegistrationResult
 | decisions | CandidateReviewDecision | * |
 | admissions | CandidateAdmissionRecord | * |
 | materialEvidence | MaterialEvidenceBinding | ? |
+| structured | InformationStructuredTarget | ? |
 
 # VALUE
 
@@ -941,6 +943,7 @@ MaterialRegistrationResult
 | groundingRefs | ProposalReference | * |
 | mappingRefs | ProposalReference | * |
 | reason | CandidateDecisionReason | 1 |
+| structured | InformationStructuredTarget | ? |
 
 ## CandidateWorkDecision
 
@@ -969,6 +972,113 @@ MaterialRegistrationResult
 | sourceContextRef | ProposalReference | ? |
 | groundingRefs | ProposalReference | * |
 | mappingRefs | ProposalReference | * |
+| structured | InformationStructuredTarget | ? |
+
+## InformationStructuredTarget
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| contents | InformationContent | * |
+| translations | InformationTranslation | * |
+| annotations | InformationAnnotation | * |
+| contexts | InformationContext | * |
+| sources | InformationSource | * |
+
+## InformationContent
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| id | string | 1 |
+| text | string | 1 |
+| language | string | ? |
+
+## InformationTranslation
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| contentId | string | 1 |
+| text | string | 1 |
+| language | string | 1 |
+
+## InformationAnnotation
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| id | string | 1 |
+| text | string | ? |
+| media | InformationAnnotationMedia | * |
+
+## InformationAnnotationMedia
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| id | string | 1 |
+| resourceId | string | 1 |
+| mediaType | string | 1 |
+| sourceVersion | string | ? |
+
+## InformationContext
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| kind | string | 1 |
+| value | string | 1 |
+
+## InformationSource
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| materialId | string | 1 |
+| resourceId | string | 1 |
+| sourceVersion | string | ? |
+| observation | string | ? |
+| workbookCells | InformationWorkbookCell | * |
+| originalBooks | InformationOriginalBook | * |
+| derivation | InformationDerivation | ? |
+
+## InformationWorkbookCell
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| sheet | string | 1 |
+| row | string | 1 |
+| column | string | 1 |
+
+## InformationOriginalBook
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| reference | string | 1 |
+| page | string | ? |
+
+## InformationDerivation
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| adapterId | string | 1 |
+| adapterVersion | string | 1 |
+| profileId | string | 1 |
+| profileVersion | string | 1 |
 
 ## CandidateReviewDecision
 

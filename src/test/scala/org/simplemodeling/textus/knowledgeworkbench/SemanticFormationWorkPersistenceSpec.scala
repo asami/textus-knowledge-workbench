@@ -12,6 +12,7 @@ import org.scalatest.wordspec.AnyWordSpec
  * @since   Oct. 30, 2026
  * @version Oct. 30, 2026
  */
+@org.scalatest.tags.Slow
 final class SemanticFormationWorkPersistenceSpec extends AnyWordSpec with Matchers with GivenWhenThen with BeforeAndAfterAll {
   private val _database = new SemanticFormationWorkFixture.Database
   override protected def beforeAll(): Unit = { super.beforeAll(); _database.start() }

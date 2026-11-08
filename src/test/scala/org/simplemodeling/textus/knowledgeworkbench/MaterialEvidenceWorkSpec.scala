@@ -32,6 +32,7 @@ import org.simplemodeling.textus.knowledgeworkbench.impl.{KnowledgeWorkbenchPart
  * @since   Oct. 28, 2026
  * @version Oct. 28, 2026
  */
+@org.scalatest.tags.Slow
 final class MaterialEvidenceWorkSpec extends AnyWordSpec with Matchers with GivenWhenThen {
   import MaterialEvidenceWorkSpec.*
   import MaterialWorkFixture.{materialRef, resourceId, owner, otherSession}

@@ -27,6 +27,7 @@ import org.simplemodeling.textus.knowledgeworkbench.value as WorkbenchValue
  * @since   Oct. 28, 2026
  * @version Oct. 28, 2026
  */
+@org.scalatest.tags.Slow
 final class MaterialCandidateWorkSpec extends AnyWordSpec with Matchers with GivenWhenThen with BeforeAndAfterAll {
   private var _postgres: Option[MaterialCandidateWorkSpec.LivePostgresql] = None
   import MaterialWorkFixture.*

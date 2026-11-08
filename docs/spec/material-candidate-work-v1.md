@@ -268,3 +268,29 @@ See [Material evidence contract](material-evidence-review-v1.md) for exact optio
 native binding/application fields, ordering, collision handling, observation
 failures and reconciliation. No client version claim, editor-side provider adapter,
 new shadow store or new query is introduced.
+
+## Structured Candidate target extension
+
+`CreateCandidateFromMaterial`, `InformationCandidate`, `CandidateWorkEdit` and
+`CandidateApprovalTarget` carry an optional `structured` value. Its public typed
+wire shape matches KnowledgeHub's `InformationStructuredTarget`: ordered contents,
+translations, annotations, contexts and sources, with nested media, workbook-cell,
+original-book and derivation values. Scalar content and context remain required or
+optional as before; old requests and persisted targets without `structured` retain
+that scalar meaning. Supplied text and collection order are preserved exactly.
+
+Each content and annotation has an independent unique identity; translations refer
+only to an existing content. An annotation has text or media. Source entries name
+actual selected Material and resource identities, optional source version and
+observation, ordered cell and book locators, and separately identified adapter and
+profile versions. Unknown source versions remain absent. Required and supplied text
+must be nonblank without trimming the stored value; contents and sources are nonempty.
+No workbook header, column or vendor interpretation belongs to this contract.
+
+The structured value is part of the durable Candidate and complete review target.
+An edit changes the entire supplied structured value; any effective target change
+invalidates the previous approval. Admission submits the exact approved target to
+KnowledgeHub, and confirmation compares the complete returned trace and target.
+An uncertain admission is reconciled only by reading the reserved identity and is
+never replayed. Existing authentication, resource rights, revision and available
+versioned evidence rules remain in force.
