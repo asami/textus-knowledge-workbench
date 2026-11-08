@@ -3,14 +3,17 @@ package org.simplemodeling.textus.knowledgeworkbench.impl
 import cats.syntax.all.*
 import org.goldenport.Consequence
 import org.goldenport.cncf.action.ActionCall
+import org.goldenport.cncf.entity.{EntityPersistent, EntityRevisionCarrier}
 import org.goldenport.cncf.security.SecuritySubject
 import org.goldenport.cncf.unitofwork.ExecUowM
 import org.goldenport.protocol.operation.OperationResponse
 import org.simplemodeling.textus.knowledgeworkbench.{KnowledgeWorkbenchComponent, entity, value}
+import org.simplemodeling.model.directive.Update
 
 /*
  * @since   Oct. 27, 2026
- * @version Oct. 28, 2026
+ *  version Oct. 28, 2026
+ * @version Nov.  8, 2026
  */
 private[impl] object CandidateWorkActions {
   import KnowledgeWorkbenchComponent.CandidateService.*
@@ -49,6 +52,21 @@ private[impl] object CandidateWorkActions {
         snapshot <- entity_load_detached[entity.InformationCandidate](input.id)
         changed <- exec_from(CandidateFormation.edit(snapshot, input, actor, current_instant))
         persisted <- changed match {
+          case Some(candidate) if input.clearStructured.contains(true) =>
+            val detached = MaterialEvidenceWork.detachOnHumanEdit(snapshot.entity, candidate)
+            val patch = entity.update.InformationCandidate.create()
+              .withContent(detached.content.fold(Update.setNull[org.simplemodeling.textus.knowledgeworkbench.datatype.CandidateContent])(Update.set))
+              .withContext(detached.context.fold(Update.setNull[org.simplemodeling.textus.knowledgeworkbench.datatype.CandidateContext])(Update.set))
+              .withEvidenceRefs(Update.set(detached.evidenceRefs))
+              .withGroundingRefs(Update.set(detached.groundingRefs))
+              .withMappingRefs(Update.set(detached.mappingRefs))
+              .withDecisions(Update.set(detached.decisions))
+              .withMaterialEvidence(detached.materialEvidence.fold(Update.setNull[value.MaterialEvidenceBinding])(Update.set))
+              .withStructured(Update.setNull[value.InformationStructuredTarget])
+            for {
+              saved <- entity_update_detached(input.id, patch, snapshot.revision)
+              decoded <- exec_from(summon[EntityPersistent[entity.InformationCandidate]].fromStoreRecordC(input.id.collection, saved.entity))
+            } yield EntityRevisionCarrier(decoded, saved.revision)
           case Some(candidate) => entity_update_detached(MaterialEvidenceWork.detachOnHumanEdit(snapshot.entity, candidate), snapshot.revision)
           case None => exec_pure(snapshot)
         }

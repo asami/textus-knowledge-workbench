@@ -286,9 +286,16 @@ observation, ordered cell and book locators, and separately identified adapter a
 profile versions. Unknown source versions remain absent. Required and supplied text
 must be nonblank without trimming the stored value; contents and sources are nonempty.
 No workbook header, column or vendor interpretation belongs to this contract.
+For Material-backed creation every structured source must use the exact selected
+Material and one of its selected resources. A structured source version does not
+replace the existing available, versioned evidence required for Review or Approve.
 
 The structured value is part of the durable Candidate and complete review target.
-An edit changes the entire supplied structured value; any effective target change
+An edit replaces the entire supplied structured value; omission preserves the
+current value for scalar clients. `clearStructured=true` explicitly removes it;
+combining true with a structured replacement is invalid; false permits a
+replacement and otherwise preserves the value. Null is not a clear
+instruction. Any effective target change
 invalidates the previous approval. Admission submits the exact approved target to
 KnowledgeHub, and confirmation compares the complete returned trace and target.
 An uncertain admission is reconciled only by reading the reserved identity and is

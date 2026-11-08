@@ -390,3 +390,19 @@ debug diagnostics and credentials are not copied into the page.
 ## Saved Information semantic formation
 
 The `SemanticWork` service exposes `openSemanticWork`, `getSemanticWork`, `correctSemanticWork`, `decideSemanticWork`, `formSemanticWork`, `confirmSemanticFormation`. Open saved Information, correct the complete semantic target, explicitly review and approve, then form Knowledge. Admission approval is separate. Changing a target invalidates its semantic approval. Reopen uncertain formation and confirm the retained result identity; never blindly resubmit creation. Original access remains Workbench MaterialWork / KnowledgeLake. This source addition has not yet been qualified or locally released.
+
+## Structured Candidate target
+
+Material creation, Candidate work edit and approval target accept optional typed
+`structured` data alongside the existing scalar fields. Ordered content,
+translations, independently identified annotations and media, contexts, source
+observations, workbook cells, original-book locators and adapter/profile provenance
+are retained as part of the complete target. An omitted value retains scalar
+behavior. Source versions are actual observations and are never inferred from
+adapter or profile versions. Material creation requires every structured source
+to identify the selected Material and one of its selected resources.
+
+Review and Approve apply to the entire target; changing structured data invalidates
+approval. Admission passes the approved target to KnowledgeHub and confirms its
+complete returned trace. An uncertain admission is reconciled by reading its
+reserved Information identity, without replaying the write.

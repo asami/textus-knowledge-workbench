@@ -526,3 +526,21 @@ before discarding edits. Tokens are not saved with work or errors.
 ## Saved Information semantic formation
 
 The `SemanticWork` service exposes `openSemanticWork`, `getSemanticWork`, `correctSemanticWork`, `decideSemanticWork`, `formSemanticWork`, `confirmSemanticFormation`. Open saved Information, correct the complete semantic target, explicitly review and approve, then form Knowledge. Admission approval is separate. Changing a target invalidates its semantic approval. Reopen uncertain formation and confirm the retained result identity; never blindly resubmit creation. Original access remains Workbench MaterialWork / KnowledgeLake. This source addition has not yet been qualified or locally released.
+
+## Structured Candidate work
+
+API clients may supply `structured` when creating a Candidate from Material or
+editing Candidate work. Supply ordered contents and sources, and any translations,
+annotations, media references, contexts, locators and derivation details. Use
+distinct content and annotation IDs; each translation names an existing content.
+Each annotation needs text or media. Source versions and observations are optional:
+leave unknown values absent rather than copying adapter or profile versions.
+Material creation accepts sources only for the selected Material and resources.
+
+An edit supplies the complete structured value; omission preserves the current
+value. Set `clearStructured` to true to remove it; do not combine true with a
+replacement. False permits a replacement and otherwise preserves the value. Null
+does not request removal.
+Review the complete target again after any effective change. Existing scalar
+requests remain valid. If Admission has an uncertain outcome, use confirmation
+to read the saved Information identity rather than repeating Admission.

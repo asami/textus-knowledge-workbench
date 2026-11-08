@@ -22,6 +22,49 @@ import org.scalatest.wordspec.AnyWordSpec
  */
 final class CandidateAdmissionSpec extends AnyWordSpec with Matchers with GivenWhenThen {
   "Candidate Information Admission" should {
+    "retain a structured target through approval, actual Hub admission and native reopen" in {
+      Given("an approved scalar Candidate and an exact structured replacement")
+      val root = _root()
+      val writer = _handle(root)
+      val structure = StructuredCandidateTargetSpec.sample(" exact source \n")
+      val saved = try {
+        val previous = _approve(writer.subsystem, "tkl-prepared.json")
+        When("the human changes the structured target and reviews and approves it again")
+        val edited = _work(_call(writer.subsystem, "editCandidateWork",
+          "id" -> previous.candidate.id.print, "expectedRevision" -> previous.revision,
+          "content" -> previous.target.get.content.value,
+          "evidenceRefs" -> previous.candidate.evidenceRefs.map(_.toRecord()),
+          "groundingRefs" -> previous.candidate.groundingRefs.map(_.toRecord()),
+          "mappingRefs" -> previous.candidate.mappingRefs.map(_.toRecord()),
+          "reason" -> "Add structured target", "structured" -> structure.toRecord()))
+        edited.approvalValid shouldBe false
+        edited.target.get.structured shouldBe Some(structure)
+        val scalar = _edit(writer.subsystem, edited, "Scalar client changed content")
+        scalar.target.get.structured shouldBe Some(structure)
+        val approved = Vector("review", "approve").foldLeft(scalar) { (current, decision) =>
+          _work(_call(writer.subsystem, "decideCandidateWork", "id" -> current.candidate.id.print,
+            "expectedRevision" -> current.revision, "decision" -> decision, "reason" -> "Review exact structure"))
+        }
+        val admitted = _admit(writer.subsystem, approved)
+        val admission = admitted.candidate.admissions.last
+        val actual = _json(_information(writer.subsystem, admission.informationId.print))
+        Then("the qualified Hub retains the exact typed approved target and trace")
+        actual.hcursor.downField("information").focus shouldBe Some(_json(CandidateAdmission.request(approved.candidate.id, admission)))
+        admission.approval.target.structured shouldBe Some(structure)
+        _command(writer.subsystem, "admitCandidateWork", admitted) shouldBe a[Consequence.Failure[?]]
+        admitted
+      } finally writer.close()
+      When("a new runtime reopens and confirms the reserved Information identity")
+      val reader = _handle(root)
+      try {
+        val restored = _get(reader.subsystem, saved.candidate.id.print)
+        val confirmed = _work(_command(reader.subsystem, "confirmCandidateAdmission", restored))
+        Then("the complete structured target and admission history remain exact")
+        confirmed.toRecord() shouldBe saved.toRecord()
+        confirmed.target.get.structured shouldBe Some(structure)
+      } finally reader.close()
+    }
+
     "actual canonical Information and trace" which {
       "admit both retained producer fixtures through the real Hub and restore confirmation after reopen" in {
         Vector("tkl-prepared.json", "editing-studio-unprepared.json").foreach { fixture =>
@@ -145,7 +188,18 @@ final class CandidateAdmissionSpec extends AnyWordSpec with Matchers with GivenW
         val root = _root()
         val writer = _handle(root, includehub = false)
         val retained = try {
-          val approved = _approve(writer.subsystem, "editing-studio-unprepared.json")
+          val original = _approve(writer.subsystem, "editing-studio-unprepared.json")
+          val structure = StructuredCandidateTargetSpec.sample("uncertain structured target")
+          val edited = _work(_call(writer.subsystem, "editCandidateWork", "id" -> original.candidate.id.print,
+            "expectedRevision" -> original.revision, "content" -> original.target.get.content.value,
+            "evidenceRefs" -> original.candidate.evidenceRefs.map(_.toRecord()),
+            "groundingRefs" -> original.candidate.groundingRefs.map(_.toRecord()),
+            "mappingRefs" -> original.candidate.mappingRefs.map(_.toRecord()),
+            "reason" -> "Add structure", "structured" -> structure.toRecord()))
+          val approved = Vector("review", "approve").foldLeft(edited) { (current, decision) =>
+            _work(_call(writer.subsystem, "decideCandidateWork", "id" -> current.candidate.id.print,
+              "expectedRevision" -> current.revision, "decision" -> decision, "reason" -> "Review structure"))
+          }
           When("the Admission invocation cannot reach the owning Operation")
           _command(writer.subsystem, "admitCandidateWork", approved) shouldBe a[Consequence.Failure[?]]
           val pending = _get(writer.subsystem, approved.candidate.id.print)
@@ -154,6 +208,7 @@ final class CandidateAdmissionSpec extends AnyWordSpec with Matchers with GivenW
           pending.candidate.admissions should have size 1
           pending.candidate.admissions.last.status shouldBe "Unconfirmed"
           pending.candidate.admissions.last.candidateRevision shouldBe approved.revision
+          pending.candidate.admissions.last.approval.target.structured shouldBe Some(structure)
           _command(writer.subsystem, "admitCandidateWork", pending) shouldBe a[Consequence.Failure[?]]
           _get(writer.subsystem, pending.candidate.id.print).toRecord() shouldBe pending.toRecord()
           pending
@@ -175,6 +230,7 @@ final class CandidateAdmissionSpec extends AnyWordSpec with Matchers with GivenW
           confirmed.state shouldBe "Admitted"
           confirmed.candidate.admissions should have size 1
           confirmed.candidate.admissions.last.informationId shouldBe admission.informationId
+          confirmed.target.get.structured shouldBe admission.approval.target.structured
         } finally reader.close()
       }
 

@@ -944,6 +944,7 @@ MaterialRegistrationResult
 | mappingRefs | ProposalReference | * |
 | reason | CandidateDecisionReason | 1 |
 | structured | InformationStructuredTarget | ? |
+| clearStructured | boolean | ? |
 
 ## CandidateWorkDecision
 

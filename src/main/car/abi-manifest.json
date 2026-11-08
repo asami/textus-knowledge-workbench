@@ -791,6 +791,18 @@
               "type": "CandidateDecisionReason",
               "multiplicity": "1",
               "required": true
+            },
+            {
+              "name": "structured",
+              "type": "InformationStructuredTarget",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "clearStructured",
+              "type": "boolean",
+              "multiplicity": "?",
+              "required": false
             }
           ]
         },
@@ -874,6 +886,12 @@
               "name": "mappingRefs",
               "type": "ProposalReference",
               "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "structured",
+              "type": "InformationStructuredTarget",
+              "multiplicity": "?",
               "required": false
             }
           ]
@@ -1094,6 +1112,12 @@
             {
               "name": "context",
               "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "structured",
+              "type": "InformationStructuredTarget",
               "multiplicity": "?",
               "required": false
             }
@@ -1494,6 +1518,282 @@
               "required": true
             }
           ]
+        },
+        {
+          "name": "InformationStructuredTarget",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "contents",
+              "type": "InformationContent",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "translations",
+              "type": "InformationTranslation",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "annotations",
+              "type": "InformationAnnotation",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "contexts",
+              "type": "InformationContext",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "sources",
+              "type": "InformationSource",
+              "multiplicity": "*",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "InformationContent",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "id",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "text",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "language",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "InformationTranslation",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "contentId",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "text",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "language",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "InformationAnnotation",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "id",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "text",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "media",
+              "type": "InformationAnnotationMedia",
+              "multiplicity": "*",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "InformationAnnotationMedia",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "id",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "resourceId",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "mediaType",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "sourceVersion",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "InformationContext",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "kind",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "value",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "InformationSource",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "materialId",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "resourceId",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "sourceVersion",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "observation",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "workbookCells",
+              "type": "InformationWorkbookCell",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "originalBooks",
+              "type": "InformationOriginalBook",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "derivation",
+              "type": "InformationDerivation",
+              "multiplicity": "?",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "InformationWorkbookCell",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "sheet",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "row",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "column",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "InformationOriginalBook",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "reference",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "InformationDerivation",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "adapterId",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "adapterVersion",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "profileId",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "profileVersion",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
         }
       ],
       "entities": [
@@ -1611,6 +1911,12 @@
             {
               "name": "materialEvidence",
               "type": "MaterialEvidenceBinding",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "structured",
+              "type": "InformationStructuredTarget",
               "multiplicity": "?",
               "required": false
             }

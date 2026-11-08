@@ -54,11 +54,14 @@ private[impl] object CandidateProposal {
             "evidenceRefs" -> evidence,
             "preparedMaterialRefs" -> materials,
             "sourceRunRef" -> run,
-            "sourceContextRef" -> sourcecontext
+            "sourceContextRef" -> sourcecontext,
+            "structured" -> record.getAny("structured")
           )
         }.flatMap { input =>
-          entity.create.InformationCandidate.createC(input).map { candidate =>
-            Parsed(input.getString("producerRef").get, input.getString("proposalId").get, candidate)
+          entity.create.InformationCandidate.createC(input).flatMap { candidate =>
+            candidate.structured.fold(Consequence.unit)(CandidateFormation.validateStructured).map { _ =>
+              Parsed(input.getString("producerRef").get, input.getString("proposalId").get, candidate)
+            }
           }
         }
       }
@@ -116,6 +119,8 @@ private[impl] object CandidateProposal {
         require(value.isString, "context must be a string"))
       objectvalue("captureConfirmed").foreach(value =>
         require(value.isBoolean, "captureConfirmed must be a Boolean"))
+      objectvalue("structured").foreach(value =>
+        require(value.isObject, "structured must be an object"))
     }
 
   private def _required_string(record: Record, field: String): String =

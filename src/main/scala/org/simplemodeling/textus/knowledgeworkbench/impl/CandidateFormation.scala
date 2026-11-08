@@ -14,7 +14,8 @@ private[knowledgeworkbench] object CandidateFormation {
   def target(candidate: entity.InformationCandidate): Option[value.CandidateApprovalTarget] =
     candidate.content.map(content => value.CandidateApprovalTarget(
       content, candidate.context, candidate.evidenceRefs, candidate.preparedMaterialRefs,
-      candidate.sourceRunRef, candidate.sourceContextRef, candidate.groundingRefs, candidate.mappingRefs
+      candidate.sourceRunRef, candidate.sourceContextRef, candidate.groundingRefs, candidate.mappingRefs,
+      candidate.structured
     ))
 
   def eligible(target: Option[value.CandidateApprovalTarget]): Boolean =
@@ -38,10 +39,15 @@ private[knowledgeworkbench] object CandidateFormation {
     instant: Instant
   ): Consequence[Option[entity.InformationCandidate]] = {
     val candidate = snapshot.entity.copy(content = Some(input.content), context = input.context,
-      evidenceRefs = input.evidenceRefs, groundingRefs = input.groundingRefs, mappingRefs = input.mappingRefs)
+      evidenceRefs = input.evidenceRefs, groundingRefs = input.groundingRefs, mappingRefs = input.mappingRefs,
+      structured = if (input.clearStructured.contains(true)) None else input.structured.orElse(snapshot.entity.structured))
     for {
       _ <- _revision(snapshot, input.expectedRevision)
+      _ <- if (input.clearStructured.contains(true) && input.structured.nonEmpty)
+        Consequence.argumentFieldInvalid("clearStructured", "clear or replace structured target, not both", "conflicting intent")
+      else Consequence.unit
       _ <- _references(candidate)
+      _ <- candidate.structured.fold(Consequence.unit)(validateStructured)
       _ <- _reason(input.reason.value)
       selected <- target(candidate).map(Consequence.success).getOrElse(
         Consequence.stateConflict("Candidate content is required"))
@@ -51,6 +57,30 @@ private[knowledgeworkbench] object CandidateFormation {
       else Some(candidate.copy(decisions = snapshot.entity.decisions :+
         value.CandidateReviewDecision(CandidateDecisionKind.edit, actor, instant.toString, input.reason, selected)))
     }
+  }
+
+  def validateStructured(target: value.InformationStructuredTarget): Consequence[Unit] = {
+    def _nonblank_(s: String): Boolean = s.trim.nonEmpty
+    def _optional_(s: Option[String]): Boolean = s.forall(_nonblank_)
+    val ids = target.contents.map(_.id)
+    val annotationids = target.annotations.map(_.id)
+    val valid = target.contents.nonEmpty && target.sources.nonEmpty &&
+      ids.distinct.size == ids.size && annotationids.distinct.size == annotationids.size &&
+      target.contents.forall(x => _nonblank_(x.id) && _nonblank_(x.text) && _optional_(x.language)) &&
+      target.translations.forall(x => ids.contains(x.contentId) && _nonblank_(x.text) && _nonblank_(x.language)) &&
+      target.annotations.forall(x => _nonblank_(x.id) && _optional_(x.text) &&
+        (x.text.nonEmpty || x.media.nonEmpty) && x.media.map(_.id).distinct.size == x.media.size &&
+        x.media.forall(m => _nonblank_(m.id) && _nonblank_(m.resourceId) &&
+          _nonblank_(m.mediaType) && _optional_(m.sourceVersion))) &&
+      target.contexts.forall(x => _nonblank_(x.kind) && _nonblank_(x.value)) &&
+      target.sources.forall(x => _nonblank_(x.materialId) && _nonblank_(x.resourceId) &&
+        _optional_(x.sourceVersion) && _optional_(x.observation) &&
+        x.workbookCells.forall(c => _nonblank_(c.sheet) && _nonblank_(c.row) && _nonblank_(c.column)) &&
+        x.originalBooks.forall(b => _nonblank_(b.reference) && _optional_(b.page)) &&
+        x.derivation.forall(d => _nonblank_(d.adapterId) && _nonblank_(d.adapterVersion) &&
+          _nonblank_(d.profileId) && _nonblank_(d.profileVersion)))
+    if (valid) Consequence.unit
+    else Consequence.argumentFieldInvalid("structured", "valid structured target and source references", "invalid structured target")
   }
 
   def decide(
