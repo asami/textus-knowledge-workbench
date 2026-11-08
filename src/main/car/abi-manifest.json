@@ -77,6 +77,13 @@
         },
         {
           "service": "MaterialWork",
+          "name": "previewWorkbook",
+          "kind": "QUERY",
+          "input": "PreviewWorkbookQuery",
+          "output": "MaterialWorkbookPreviewResult"
+        },
+        {
+          "service": "MaterialWork",
           "name": "createMaterialRegistration",
           "kind": "COMMAND",
           "input": "MaterialRegistrationCreateCommand",
@@ -525,6 +532,24 @@
           ]
         },
         {
+          "name": "PreviewWorkbookQuery",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "materialRef",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "resourceId",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            }
+          ]
+        },
+        {
           "name": "MaterialOriginalResult",
           "kind": "value",
           "fields": [
@@ -533,6 +558,120 @@
               "type": "blob",
               "multiplicity": "1",
               "required": true
+            }
+          ]
+        },
+        {
+          "name": "MaterialWorkbookPreviewResult",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "materialRef",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "resourceId",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "sourceVersion",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "sheets",
+              "type": "MaterialWorkbookSheet",
+              "multiplicity": "*",
+              "required": false
+            },
+            {
+              "name": "diagnostics",
+              "type": "string",
+              "multiplicity": "*",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "MaterialWorkbookSheet",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "index",
+              "type": "int",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "cells",
+              "type": "MaterialWorkbookCell",
+              "multiplicity": "*",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "MaterialWorkbookCell",
+          "kind": "value",
+          "fields": [
+            {
+              "name": "row",
+              "type": "int",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "column",
+              "type": "int",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "kind",
+              "type": "string",
+              "multiplicity": "1",
+              "required": true
+            },
+            {
+              "name": "rawValue",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "displayText",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "formula",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "cachedKind",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
+            },
+            {
+              "name": "diagnostic",
+              "type": "string",
+              "multiplicity": "?",
+              "required": false
             }
           ]
         },

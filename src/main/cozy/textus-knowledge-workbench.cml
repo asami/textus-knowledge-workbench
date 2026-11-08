@@ -521,6 +521,47 @@ OperationResult
 |---------|------|--------------|
 | content | blob | 1            |
 
+#### previewWorkbook
+
+##### TYPE
+
+QUERY
+
+##### ACCESS
+
+###### POLICY
+
+authenticated_only
+
+##### DESCRIPTION
+
+Read the exact caller-authorized original and return a bounded generic XLSX preview.
+The result never evaluates formulas, fetches external links, or creates Candidate work.
+Unsupported formats, unsafe packages and limits fail explicitly.
+
+##### INPUT
+
+###### VALUE
+
+####### PreviewWorkbookQuery
+
+######## EXTENDS
+
+QueryAction
+
+######## ATTRIBUTE
+
+| name | type | multiplicity |
+|---|---|---|
+| materialRef | string | 1 |
+| resourceId | string | 1 |
+
+##### OUTPUT
+
+###### TYPE
+
+MaterialWorkbookPreviewResult
+
 #### createMaterialRegistration
 
 ##### TYPE
@@ -813,6 +854,43 @@ MaterialRegistrationResult
 | retrievalState | string | ? |
 | retentionUntil | string | ? |
 | limitation | string | ? |
+
+## MaterialWorkbookPreviewResult
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| materialRef | string | 1 |
+| resourceId | string | 1 |
+| sourceVersion | string | ? |
+| sheets | MaterialWorkbookSheet | * |
+| diagnostics | string | * |
+
+## MaterialWorkbookSheet
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| index | int | 1 |
+| name | string | 1 |
+| cells | MaterialWorkbookCell | * |
+
+## MaterialWorkbookCell
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| row | int | 1 |
+| column | int | 1 |
+| kind | string | 1 |
+| rawValue | string | ? |
+| displayText | string | ? |
+| formula | string | ? |
+| cachedKind | string | ? |
+| diagnostic | string | ? |
 
 ## MaterialSearchResult
 

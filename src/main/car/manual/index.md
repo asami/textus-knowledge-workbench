@@ -10,6 +10,17 @@ and provider-neutral proposal registration with durable source-key lookup and
 sequential resend preserving current edits. Follow the [user guide](user-guide.md) for build, instance setup and
 complete CLI examples.
 
+## Workbook preview
+
+`MaterialWork.previewWorkbook` is an authenticated query for the exact opaque
+`materialRef` and `resourceId`. It reads the caller-authorized original from
+KnowledgeLake and returns ordered sheets and physically present cells with
+one-based coordinates, kind, available raw/display values and diagnostics.
+Formulas are returned unevaluated. Only unencrypted, non-macro XLSX is supported;
+external relationships and malformed or over-limit packages are rejected. No
+source version is inferred and the query creates no Candidate. See the [user
+guide](user-guide.md#workbook-preview) for limits.
+
 ## Explicit Material-backed work
 
 `MaterialWork.createCandidateFromMaterial` is an authenticated COMMAND returning

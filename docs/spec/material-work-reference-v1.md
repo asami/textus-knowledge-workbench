@@ -1,5 +1,39 @@
 # Material work reference contract v1
 
+## Workbook preview (authored; qualification pending)
+
+The following additive contract is authored in CML and implementation; generated
+artifacts, validation, review and local publication remain pending. An authenticated `previewWorkbook` query takes the exact `materialRef` and
+`resourceId` and reads that selection once through the existing caller-context
+KnowledgeLake `readOriginal` route. It returns those selectors unchanged, with
+ordered sheet identities and physically present cells at their original
+one-based row and column coordinates. Absent cells are not invented. The
+result identifies cell kind, raw value where available, displayed value where
+meaningful, and diagnostics; a formula is an unevaluated expression, never a
+newly computed value. An absent source version remains absent. Producer
+failures retain their original Conclusions. This read creates no Candidate,
+changes no original, and maintains no duplicate original store.
+
+The initial supported format is unencrypted, non-macro XLSX. XLS, XLSM,
+encrypted files and other formats are rejected explicitly. The reader never
+fetches external relationships. The intended limits are 8 MiB original bytes,
+256 ZIP entries, 8 MiB per expanded entry, 32 MiB aggregate expanded bytes,
+XML depth 64, 100,000 XML elements, 64 sheets, 20,000 cells, 10,000 characters
+per cell and 1 MiB aggregate text. Limit violations reject the entire preview;
+results are never silently truncated. Only XML/relationship parts and PNG or JPEG parts with matching signatures under standard xl/media or docProps/thumbnail paths are admitted; other package parts, including XML with nonstandard extensions, are rejected before workbook loading.
+These limits bound the stated processing,
+not all CPU or memory consumption of a third-party parsing library.
+
+`PreviewWorkbookQuery` selects the exact pair. `MaterialWorkbookPreviewResult`
+contains those selectors, an absent optional source version, ordered sheets and
+workbook diagnostics. Each sheet has a one-based index and name. Each present
+cell reports one-based row/column, kind, optional raw and display text, optional
+formula, optional cached kind and diagnostic. Raw formula cache is an observed
+value, not a computed result. External relationships are rejected before model
+loading. Attribute limits are 500,000 in total and 128 per element; shared
+strings and styles are each limited to 20,000. The authored specifications
+require qualification; this document is not acceptance evidence.
+
 Status: fixed-forward implementation consumed by accepted Phase 2 Steps through P2-04 `166f10c5`; connected receipt 659 and final full receipt 672 passed; closing review/native closure/local release pending
 Contract date: 2026-10-21
 Owner: TKW K01/K02
