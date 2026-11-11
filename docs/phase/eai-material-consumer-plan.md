@@ -58,3 +58,55 @@ Reuse [existing integration](knowledge-editing-integration-plan.md) and
 [Phase 3](phase-3.md) source-evidence contracts. If all public shapes remain
 compatible, deliver this through integration evidence and minimal necessary
 fixtures; do not add production features merely to create Workbench work.
+
+## BMFT production-feature extension — 2026-11-08
+
+The user's explicit [BMFT connected plan](https://github.com/KnowledgeHubProject/bok-knowledgehub/blob/main/docs/phase/bmft-excel-material-information-plan.md) authorizes planning the
+concrete workbook interpretation and Web Candidate path in addition to the
+bounded compatibility acceptance above. The earlier "minimal necessary fixtures"
+guidance does not mean this newly selected functionality is already implemented.
+WB-EAI-01..03 retain their OPEN state and accepted Phases are not reopened.
+
+The 2026-11-08 user clarification replaces the earlier Workbench parsing allocation:
+Studio server owns BMFT-specific sheet/header/bibliography interpretation and maps
+selected excerpts into generic content/translation/annotation/context/source items.
+Workbench owns BMFT-01/04's generic public/save contract support and Candidate
+creation from those application-supplied items. Textus must not require BMFT column
+names, profiles or vendor-specific branches. Retain source references, translations,
+contextual annotations and both locators through the generic contract. Reuse generic
+spreadsheet read capabilities only for structural access, not BMFT interpretation.
+Name necessary generic model/API extensions before implementation; no arbitrary
+string packing, inferred authorship or replacement of raw TKL Material.
+
+BMFT-05/06 reuse real TKL versioned source evidence, Candidate editing and explicit
+Review/Approve, then existing Hub admission/getInformation. Preserve original
+selection/source after reopen, invalidate decisions after edits under existing
+rules, distinguish retry from deliberate new interpretation, and do not blindly
+resend unknown admissions. TKL identity/version and Hub canonical ownership remain.
+
+BMFT-07 verifies representative Japanese and translated English rows with Studio
+Web, persisted Information and both source locators. Mail ingestion and row parsing
+never themselves approve a Candidate. The central BMFT ledger tracks the added
+delivery; it does not replace WB-EAI or other owners' completion ledgers.
+
+## Immediate existing-Material demo contribution — 2026-11-08
+
+The user's follow-up assigns the existing-TKL-Material Web route to the next demo
+development: [App Phase 7.1](https://github.com/KnowledgeHubProject/nict-editing-studio-app/blob/main/docs/phase/phase-7.1.md) and [Server Phase 5.1](https://github.com/KnowledgeHubProject/nict-editing-studio/blob/main/docs/phase/phase-5.1.md),
+immediately after their active Phases. Prioritize BMFT-01/04/06 generic contract
+capability delivery for those successors, before broader non-demo expansion.
+BMFT-03 parsing/mapping is owned by the Studio application adapter.
+Begin from an authorized existing Material with real identity/version/original
+reads; no new phone capture or Studio receipt is required. Workbench discovery,
+generic Candidate formation from application-normalized inputs and explicit
+review/admission stay on the owning contracts. Missing generic capabilities
+receive explicit owning spec/design
+and implementation work, rather than being assumed present or postponed to EAI.
+
+The registered-Material demo path does not wait for EAI2-02/TKL2-02 live mail or
+all producer Phases to close. Their actual ingestion acceptance and WB-EAI-01..03
+remain separately open. Join actual browser correction, Information persistence/
+reopen and source trace; fixture-only approval cannot close the demo route.
+Acceptance also checks that BMFT profile changes are handled by the app adapter
+without a BMFT branch in Textus, and that the raw Material bytes remain unchanged
+after normalization, Candidate correction and Information admission.
