@@ -10,7 +10,7 @@ import org.simplemodeling.textus.knowledgeworkbench.{KnowledgeWorkbenchComponent
 
 /*
  * @since   Oct. 21, 2026
- * @version Oct. 28, 2026
+ * @version Nov. 8, 2026
  */
 private[knowledgeworkbench] final class MaterialWorkServiceFactory
     extends KnowledgeWorkbenchComponent.MaterialWorkServiceFactory {
@@ -41,6 +41,11 @@ private[knowledgeworkbench] final class MaterialWorkServiceFactory
     core: ActionCall.Core,
     action: OriginalSelectionQuery
   ): ReadOriginalActionCall = ReadOriginalActionCallImpl(core, action)
+
+  override def createPreviewWorkbookActionCall(
+    core: ActionCall.Core,
+    action: PreviewWorkbookQuery
+  ): PreviewWorkbookActionCall = PreviewWorkbookActionCallImpl(core, action)
 
   override def createCreateMaterialRegistrationActionCall(
     core: ActionCall.Core,
@@ -119,6 +124,22 @@ private[knowledgeworkbench] object MaterialWorkServiceFactory {
           Property("materialRef", input.materialRef, None),
           Property("resourceId", input.resourceId, None)
         )))
+      } yield response
+    }
+  }
+
+  private final case class PreviewWorkbookActionCallImpl(
+    core: ActionCall.Core,
+    override val action: PreviewWorkbookQuery
+  ) extends PreviewWorkbookActionCall {
+    protected def build_Program: ExecUowM[OperationResponse] = {
+      for {
+        input <- exec_from(value.PreviewWorkbookQuery.createC(action.request.toRecord))
+        original <- exec_from(_dispatch(core, "readOriginal", List(
+          Property("materialRef", input.materialRef, None),
+          Property("resourceId", input.resourceId, None)
+        )))
+        response <- exec_from(MaterialWorkbookPreview.preview(original, input.materialRef, input.resourceId))
       } yield response
     }
   }

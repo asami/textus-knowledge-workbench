@@ -22,10 +22,12 @@ lazy val root = project
     libraryDependencies ++= ProjectYamlBuild.dependencies(cozyProjectMetadata.value),
     // Native fixture/bootstrap process-global lifecycle must be serialized.
     Test / parallelExecution := false,
+    Test / test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-l", "org.scalatest.tags.Slow"),
     // Native component-dev-dir fixtures require ordinary runtime evidence.
     Test / compile := (Test / compile).dependsOn(cozyPrepareRuntime).value,
 
     cozyGeneratorBackend := "cozy",
+    cozySkipUnchangedGeneration := !ProjectYamlBuild.requiredValue(cozyProjectMetadata.value, "build.cozyVersion").endsWith("-SNAPSHOT"),
     cozyDelegateProjectDir := None,
     cozyDelegateCommand := Seq(
       "cozy",

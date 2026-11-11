@@ -162,6 +162,64 @@ final class CandidateFormationSpec extends AnyWordSpec with Matchers with GivenW
     }
 
     "persistence and complete target invalidation" which {
+      "invalidate approval for each structured dimension while preserving omitted old-client data" in {
+        Given("approved work containing the complete structured target")
+        _with_runtime { subsystem =>
+          val initial = _get(subsystem, _register(subsystem, "tkl-prepared.json").id.print)
+          val structure = StructuredCandidateTargetSpec.sample(" original ")
+          val properties = _edit_properties(initial, initial.target.get.content.value, initial.candidate.evidenceRefs) :+
+            ("structured" -> structure.toRecord())
+          val edited = _success(workbenchvalue.CandidateWorkResult.createC(_execute(subsystem, "editCandidateWork", properties*)))
+          val approved = _decide(subsystem, _decide(subsystem, edited, "review"), "approve")
+          val snapshot = EntityRevisionCarrier(approved.candidate, _success(EntityRevision.createC(approved.revision)))
+          val target = approved.target.get
+          val base = workbenchvalue.CandidateWorkEdit(approved.candidate.id, approved.revision, target.content,
+            target.context, target.evidenceRefs, target.groundingRefs, target.mappingRefs,
+            _success(datatype.CandidateDecisionReason.createC("Change structured target")), Some(structure), None)
+          val replacements = Vector(
+            structure.copy(contents = structure.contents.reverse),
+            structure.copy(translations = structure.translations.map(_.copy(text = "changed"))),
+            structure.copy(annotations = structure.annotations.reverse),
+            structure.copy(contexts = structure.contexts.map(_.copy(value = "changed"))),
+            structure.copy(sources = structure.sources.map(_.copy(sourceVersion = None))))
+          When("each structured dimension changes")
+          replacements.foreach { replacement =>
+            val changed = _success(CandidateFormation.edit(snapshot, base.copy(structured = Some(replacement)),
+              "editor", Instant.parse("2026-10-27T00:00:00Z"))).get
+            val result = CandidateFormation.result(EntityRevisionCarrier(changed, snapshot.revision))
+            Then("the previous approval remains history and the current target is Draft")
+            result.approvalValid shouldBe false
+            result.state shouldBe "Draft"
+            result.target.get.structured shouldBe Some(replacement)
+          }
+          When("a legacy scalar client omits the new field")
+          val legacy = _edit(subsystem, approved, "Scalar correction", approved.candidate.evidenceRefs)
+          Then("its scalar edit keeps the complete structure and invalidates approval")
+          legacy.target.get.structured shouldBe Some(structure)
+          legacy.approvalValid shouldBe false
+          When("a client supplies a replacement with clearStructured false")
+          val replacement = structure.copy(contexts = structure.contexts.map(_.copy(value = "replacement")))
+          val replaced = _success(workbenchvalue.CandidateWorkResult.createC(_execute(subsystem, "editCandidateWork",
+            (_edit_properties(legacy, legacy.target.get.content.value, legacy.candidate.evidenceRefs) ++
+              Vector("structured" -> replacement.toRecord(), "clearStructured" -> false))*)))
+          Then("the complete new target replaces the previous structure")
+          replaced.target.get.structured shouldBe Some(replacement)
+          When("the client explicitly clears the structure or submits conflicting intents")
+          val cleared = _success(workbenchvalue.CandidateWorkResult.createC(_execute(subsystem, "editCandidateWork",
+            (_edit_properties(replaced, replaced.target.get.content.value, replaced.candidate.evidenceRefs) :+
+              ("clearStructured" -> true))*)))
+          val conflicting = _call(subsystem, "editCandidateWork",
+            (_edit_properties(cleared, cleared.target.get.content.value, cleared.candidate.evidenceRefs) ++
+              Vector("structured" -> structure.toRecord(), "clearStructured" -> true))*)
+          Then("clear removes the structure and conflicting requests write nothing")
+          cleared.target.get.structured shouldBe None
+          cleared.revision shouldBe (replaced.revision + 1)
+          _get(subsystem, cleared.candidate.id.print).target.get.structured shouldBe None
+          conflicting shouldBe a[Consequence.Failure[?]]
+          _get(subsystem, cleared.candidate.id.print).toRecord() shouldBe cleared.toRecord()
+        }
+      }
+
       "retain approval and exact history after normal runtime shutdown and persistent reopen" in {
         Given("a normal persistent runtime and an approved captured Candidate")
         val root = _root()
@@ -196,7 +254,7 @@ final class CandidateFormationSpec extends AnyWordSpec with Matchers with GivenW
             val current = approved.target.get
             val base = workbenchvalue.CandidateWorkEdit(approved.candidate.id, approved.revision,
               current.content, current.context, current.evidenceRefs, current.groundingRefs, current.mappingRefs,
-              _success(datatype.CandidateDecisionReason.createC("Human correction")))
+              _success(datatype.CandidateDecisionReason.createC("Human correction")), None, None)
             val replacement = dimension match {
               case 0 => base.copy(content = _success(datatype.CandidateContent.createC(s"Changed $text")))
               case 1 => base.copy(context = Some(_success(datatype.CandidateContext.createC(s"Changed $text"))))

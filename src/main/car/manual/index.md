@@ -10,6 +10,17 @@ and provider-neutral proposal registration with durable source-key lookup and
 sequential resend preserving current edits. Follow the [user guide](user-guide.md) for build, instance setup and
 complete CLI examples.
 
+## Workbook preview
+
+`MaterialWork.previewWorkbook` is an authenticated query for the exact opaque
+`materialRef` and `resourceId`. It reads the caller-authorized original from
+KnowledgeLake and returns ordered sheets and physically present cells with
+one-based coordinates, kind, available raw/display values and diagnostics.
+Formulas are returned unevaluated. Only unencrypted, non-macro XLSX is supported;
+external relationships and malformed or over-limit packages are rejected. No
+source version is inferred and the query creates no Candidate. See the [user
+guide](user-guide.md#workbook-preview) for limits.
+
 ## Explicit Material-backed work
 
 `MaterialWork.createCandidateFromMaterial` is an authenticated COMMAND returning
@@ -390,3 +401,19 @@ debug diagnostics and credentials are not copied into the page.
 ## Saved Information semantic formation
 
 The `SemanticWork` service exposes `openSemanticWork`, `getSemanticWork`, `correctSemanticWork`, `decideSemanticWork`, `formSemanticWork`, `confirmSemanticFormation`. Open saved Information, correct the complete semantic target, explicitly review and approve, then form Knowledge. Admission approval is separate. Changing a target invalidates its semantic approval. Reopen uncertain formation and confirm the retained result identity; never blindly resubmit creation. Original access remains Workbench MaterialWork / KnowledgeLake. This source addition has not yet been qualified or locally released.
+
+## Structured Candidate target
+
+Material creation, Candidate work edit and approval target accept optional typed
+`structured` data alongside the existing scalar fields. Ordered content,
+translations, independently identified annotations and media, contexts, source
+observations, workbook cells, original-book locators and adapter/profile provenance
+are retained as part of the complete target. An omitted value retains scalar
+behavior. Source versions are actual observations and are never inferred from
+adapter or profile versions. Material creation requires every structured source
+to identify the selected Material and one of its selected resources.
+
+Review and Approve apply to the entire target; changing structured data invalidates
+approval. Admission passes the approved target to KnowledgeHub and confirms its
+complete returned trace. An uncertain admission is reconciled by reading its
+reserved Information identity, without replaying the write.

@@ -216,6 +216,25 @@ binary response come from TKL. Preserve the producer MIME type and safety
 headers. These reads can precede Candidate work and require no new registration,
 OpenClaw processing or dummy Candidate.
 
+### Workbook preview
+
+Call `previewWorkbook` with the exact `materialRef` and `resourceId`. The
+same caller's `readOriginal` is the only source. Sheets are ordered and have a
+one-based index; cells retain one-based row and column coordinates. Each cell
+reports its kind and available raw and displayed text; formula cells report the
+expression and `formula-not-evaluated`, without calculation. Error cells report
+`cell-error`. No source version is inferred from the original response.
+
+Only unencrypted non-macro XLSX is supported. Legacy XLS, other formats,
+external relationships, malformed ZIP/XML and limit violations fail without a
+partial result. Limits are 8 MiB original, 256 ZIP entries, 8 MiB expanded per
+entry, 32 MiB aggregate expansion, XML depth 64, 100,000 elements, 500,000
+attributes, 128 attributes per element, 64 sheets, 20,000 cells/shared strings
+or styles, 10,000 characters per cell value and 1 MiB XML or output text.
+Only XML/relationship parts and PNG or JPEG parts with matching signatures under standard xl/media or docProps/thumbnail paths are admitted; other package parts, including XML with nonstandard extensions, are rejected before workbook loading.
+No links are fetched, Candidate work changed, or original stored. These bounds
+are not a guarantee of isolation from every third-party library resource risk.
+
 For an explicitly authorized first registration:
 
 1. Construct one complete neutral `textus.material-contribution/1` JSON value
@@ -235,7 +254,7 @@ For an explicitly authorized first registration:
    `readOriginal` operations with the observed logical Material/resource
    references. Candidate evidence selection and human approval are separate work.
 
-All six operations target only `org.simplemodeling.textus.KnowledgeLake` /
+The six forwarding operations target only `org.simplemodeling.textus.KnowledgeLake` /
 `Material`. Do not supply a Book/ISBN/App key, owner, provider selector, token,
 connection or alternate target as a work input. Opaque nested contribution
 content remains data and confers no authority. A domain-neutral application
@@ -526,3 +545,23 @@ before discarding edits. Tokens are not saved with work or errors.
 ## Saved Information semantic formation
 
 The `SemanticWork` service exposes `openSemanticWork`, `getSemanticWork`, `correctSemanticWork`, `decideSemanticWork`, `formSemanticWork`, `confirmSemanticFormation`. Open saved Information, correct the complete semantic target, explicitly review and approve, then form Knowledge. Admission approval is separate. Changing a target invalidates its semantic approval. Reopen uncertain formation and confirm the retained result identity; never blindly resubmit creation. Original access remains Workbench MaterialWork / KnowledgeLake. This source addition has not yet been qualified or locally released.
+
+## Structured Candidate work
+
+API clients may supply `structured` when creating a Candidate from Material or
+editing Candidate work. Supply ordered contents and sources, and any translations,
+annotations, media references, contexts, locators and derivation details. Use
+distinct content and annotation IDs; each translation names an existing content.
+Each annotation needs text or media. Source versions and observations are optional:
+leave unknown values absent rather than copying adapter or profile versions.
+Material creation accepts sources only for the selected Material and resources.
+
+An edit supplies the complete structured value; omission preserves the current
+value. Set `clearStructured` to true to remove it; do not combine true with a
+replacement. False permits a replacement and otherwise preserves the value. Null
+does not request removal.
+Review the complete target again after any effective change. Existing scalar
+requests remain valid. If Admission has an uncertain outcome, use confirmation
+to read the saved Information identity rather than repeating Admission.
+
+Workbook preview admits opaque printer settings only at the standard numbered `xl/printerSettings/printerSettingsN.bin` path, with the matching OPC content type and internal worksheet relationship. The bounded payload must have a consistent DEVMODEW size header; it is not interpreted or executed. Other binary parts, external relationships, macros and oversized packages remain unsupported. This narrow format check does not cover every printer or platform layout.

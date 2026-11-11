@@ -33,6 +33,7 @@ import scala.util.Using
  * @since   Oct. 28, 2026
  * @version Oct. 28, 2026
  */
+@org.scalatest.tags.Slow
 final class MaterialCandidateIntegrationSpec extends AnyWordSpec with Matchers with GivenWhenThen with BeforeAndAfterAll {
   import MaterialCandidateIntegrationSpec.*
   private var _postgres: Option[MaterialCandidateWorkSpec.LivePostgresql] = None

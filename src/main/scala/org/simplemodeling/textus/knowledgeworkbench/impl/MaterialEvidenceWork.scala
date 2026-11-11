@@ -80,7 +80,8 @@ private[knowledgeworkbench] object MaterialEvidenceWork {
         case None => Consequence.stateConflict("Candidate content is required for Material evidence application")
         case Some(content) =>
           val edit = value.CandidateWorkEdit(snapshot.entity.id, input.expectedRevision, content,
-            snapshot.entity.context, replacement, snapshot.entity.groundingRefs, snapshot.entity.mappingRefs, input.reason)
+            snapshot.entity.context, replacement, snapshot.entity.groundingRefs, snapshot.entity.mappingRefs,
+            input.reason, snapshot.entity.structured, None)
           CandidateFormation.edit(snapshot, edit, actor, instant).map(_.map { candidate =>
             val applications = snapshot.entity.materialEvidence.map(_.applications).getOrElse(Vector.empty)
             candidate.copy(materialEvidence = Some(value.MaterialEvidenceBinding(selection.materialRef,

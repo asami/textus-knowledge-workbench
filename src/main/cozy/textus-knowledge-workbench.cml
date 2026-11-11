@@ -338,6 +338,7 @@ CommandAction
 | name | name | 1 |
 | content | string | 1 |
 | context | string | ? |
+| structured | InformationStructuredTarget | ? |
 
 ##### OUTPUT
 
@@ -520,6 +521,47 @@ OperationResult
 |---------|------|--------------|
 | content | blob | 1            |
 
+#### previewWorkbook
+
+##### TYPE
+
+QUERY
+
+##### ACCESS
+
+###### POLICY
+
+authenticated_only
+
+##### DESCRIPTION
+
+Read the exact caller-authorized original and return a bounded generic XLSX preview.
+The result never evaluates formulas, fetches external links, or creates Candidate work.
+Unsupported formats, unsafe packages and limits fail explicitly.
+
+##### INPUT
+
+###### VALUE
+
+####### PreviewWorkbookQuery
+
+######## EXTENDS
+
+QueryAction
+
+######## ATTRIBUTE
+
+| name | type | multiplicity |
+|---|---|---|
+| materialRef | string | 1 |
+| resourceId | string | 1 |
+
+##### OUTPUT
+
+###### TYPE
+
+MaterialWorkbookPreviewResult
+
 #### createMaterialRegistration
 
 ##### TYPE
@@ -701,6 +743,7 @@ MaterialRegistrationResult
 | decisions | CandidateReviewDecision | * |
 | admissions | CandidateAdmissionRecord | * |
 | materialEvidence | MaterialEvidenceBinding | ? |
+| structured | InformationStructuredTarget | ? |
 
 # VALUE
 
@@ -811,6 +854,43 @@ MaterialRegistrationResult
 | retrievalState | string | ? |
 | retentionUntil | string | ? |
 | limitation | string | ? |
+
+## MaterialWorkbookPreviewResult
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| materialRef | string | 1 |
+| resourceId | string | 1 |
+| sourceVersion | string | ? |
+| sheets | MaterialWorkbookSheet | * |
+| diagnostics | string | * |
+
+## MaterialWorkbookSheet
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| index | int | 1 |
+| name | string | 1 |
+| cells | MaterialWorkbookCell | * |
+
+## MaterialWorkbookCell
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| row | int | 1 |
+| column | int | 1 |
+| kind | string | 1 |
+| rawValue | string | ? |
+| displayText | string | ? |
+| formula | string | ? |
+| cachedKind | string | ? |
+| diagnostic | string | ? |
 
 ## MaterialSearchResult
 
@@ -941,6 +1021,8 @@ MaterialRegistrationResult
 | groundingRefs | ProposalReference | * |
 | mappingRefs | ProposalReference | * |
 | reason | CandidateDecisionReason | 1 |
+| structured | InformationStructuredTarget | ? |
+| clearStructured | boolean | ? |
 
 ## CandidateWorkDecision
 
@@ -969,6 +1051,113 @@ MaterialRegistrationResult
 | sourceContextRef | ProposalReference | ? |
 | groundingRefs | ProposalReference | * |
 | mappingRefs | ProposalReference | * |
+| structured | InformationStructuredTarget | ? |
+
+## InformationStructuredTarget
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| contents | InformationContent | * |
+| translations | InformationTranslation | * |
+| annotations | InformationAnnotation | * |
+| contexts | InformationContext | * |
+| sources | InformationSource | * |
+
+## InformationContent
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| id | string | 1 |
+| text | string | 1 |
+| language | string | ? |
+
+## InformationTranslation
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| contentId | string | 1 |
+| text | string | 1 |
+| language | string | 1 |
+
+## InformationAnnotation
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| id | string | 1 |
+| text | string | ? |
+| media | InformationAnnotationMedia | * |
+
+## InformationAnnotationMedia
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| id | string | 1 |
+| resourceId | string | 1 |
+| mediaType | string | 1 |
+| sourceVersion | string | ? |
+
+## InformationContext
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| kind | string | 1 |
+| value | string | 1 |
+
+## InformationSource
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| materialId | string | 1 |
+| resourceId | string | 1 |
+| sourceVersion | string | ? |
+| observation | string | ? |
+| workbookCells | InformationWorkbookCell | * |
+| originalBooks | InformationOriginalBook | * |
+| derivation | InformationDerivation | ? |
+
+## InformationWorkbookCell
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| sheet | string | 1 |
+| row | string | 1 |
+| column | string | 1 |
+
+## InformationOriginalBook
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| reference | string | 1 |
+| page | string | ? |
+
+## InformationDerivation
+
+### Attribute
+
+| name | type | multiplicity |
+|---|---|---|
+| adapterId | string | 1 |
+| adapterVersion | string | 1 |
+| profileId | string | 1 |
+| profileVersion | string | 1 |
 
 ## CandidateReviewDecision
 

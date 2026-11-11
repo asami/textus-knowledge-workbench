@@ -32,7 +32,10 @@ private[knowledgeworkbench] object MaterialCandidateWork {
     require(input.resourceIds.forall(_.trim.nonEmpty), "resourceIds must contain nonblank strings")
     require(input.resourceIds.distinct.size == input.resourceIds.size, "resourceIds must be distinct")
     require(input.content.trim.nonEmpty, "content must be nonblank")
-  }
+    require(input.structured.forall(_.sources.forall(source =>
+      source.materialId == input.materialRef && input.resourceIds.contains(source.resourceId))),
+      "structured sources must identify the selected Material and resources")
+  }.flatMap(_ => input.structured.fold(Consequence.unit)(CandidateFormation.validateStructured))
 
   def record(response: OperationResponse): Consequence[Record] = response match {
     case OperationResponse.RecordResponse(record) => Consequence.success(record)
@@ -59,6 +62,11 @@ private[knowledgeworkbench] object MaterialCandidateWork {
       }
       text <- metadata.toJsonStringC
       observed <- Consequence(io.circe.parser.parse(text).fold(throw _, identity))
+      structured <- input.structured match {
+        case Some(target) => target.toRecord().toJsonStringC.flatMap(text =>
+          Consequence(io.circe.parser.parse(text).fold(throw _, identity))).map(Some(_))
+        case None => Consequence.success(None)
+      }
     } yield {
       val fields = Vector(
         "producerRef" -> Json.fromString(producerRef), "proposalId" -> Json.fromString(input.proposalId),
@@ -69,7 +77,8 @@ private[knowledgeworkbench] object MaterialCandidateWork {
         "preparedMaterialRefs" -> Json.arr(),
         "materialSelection" -> Json.obj("materialRef" -> Json.fromString(input.materialRef),
           "resourceIds" -> Json.fromValues(input.resourceIds.map(Json.fromString)), "metadata" -> observed)
-      ) ++ input.context.map(text => "context" -> Json.fromString(text))
+      ) ++ input.context.map(text => "context" -> Json.fromString(text)) ++
+        structured.map(value => "structured" -> value)
       Json.obj(fields*).noSpaces
     }
 

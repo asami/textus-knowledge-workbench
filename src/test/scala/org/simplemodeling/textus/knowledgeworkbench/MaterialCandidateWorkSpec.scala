@@ -27,11 +27,97 @@ import org.simplemodeling.textus.knowledgeworkbench.value as WorkbenchValue
  * @since   Oct. 28, 2026
  * @version Oct. 28, 2026
  */
+@org.scalatest.tags.Slow
 final class MaterialCandidateWorkSpec extends AnyWordSpec with Matchers with GivenWhenThen with BeforeAndAfterAll {
   private var _postgres: Option[MaterialCandidateWorkSpec.LivePostgresql] = None
   import MaterialWorkFixture.*
 
   "Explicit Material-backed Candidate work" should {
+    "reopen an old scalar decision persisted without the structured key" in {
+      Given("a scalar Candidate and a native persisted decision")
+      val root = Files.createTempDirectory(Path.of("target").toAbsolutePath, "legacy-candidate-postgres-")
+      val writer = _pg_handle(root)
+      val held = try {
+        _install_producer(writer.subsystem)
+        val created = _result(_pg_call(writer.subsystem, "MaterialWork", "createCandidateFromMaterial", _fields("intent:legacy")))
+        val work = _work(_pg_call(writer.subsystem, "Candidate", "getCandidateWork", Vector("id" -> created.candidate.id.print)))
+        _work(_pg_call(writer.subsystem, "Candidate", "decideCandidateWork", Vector("id" -> created.candidate.id.print,
+          "expectedRevision" -> work.revision, "decision" -> "hold", "reason" -> "Legacy decision")))
+      } finally writer.close()
+      val database = _postgres.get
+      val connection = java.sql.DriverManager.getConnection(database.getJdbcUrl, database.getUsername, database.getPassword)
+      try {
+        val select = connection.prepareStatement("SELECT decisions FROM information_candidate WHERE id = ?")
+        val original = try {
+          select.setString(1, held.candidate.id.print)
+          val rows = select.executeQuery()
+          try { rows.next() shouldBe true; rows.getString(1) } finally rows.close()
+        } finally select.close()
+        val decisions = parse(original).toOption.get.asArray.get.map(_.mapObject { event =>
+          event("target").fold(event)(target => event.add("target", target.mapObject(_.remove("structured"))))
+        })
+        decisions.foreach(_.hcursor.downField("target").downField("structured").succeeded shouldBe false)
+        val update = connection.prepareStatement("UPDATE information_candidate SET decisions = ? WHERE id = ?")
+        try {
+          update.setString(1, io.circe.Json.fromValues(decisions).noSpaces)
+          update.setString(2, held.candidate.id.print)
+          update.executeUpdate() shouldBe 1
+        } finally update.close()
+      } finally connection.close()
+      When("the current native runtime reopens the original stored form")
+      val reader = _pg_handle(root)
+      try {
+        val restored = _work(_pg_call(reader.subsystem, "Candidate", "getCandidateWork", Vector("id" -> held.candidate.id.print)))
+        Then("the original scalar target, decision, state and revision survive")
+        restored.toRecord() shouldBe held.toRecord()
+        restored.target.get.structured shouldBe None
+        restored.candidate.decisions.last.target.structured shouldBe None
+      } finally reader.close()
+    }
+
+    "preserve structured source selection and target through native PostgreSQL reopen and same-intent lookup" in {
+      Given("an exact Material selection and independently identified multimedia annotations")
+      val root = Files.createTempDirectory(Path.of("target").toAbsolutePath, "structured-material-postgres-")
+      val structure = StructuredCandidateTargetSpec.sample(" exact source \n", materialRef, resourceId)
+      val writer = _pg_handle(root)
+      val first = try {
+        _install_producer(writer.subsystem)
+        val fields = _fields("intent:structured") :+ ("structured" -> structure.toRecord())
+        When("the typed command creates one native Candidate")
+        val result = _result(_pg_call(writer.subsystem, "MaterialWork", "createCandidateFromMaterial", fields))
+        Then("the exact typed value is stored alongside the first source observation")
+        result.candidate.structured shouldBe Some(structure)
+        result.candidate.originalProposal.get.value should include ("structured")
+        result
+      } finally writer.close()
+      When("a fresh native runtime reopens the work and the same intent is submitted")
+      val reader = _pg_handle(root)
+      try {
+        val work = _work(_pg_call(reader.subsystem, "Candidate", "getCandidateWork", Vector("id" -> first.candidate.id.print)))
+        val resent = _result(_pg_call(reader.subsystem, "MaterialWork", "createCandidateFromMaterial",
+          _fields("intent:structured") :+ ("structured" -> structure.toRecord())))
+        Then("the original value, identity and revision are retained without another source read")
+        work.candidate.structured shouldBe Some(structure)
+        work.target.get.structured shouldBe Some(structure)
+        work.reviewEligible shouldBe false
+        resent.created shouldBe false
+        resent.candidate.toRecord() shouldBe work.candidate.toRecord()
+      } finally reader.close()
+    }
+
+    "reject a structured source outside the selected Material resources" in {
+      Given("a structured source naming a different selected resource")
+      _with_session { session =>
+        val structure = StructuredCandidateTargetSpec.sample("source", materialRef, "unselected")
+        When("the public create command is invoked")
+        val result = session.execute("createCandidateFromMaterial", _fields("intent:outside") :+
+          ("structured" -> structure.toRecord()))
+        Then("it fails before observing or creating a source")
+        result shouldBe a[Consequence.Failure[?]]
+        session.producer.calls shouldBe empty
+      }
+    }
+
     "dispatch the generated authenticated command and retain exact source selectors without inventing readiness" in {
       Given("the public native Workbench and a caller-authorized logical Material")
       _with_session { session =>
